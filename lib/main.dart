@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thammasat/Routes.dart';
+import 'package:thammasat/app_routes.dart';
 
 void main() {
   runApp(const MyApp());
