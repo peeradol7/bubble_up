@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:thammasat/View/accounts_page.dart';
 import 'package:thammasat/View/home_page.dart';
+import 'package:thammasat/View/login_dialog.dart';
 
 class AppRoutes {
   static const String homePage = '/home-page';
@@ -16,9 +16,9 @@ class AppRoutes {
         builder: (context, state) => const HomePage(),
       ),
       GoRoute(
-        path: accoountPage,
-        name: accoountPage,
-        builder: (context, state) => const AccountsPage(),
+        path: loginPage,
+        name: loginPage,
+        builder: (context, state) => const LoginPage(),
       ),
     ],
     redirect: (context, state) {

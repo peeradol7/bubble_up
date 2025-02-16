@@ -13,6 +13,11 @@ class HomeController extends GetxController {
     'Premium Quality Cleaning & Fabric Care',
     'Track the Progress of Your Laundry in Real Time'
   ];
+  final List<String> message = [
+    'No more trips to the laundromat! Choose your preferred pickup time, and our riders will collect and deliver your laundry straight to your door. 🚛✨',
+    'We use high-quality cleaning products and specialized techniques to ensure your garments stay fresh, bright, and long-lasting. 👕💎',
+    'Easily track your order at every stage—from pickup and cleaning to delivery—right from our app. ⏳📱'
+  ];
 
   void pageChanged(int index) {
     currentIndex.value = index;
