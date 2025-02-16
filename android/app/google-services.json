@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "578003904265",
+    "project_id": "bubbleup-5ab0e",
+    "storage_bucket": "bubbleup-5ab0e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578003904265:android:85564542020dc699b4d5d8",
+        "android_client_info": {
+          "package_name": "com.example.thammasat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJp7t8DH_RLQeryGFkxRaipopCeLDaon8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
