@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'widget/login_button.dart';
+import '../widget/sign_up_button.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpDialog extends StatefulWidget {
+  const SignUpDialog({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpDialog> createState() => _SignUpDialogState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpDialogState extends State<SignUpDialog> {
   final CustomButton btn = CustomButton();
 
   @override
@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.all(20),
             width: 300,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.blue[100],
               borderRadius: BorderRadius.circular(20),
               boxShadow: const [
                 BoxShadow(
@@ -46,11 +46,11 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Sign In',
+                  'Sign Un',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue[600],
+                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                btn.btnlogin(
+                btn.btnSignUp(
                   onPressed: () => {
                     print('Login'),
                   },
@@ -72,6 +72,13 @@ class _LoginPageState extends State<LoginPage> {
                   iconPath: 'assets/google.png',
                 ),
                 const SizedBox(height: 10),
+                btn.btnSignUp(
+                  onPressed: () => {
+                    print('email'),
+                  },
+                  label: 'Continue with Email',
+                  iconPath: 'assets/email.png',
+                ),
               ],
             ),
           ),

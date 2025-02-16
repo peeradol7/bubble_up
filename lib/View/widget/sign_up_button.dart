@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomButton {
   ButtonStyle btnStyle() {
     return ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFF818EF4),
+      backgroundColor: Colors.white,
       minimumSize: const Size(double.infinity, 50),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -11,7 +11,7 @@ class CustomButton {
     );
   }
 
-  Widget btnlogin({
+  Widget btnSignUp({
     required VoidCallback onPressed,
     required String label,
     required String iconPath,
@@ -28,7 +28,7 @@ class CustomButton {
       ),
       label: Text(
         label,
-        style: const TextStyle(color: Colors.white, fontSize: 15),
+        style: const TextStyle(color: Colors.black, fontSize: 15),
       ),
       style: btnStyle(),
     );
