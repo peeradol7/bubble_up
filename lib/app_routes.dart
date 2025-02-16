@@ -3,10 +3,12 @@ import 'package:thammasat/View/accounts_page.dart';
 import 'package:thammasat/View/home_page.dart';
 
 class AppRoutes {
-  static final String homePage = '/home-page';
-  static final String accoountPage = '/accounts-page';
+  static const String homePage = '/home-page';
+  static const String loginPage = '/login-page';
+  static const String accoountPage = '/accounts-page';
 
   final route = GoRouter(
+    initialLocation: homePage,
     routes: [
       GoRoute(
         path: homePage,
@@ -19,5 +21,9 @@ class AppRoutes {
         builder: (context, state) => const AccountsPage(),
       ),
     ],
+    redirect: (context, state) {
+      print('---path => ${state.uri.toString()}');
+      return null;
+    },
   );
 }
