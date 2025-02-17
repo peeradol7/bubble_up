@@ -1,4 +1,4 @@
-# thammasat
+# bubbleUP
 
 A new Flutter project.
 

@@ -7,6 +7,7 @@ class SharedPreferenesService {
 
   static Future<SharedPreferenesService> getInstance() async {
     final prefs = await SharedPreferences.getInstance();
+
     return SharedPreferenesService(prefs);
   }
 }
