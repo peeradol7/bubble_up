@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:thammasat/View/login_dialog.dart';
+import 'package:go_router/go_router.dart';
+import 'package:thammasat/View/dialog/sign_up_dialog.dart';
+import 'package:thammasat/app_routes.dart';
 
 class HomeButtonWidget extends StatelessWidget {
   const HomeButtonWidget({super.key});
@@ -10,7 +12,7 @@ class HomeButtonWidget extends StatelessWidget {
       barrierDismissible: true,
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
-        child: LoginPage(),
+        child: SignUpDialog(),
       ),
     );
   }
@@ -26,7 +28,9 @@ class HomeButtonWidget extends StatelessWidget {
             color: Colors.blue,
             textColor: Colors.white,
             isOutlined: false,
-            onPressed: () {},
+            onPressed: () {
+              handleSignUp(context);
+            },
           ),
           const SizedBox(height: 15),
           _buildButton(
@@ -35,7 +39,7 @@ class HomeButtonWidget extends StatelessWidget {
             textColor: Colors.blue,
             isOutlined: true,
             onPressed: () {
-              handleSignUp(context);
+              context.go(AppRoutes.loginPage);
             },
           ),
         ],

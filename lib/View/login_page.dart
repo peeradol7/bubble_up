@@ -7,7 +7,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: context.canPop(),
+      canPop: context.canPop(), // ตรวจสอบว่าสามารถ pop กลับได้หรือไม่
       onPopInvoked: (bool didPop) async {
         if (didPop) {
           return;
