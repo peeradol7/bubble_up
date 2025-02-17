@@ -33,14 +33,14 @@ class AuthService {
       if (user != null) {
         print('Google login successful: ${user.uid}');
 
-        final usersModel = Usersmodel(
-          userId: user.uid,
-          authMethod: 'Google',
-          name: user.displayName ?? 'Google User',
-          email: user.email ?? 'email',
-          phone_number: user.phoneNumber ?? 'phoneNumber',
-          password: user.password,
-        );
+        // final usersModel = Usersmodel(
+        //   userId: user.uid,
+        //   authMethod: 'Google',
+        //   name: user.displayName ?? 'Google User',
+        //   email: user.email ?? 'email',
+        //   phone_number: user.phoneNumber ?? 'phoneNumber',
+        //   password: user.password,
+        // );
       }
 
       return user;
