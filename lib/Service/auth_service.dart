@@ -32,15 +32,6 @@ class AuthService {
 
       if (user != null) {
         print('Google login successful: ${user.uid}');
-
-        // final usersModel = Usersmodel(
-        //   userId: user.uid,
-        //   authMethod: 'Google',
-        //   name: user.displayName ?? 'Google User',
-        //   email: user.email ?? 'email',
-        //   phone_number: user.phoneNumber ?? 'phoneNumber',
-        //   password: user.password,
-        // );
       }
 
       return user;
@@ -49,7 +40,76 @@ class AuthService {
     }
   }
 
-  Future<void> save(Usersmodel user) async {
+  Future<void> save(UsersModel user) async {
     await _firestore.collection(userCollection).doc().set(user.toMap());
+  }
+
+  Future<User?> signInWithEmail(String email, String password) async {
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user;
+    } catch (e) {
+      print("Error signing in: $e");
+      return null;
+    }
+  }
+
+  Future<void> signOut() async {
+    await auth.signOut();
+  }
+
+  Stream<User?> get userStream => auth.authStateChanges();
+  Future<User?> saveUserEmailPassword({
+    required String email,
+    required String password,
+    required String name,
+    required String phoneNumber,
+  }) async {
+    try {
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        await user.sendEmailVerification();
+
+        UsersModel userData = UsersModel(
+          userId: user.uid,
+          authMethod: 'email',
+          name: name,
+          phone_number: phoneNumber,
+          password: password,
+          email: email,
+        );
+
+        await save(userData);
+
+        return user;
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+    return null;
+  }
+
+  Future<bool> isEmailVerified() async {
+    User? user = auth.currentUser;
+    if (user != null) {
+      await user.reload();
+      return user.emailVerified;
+    }
+    return false;
+  }
+
+  Future<void> signOutIfNotVerified() async {
+    if (!await isEmailVerified()) {
+      await auth.signOut();
+    }
   }
 }

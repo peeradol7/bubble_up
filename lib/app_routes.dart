@@ -1,12 +1,13 @@
 import 'package:go_router/go_router.dart';
-import 'package:thammasat/View/email_sign_up.dart';
 import 'package:thammasat/View/home_page.dart';
+import 'package:thammasat/View/login_page.dart';
 import 'package:thammasat/View/select_service_page.dart';
+import 'package:thammasat/email_sign_up/email_sign_up.dart';
 
 class AppRoutes {
   static const String homePage = '/';
   static const String loginPage = '/login-page';
-  static const String emailSignUp = '/emailsignup';
+  static const String emailSignUp = '/email-sign-up';
   static const String accoountPage = '/accounts-page';
   static const String selectServicePage = '/select-service';
 
@@ -27,6 +28,11 @@ class AppRoutes {
         path: emailSignUp,
         name: emailSignUp,
         builder: (context, state) => const EmailSignUp(),
+      ),
+      GoRoute(
+        path: loginPage,
+        name: loginPage,
+        builder: (context, state) => const LoginPage(),
       ),
     ],
     redirect: (context, state) {

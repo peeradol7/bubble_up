@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:thammasat/app_routes.dart';
 
 import '../widget/sign_up_button.dart';
 
@@ -74,7 +75,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
                 const SizedBox(height: 10),
                 btn.btnSignUp(
                   onPressed: () => {
-                    print('email'),
+                    context.go(AppRoutes.emailSignUp),
                   },
                   label: 'Continue with Email',
                   iconPath: 'assets/email.png',
