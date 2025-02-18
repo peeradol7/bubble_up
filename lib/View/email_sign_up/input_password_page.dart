@@ -39,7 +39,11 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
   }
 
   void saveUser(
-      String email, String password, String phoneNumber, String name) async {
+    String email,
+    String password,
+    String phoneNumber,
+    String name,
+  ) async {
     try {
       await authController.signInWithEmail(email, password, phoneNumber, name);
     } catch (e) {

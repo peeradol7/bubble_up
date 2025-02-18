@@ -62,8 +62,6 @@ class AuthService {
     await auth.signOut();
   }
 
-  Stream<User?> get userStream => auth.authStateChanges();
-
   Future<User?> saveUserEmailPassword({
     required String email,
     required String password,
@@ -77,27 +75,32 @@ class AuthService {
       );
 
       User? user = userCredential.user;
-
-      if (user != null) {
-        await user.sendEmailVerification();
-
-        UsersModel userData = UsersModel(
-          userId: user.uid,
-          authMethod: 'email',
-          name: name,
-          phone_number: phoneNumber,
-          password: password,
-          email: email,
-        );
-
-        await save(userData);
-
-        return user;
+      if (user == null) {
+        print('Error: User registration failed, user is null');
+        return null;
       }
+
+      UsersModel userData = UsersModel(
+        userId: user.uid,
+        authMethod: 'email',
+        name: name,
+        phone_number: phoneNumber,
+        email: email,
+        password: password,
+      );
+
+      // Log ข้อมูลที่กำลังบันทึก
+
+      await _firestore
+          .collection(userCollection)
+          .doc(user.uid)
+          .set(userData.toMap());
+
+      return user;
     } catch (e) {
-      print('Error: $e');
+      print('Error during registration: $e');
+      return null;
     }
-    return null;
   }
 
   Future<bool> isEmailVerified() async {
