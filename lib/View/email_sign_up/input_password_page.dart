@@ -8,8 +8,19 @@ class InputPasswordPage extends StatefulWidget {
 }
 
 class _InputPasswordPageState extends State<InputPasswordPage> {
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Input Data'),
+        backgroundColor: Colors.blue[200],
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Container(),
+      ),
+    );
   }
 }
