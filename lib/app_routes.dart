@@ -17,30 +17,35 @@ class AppRoutes {
     initialLocation: homePage,
     routes: [
       GoRoute(
-        path: homePage,
-        name: homePage,
-        builder: (context, state) => const HomePage(),
-      ),
+          path: homePage,
+          name: homePage,
+          builder: (context, state) {
+            return const HomePage();
+          }),
       GoRoute(
-        path: selectServicePage,
-        name: selectServicePage,
-        builder: (context, state) => const SelectServicePage(),
-      ),
+          path: selectServicePage,
+          name: selectServicePage,
+          builder: (context, state) {
+            return const SelectServicePage();
+          }),
       GoRoute(
-        path: emailSignUp,
-        name: emailSignUp,
-        builder: (context, state) => const EmailSignUp(),
-      ),
+          path: emailSignUp,
+          name: emailSignUp,
+          builder: (context, state) {
+            return EmailSignUp();
+          }),
       GoRoute(
-        path: loginPage,
-        name: loginPage,
-        builder: (context, state) => const LoginPage(),
-      ),
+          path: inputPassword,
+          name: inputPassword,
+          builder: (context, state) {
+            return InputPasswordPage();
+          }),
       GoRoute(
-        path: inputPassword,
-        name: inputPassword,
-        builder: (context, state) => const InputPasswordPage(),
-      ),
+          path: loginPage,
+          name: loginPage,
+          builder: (context, state) {
+            return const LoginPage();
+          }),
     ],
     redirect: (context, state) {
       print('---path => ${state.uri.toString()}');

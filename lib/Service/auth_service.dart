@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:thammasat/Model/usersmodel.dart';
 
@@ -62,6 +63,7 @@ class AuthService {
   }
 
   Stream<User?> get userStream => auth.authStateChanges();
+
   Future<User?> saveUserEmailPassword({
     required String email,
     required String password,
@@ -110,6 +112,26 @@ class AuthService {
   Future<void> signOutIfNotVerified() async {
     if (!await isEmailVerified()) {
       await auth.signOut();
+    }
+  }
+
+  Future<void> checkEmailVerified(BuildContext context) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return;
+    }
+
+    await user.reload();
+
+    if (user.emailVerified) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Your email is verified!')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please verify your email first.')),
+      );
     }
   }
 }

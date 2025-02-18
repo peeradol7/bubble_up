@@ -39,7 +39,7 @@ class HomeButtonWidget extends StatelessWidget {
             textColor: Colors.blue,
             isOutlined: true,
             onPressed: () {
-              context.go(AppRoutes.loginPage);
+              context.push(AppRoutes.loginPage);
             },
           ),
         ],
