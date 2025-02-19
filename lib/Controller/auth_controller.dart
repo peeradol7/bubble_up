@@ -1,12 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:thammasat/Model/usersmodel.dart';
 import 'package:thammasat/Service/auth_service.dart';
 
 class AuthController extends GetxController {
   final AuthService authService = AuthService();
-  var userModel = <UsersModel>[].obs;
-
+  var user = Rxn<User>();
+  var isLoading = false.obs;
   RxString email = ''.obs;
   RxString password = ''.obs;
   RxString name = ''.obs;
@@ -40,6 +39,33 @@ class AuthController extends GetxController {
     } catch (e) {
       print('Error: $e');
       Get.snackbar('Error', 'Something went wrong');
+    }
+  }
+
+  Future<void> loginController() async {
+    try {
+      isLoading(true);
+      await googleLogin();
+    } catch (e) {
+      print('Exception : $e');
+    }
+  }
+
+  Future<void> googleLogin() async {
+    final result = await authService.loginWithGoogle();
+    if (result != null) {
+      user.value = result;
+    } else {
+      print('Google login failed: user is null');
+    }
+  }
+
+  Future<void> logoutController() async {
+    try {
+      await authService.logout();
+      user.value = null;
+    } catch (e) {
+      Get.snackbar('Error', '$e', snackPosition: SnackPosition.BOTTOM);
     }
   }
 }

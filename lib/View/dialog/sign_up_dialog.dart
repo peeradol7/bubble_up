@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:thammasat/Controller/auth_controller.dart';
 import 'package:thammasat/app_routes.dart';
 
 import '../widget/sign_up_button.dart';
@@ -13,6 +15,35 @@ class SignUpDialog extends StatefulWidget {
 
 class _SignUpDialogState extends State<SignUpDialog> {
   final CustomButton btn = CustomButton();
+
+  final AuthController authController = Get.put(AuthController());
+
+  Future<void> handleLogin(BuildContext context) async {
+    try {
+      await authController.loginController();
+
+      await Future.delayed(Duration(milliseconds: 500));
+
+      if (authController.user.value == null) {
+        print('Login failed, user is null');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login failed. Please try again.')),
+        );
+      } else {
+        print('Login successful, navigating to selectServicePage');
+        if (context.mounted) {
+          context.go(AppRoutes.selectServicePage);
+        }
+      }
+    } catch (e) {
+      print('Error: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('An error occurred. Please try again.')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +97,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
                 ),
                 const SizedBox(height: 20),
                 btn.btnSignUp(
-                  onPressed: () => {
-                    print('Login'),
-                  },
+                  onPressed: () => {handleLogin(context)},
                   label: 'Continue with Google',
                   iconPath: 'assets/google.png',
                 ),

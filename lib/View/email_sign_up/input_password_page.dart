@@ -46,6 +46,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
   ) async {
     try {
       await authController.signInWithEmail(email, password, phoneNumber, name);
+      Get.snackbar('Success', 'Check your email');
     } catch (e) {
       print(e);
     }
@@ -144,7 +145,6 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                           saveUser(email, password, phoneNumber, name);
 
                           context.go(AppRoutes.homePage);
-                          Get.snackbar('Error', 'Registration failed');
                         }
                       },
                       child: const Text("Submit"),

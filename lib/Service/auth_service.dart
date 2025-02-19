@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:thammasat/Model/google_user_model.dart';
 import 'package:thammasat/Model/usersmodel.dart';
 
 class AuthService {
@@ -13,17 +14,27 @@ class AuthService {
 
   Future<User?> loginWithGoogle() async {
     try {
+      print('Starting Google Sign In process...');
+
+      final isAvailable = await _googleSignIn.isSignedIn();
+      print('Google Sign In available: $isAvailable');
+
       await _googleSignIn.signOut();
       await auth.signOut();
 
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
-        throw Exception('Google sign-in aborted');
+        print('Sign in aborted by user');
+        return null;
       }
+
+      print('Google Sign In successful: ${googleUser.email}');
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
-      final OAuthCredential credential = GoogleAuthProvider.credential(
+      print('Got authentication tokens');
+
+      final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
@@ -32,17 +43,36 @@ class AuthService {
       final user = userCredential.user;
 
       if (user != null) {
-        print('Google login successful: ${user.uid}');
+        // สร้าง user model
+        final userData = GoogleUserModel(
+          userId: user.uid,
+          displayName: user.displayName ?? 'user',
+          authMethod: 'google',
+          phoneNumber: '',
+          address: '',
+        );
+
+        final userDoc =
+            await _firestore.collection(userCollection).doc(user.uid).get();
+
+        if (!userDoc.exists) {
+          await _firestore
+              .collection(userCollection)
+              .doc(user.uid)
+              .set(userData.toMap());
+          print('Saved new user data to Firestore');
+        } else {
+          print('User data already exists in Firestore');
+        }
       }
 
-      return user;
-    } catch (e) {
-      throw Exception('Error ${e.toString()}');
-    }
-  }
+      return userCredential.user;
+    } catch (e, stackTrace) {
+      print('Detailed error: $e');
+      print('Stack trace: $stackTrace');
 
-  Future<void> save(UsersModel user) async {
-    await _firestore.collection(userCollection).doc().set(user.toMap());
+      return null;
+    }
   }
 
   Future<User?> signInWithEmail(String email, String password) async {
@@ -136,5 +166,9 @@ class AuthService {
         SnackBar(content: Text('Please verify your email first.')),
       );
     }
+  }
+
+  Future<void> logout() async {
+    FirebaseAuth.instance.signOut();
   }
 }
