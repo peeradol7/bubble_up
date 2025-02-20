@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:thammasat/View/home_page/select_service_widget/display_service_widget.dart';
+import 'package:thammasat/View/home_page/select_service_widget/menu_bar_widget.dart';
 import 'package:thammasat/View/home_page/select_service_widget/promotion_banner_widget.dart';
+import 'package:thammasat/View/home_page/select_service_widget/recommended_widget.dart';
 import 'package:thammasat/View/home_page/select_service_widget/show_location_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,17 +18,30 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            ShowLocationWidget(),
-            SliverToBoxAdapter(
-              child: SizedBox(height: 20),
+        child: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                ShowLocationWidget(),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: 20),
+                ),
+                SliverToBoxAdapter(
+                  child: DisplayServiceWidget(),
+                ),
+                SliverToBoxAdapter(
+                  child: PromotionBannerWidget(),
+                ),
+                SliverToBoxAdapter(
+                  child: RecommendedWidget(),
+                ),
+              ],
             ),
-            SliverToBoxAdapter(
-              child: DisplayServiceWidget(),
-            ),
-            SliverToBoxAdapter(
-              child: PromotionBannerWidget(),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: MenuBarWidget(),
             ),
           ],
         ),

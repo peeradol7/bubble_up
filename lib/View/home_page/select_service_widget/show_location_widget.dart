@@ -37,17 +37,17 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
               const SizedBox(height: 20),
               Padding(
                 padding: EdgeInsets.only(
-                  left: 20,
+                  left: 18,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(
-                      Icons.gps_fixed,
+                      Icons.location_on,
                       color: Colors.white,
                       size: 30,
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(width: 1),
                     Text(
                       'Home',
                       style: TextStyle(
