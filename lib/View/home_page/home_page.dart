@@ -35,6 +35,11 @@ class _HomePageState extends State<HomePage> {
                 SliverToBoxAdapter(
                   child: RecommendedWidget(),
                 ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 90,
+                  ),
+                ),
               ],
             ),
             Positioned(

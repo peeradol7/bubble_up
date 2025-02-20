@@ -66,7 +66,7 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
           padding: EdgeInsets.only(
             left: 25,
             right: 25,
-            bottom: 20,
+            bottom: 10,
           ),
           child: TextField(
             decoration: InputDecoration(
