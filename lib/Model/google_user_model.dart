@@ -6,6 +6,7 @@ class GoogleUserModel {
   final String authMethod;
   final String phoneNumber;
   final String address;
+  final String role;
 
   GoogleUserModel({
     required this.userId,
@@ -13,6 +14,7 @@ class GoogleUserModel {
     required this.authMethod,
     required this.phoneNumber,
     required this.address,
+    required this.role,
   });
   factory GoogleUserModel.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -22,6 +24,7 @@ class GoogleUserModel {
       displayName: data['displayName'] ?? '',
       phoneNumber: data['phoneNumber'] ?? '',
       address: data['address'] ?? '',
+      role: data['role'] ?? '',
     );
   }
 
@@ -32,6 +35,7 @@ class GoogleUserModel {
       'authMethod': authMethod,
       'phoneNumber': phoneNumber,
       'address': address,
+      'role': role,
     };
   }
 }

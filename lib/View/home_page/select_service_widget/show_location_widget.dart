@@ -31,8 +31,9 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
             ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              const SizedBox(height: 20), // Add spacing from top
               Padding(
                 padding: EdgeInsets.only(
                   left: 20,
@@ -42,9 +43,10 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
                   child: Text(
                     'Home',
                     style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -52,7 +54,11 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
           ),
         ),
         title: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25),
+          padding: EdgeInsets.only(
+            left: 25,
+            right: 25,
+            bottom: 20,
+          ),
           child: TextField(
             decoration: InputDecoration(
               hintText: "Search",
@@ -60,12 +66,13 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
               filled: true,
               fillColor: Colors.white,
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none),
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide.none,
+              ),
             ),
           ),
         ),
-        titlePadding: EdgeInsets.only(bottom: 16),
+        titlePadding: EdgeInsets.zero, // Remove default title padding
       ),
     );
   }

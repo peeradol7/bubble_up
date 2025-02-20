@@ -14,8 +14,6 @@ class AuthService {
 
   Future<User?> loginWithGoogle() async {
     try {
-      print('Starting Google Sign In process...');
-
       final isAvailable = await _googleSignIn.isSignedIn();
       print('Google Sign In available: $isAvailable');
 
@@ -28,11 +26,8 @@ class AuthService {
         return null;
       }
 
-      print('Google Sign In successful: ${googleUser.email}');
-
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
-      print('Got authentication tokens');
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -43,13 +38,13 @@ class AuthService {
       final user = userCredential.user;
 
       if (user != null) {
-        // สร้าง user model
         final userData = GoogleUserModel(
           userId: user.uid,
           displayName: user.displayName ?? 'user',
           authMethod: 'google',
           phoneNumber: '',
           address: '',
+          role: '',
         );
 
         final userDoc =
@@ -61,9 +56,7 @@ class AuthService {
               .doc(user.uid)
               .set(userData.toMap());
           print('Saved new user data to Firestore');
-        } else {
-          print('User data already exists in Firestore');
-        }
+        } else {}
       }
 
       return userCredential.user;
@@ -117,9 +110,8 @@ class AuthService {
         phone_number: phoneNumber,
         email: email,
         password: password,
+        role: '',
       );
-
-      // Log ข้อมูลที่กำลังบันทึก
 
       await _firestore
           .collection(userCollection)

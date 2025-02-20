@@ -25,14 +25,13 @@ class _SignUpDialogState extends State<SignUpDialog> {
       await Future.delayed(Duration(milliseconds: 500));
 
       if (authController.user.value == null) {
-        print('Login failed, user is null');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login failed. Please try again.')),
         );
       } else {
         print('Login successful, navigating to selectServicePage');
         if (context.mounted) {
-          context.go(AppRoutes.selectServicePage);
+          context.go(AppRoutes.homepage);
         }
       }
     } catch (e) {

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thammasat/Controller/home_controller.dart';
-import 'package:thammasat/View/widget/home_button_widget.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+import 'widget/home_button_widget.dart';
+
+class LandingPage extends StatefulWidget {
+  const LandingPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<LandingPage> createState() => _LandingPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _LandingPageState extends State<LandingPage> {
   final HomeController controller = Get.put(HomeController());
 
   @override
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 50),
+                              padding: const EdgeInsets.symmetric(vertical: 02),
                               child: Image.asset(
                                 controller.images[index],
                                 height: 230,
@@ -64,6 +65,30 @@ class _HomePageState extends State<HomePage> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
+                            Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: List.generate(
+                                  controller.titles.length,
+                                  (index) => Obx(
+                                    () => Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5),
+                                      width: 12,
+                                      height: 12,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: controller.currentIndex.value ==
+                                                index
+                                            ? Colors.blue
+                                            : Colors.grey.shade300,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       );
@@ -71,33 +96,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      controller.titles.length,
-                      (index) => Obx(
-                        () => Container(
-                          margin: EdgeInsets.symmetric(horizontal: 5),
-                          width: 12,
-                          height: 12,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: controller.currentIndex.value == index
-                                ? Colors.blue
-                                : Colors.grey.shade300,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
                   padding: EdgeInsets.only(
                     left: 20,
                     right: 20,
-                    bottom: 35,
-                    top: MediaQuery.of(context).viewInsets.bottom > 0 ? 0 : 35,
+                    bottom: 0,
+                    top: MediaQuery.of(context).viewInsets.bottom > 0 ? 0 : 20,
                   ),
                   child: HomeButtonWidget(),
                 ),

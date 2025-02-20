@@ -144,7 +144,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
 
                           saveUser(email, password, phoneNumber, name);
 
-                          context.go(AppRoutes.homePage);
+                          context.go(AppRoutes.landingPage);
                         }
                       },
                       child: const Text("Submit"),
