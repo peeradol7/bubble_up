@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thammasat/View/home_page/select_service_widget/display_service_widget.dart';
+import 'package:thammasat/View/home_page/select_service_widget/promotion_banner_widget.dart';
 import 'package:thammasat/View/home_page/select_service_widget/show_location_widget.dart';
-import 'package:thammasat/View/widget/promotion_banner_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

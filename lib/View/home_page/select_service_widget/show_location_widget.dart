@@ -11,6 +11,7 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
   @override
   Widget build(BuildContext context) {
     const appbar = Color(0xFF01B9E4);
+
     return SliverAppBar(
       elevation: 0,
       backgroundColor: appbar,
@@ -33,21 +34,29 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 20), // Add spacing from top
+              const SizedBox(height: 20),
               Padding(
                 padding: EdgeInsets.only(
                   left: 20,
                 ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Home',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.gps_fixed,
                       color: Colors.white,
+                      size: 30,
                     ),
-                  ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Home',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
