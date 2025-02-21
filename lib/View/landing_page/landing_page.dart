@@ -40,7 +40,7 @@ class _LandingPageState extends State<LandingPage> {
           if (snapshot.hasData) {
             if (snapshot.data == false) {
               Future.delayed(Duration.zero, () {
-                context.go(AppRoutes.homepage);
+                context.go(AppRoutes.homePage);
               });
             }
           }

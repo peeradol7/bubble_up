@@ -10,11 +10,11 @@ class AppRoutes {
   static const String loginPage = '/login-page';
   static const String emailSignUp = '/email-sign-up';
   static const String accoountPage = '/accounts-page';
-  static const String homepage = '/home-page';
+  static const String homePage = '/home-page';
   static const String inputPassword = '/input-password';
 
   final route = GoRouter(
-    initialLocation: landingPage,
+    initialLocation: homePage,
     routes: [
       GoRoute(
           path: landingPage,
@@ -23,8 +23,8 @@ class AppRoutes {
             return const LandingPage();
           }),
       GoRoute(
-          path: homepage,
-          name: homepage,
+          path: homePage,
+          name: homePage,
           builder: (context, state) {
             return const HomePage();
           }),

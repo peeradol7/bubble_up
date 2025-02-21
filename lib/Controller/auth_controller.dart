@@ -9,8 +9,9 @@ import '../Service/shared_preferenes_service.dart';
 class AuthController extends GetxController {
   final AuthService authService = AuthService();
   final UserService userService = UserService();
+
   var user = Rxn<User>();
-  var userModel = Rxn<UsersModel>();
+  var userModel = Rxn<UserCollectionModel>();
   var isLoading = false.obs;
   RxString email = ''.obs;
   RxString password = ''.obs;
@@ -22,10 +23,33 @@ class AuthController extends GetxController {
 
   Future<void> fetchUserData(String email, String password) async {
     try {
-      UsersModel user = await userService.emailLoginService(email, password);
+      UserCollectionModel user =
+          await userService.emailLoginService(email, password);
       userModel.value = user;
     } catch (e) {
       errorMessage.value = e.toString();
+    }
+  }
+
+  Future<void> updateUserData(Map<String, dynamic> updatedData) async {
+    try {
+      await authService.updateUserData(updatedData);
+
+      userModel.value = UserCollectionModel(
+        userId: userModel.value?.userId ?? '',
+        email: updatedData['email'] ?? userModel.value?.email ?? '',
+        displayName: updatedData['name'] ?? userModel.value?.displayName ?? '',
+        role: updatedData['role'] ?? userModel.value?.role ?? '',
+        address: updatedData['address'] ?? userModel.value?.address ?? '',
+        phoneNumber:
+            updatedData['phoneNumber'] ?? userModel.value?.phoneNumber ?? '',
+        authMethod: '',
+      );
+
+      update(); // อัปเดต UI
+      print("User data updated in GetX");
+    } catch (e) {
+      print("Error updating user data in GetX: $e");
     }
   }
 

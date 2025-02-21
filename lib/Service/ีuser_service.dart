@@ -25,7 +25,8 @@ class UserService {
     }
   }
 
-  Future<UsersModel> emailLoginService(String email, String password) async {
+  Future<UserCollectionModel> emailLoginService(
+      String email, String password) async {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
         email: email,
@@ -48,13 +49,13 @@ class UserService {
         throw Exception("ไม่พบข้อมูลผู้ใช้ในระบบ");
       }
 
-      UsersModel userData = UsersModel.fromFirestore(userDoc);
+      UserCollectionModel userData = UserCollectionModel.fromFirestore(userDoc);
 
       final prefsService = await SharedPreferencesService.getInstance();
       await prefsService.saveUserData(
         userData.userId,
         userData.email,
-        userData.name,
+        userData.displayName,
         userData.role,
         userData.address,
         userData.phoneNumber,

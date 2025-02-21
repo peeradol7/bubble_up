@@ -38,7 +38,6 @@ class SharedPreferencesService {
       'phoneNumber': _prefs.getString('phoneNumber'),
     };
 
-    // Print out the user data
     print("User Data: $userData");
 
     return userData;

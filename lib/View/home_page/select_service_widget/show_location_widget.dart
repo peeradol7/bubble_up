@@ -81,7 +81,7 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
             ),
           ),
         ),
-        titlePadding: EdgeInsets.zero, // Remove default title padding
+        titlePadding: EdgeInsets.zero,
       ),
     );
   }

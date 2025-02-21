@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:thammasat/Model/google_user_model.dart';
-import 'package:thammasat/Model/usersmodel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thammasat/Model/user_collection_model.dart';
 
 import 'shared_preferenes_service.dart';
 
@@ -39,7 +39,7 @@ class AuthService {
       final user = userCredential.user;
 
       if (user != null) {
-        final userData = GoogleUserModel(
+        final userData = UserCollectionModel(
           userId: user.uid,
           displayName: user.displayName ?? 'user',
           authMethod: 'google',
@@ -80,23 +80,6 @@ class AuthService {
     }
   }
 
-  Future<User?> signInWithEmail(String email, String password) async {
-    try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
-    } catch (e) {
-      print("Error signing in: $e");
-      return null;
-    }
-  }
-
-  Future<void> signOut() async {
-    await auth.signOut();
-  }
-
   Future<User?> saveUserEmailPassword({
     required String email,
     required String password,
@@ -127,10 +110,10 @@ class AuthService {
 
       await user.sendEmailVerification();
 
-      UsersModel userData = UsersModel(
+      UserCollectionModel userData = UserCollectionModel(
         userId: user.uid,
         authMethod: 'email',
-        name: name,
+        displayName: name,
         phoneNumber: phoneNumber,
         email: email,
         password: password,
@@ -147,6 +130,37 @@ class AuthService {
     } catch (e) {
       print('Error during registration: $e');
       return null;
+    }
+  }
+
+  Future<void> updateUserData(Map<String, dynamic> updatedData) async {
+    try {
+      String? userId = auth.currentUser?.uid;
+      if (userId == null) {
+        throw Exception("User not logged in");
+      }
+
+      await _firestore
+          .collection(userCollection)
+          .doc(userId)
+          .update(updatedData);
+      print('User data updated successfully');
+
+      final prefs = await SharedPreferences.getInstance();
+      String? email = prefs.getString('email');
+      String? name = prefs.getString('name');
+      String? role = prefs.getString('role');
+      String? address = prefs.getString('address');
+      String? phoneNumber = prefs.getString('phoneNumber');
+
+      await prefs.setString('email', updatedData['email'] ?? email ?? '');
+      await prefs.setString('name', updatedData['name'] ?? name ?? '');
+      await prefs.setString('role', updatedData['role'] ?? role ?? '');
+      await prefs.setString('address', updatedData['address'] ?? address ?? '');
+      await prefs.setString(
+          'phoneNumber', updatedData['phoneNumber'] ?? phoneNumber ?? '');
+    } catch (e) {
+      throw Exception("Error updating user data: ${e.toString()}");
     }
   }
 

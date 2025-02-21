@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
       await authController.fetchUserData(email, password);
 
       if (authController.userModel.value != null) {
-        context.go(AppRoutes.homepage);
+        context.go(AppRoutes.homePage);
       }
     } catch (e) {
       setState(() {

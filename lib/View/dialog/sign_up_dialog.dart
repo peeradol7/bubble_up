@@ -31,7 +31,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
       } else {
         print('Login successful, navigating to selectServicePage');
         if (context.mounted) {
-          context.go(AppRoutes.homepage);
+          context.go(AppRoutes.homePage);
         }
       }
     } catch (e) {

@@ -1,33 +1,40 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class GoogleUserModel {
+class UserCollectionModel {
   final String userId;
   final String displayName;
   final String authMethod;
   final String email;
+  final String? password;
   final String phoneNumber;
-  final String address;
   final String role;
+  final String address;
 
-  GoogleUserModel({
+  UserCollectionModel({
     required this.userId,
     required this.displayName,
     required this.authMethod,
-    required this.phoneNumber,
-    required this.address,
     required this.email,
+    this.password,
+    required this.phoneNumber,
     required this.role,
+    required this.address,
   });
-  factory GoogleUserModel.fromFirestore(DocumentSnapshot doc) {
+
+  factory UserCollectionModel.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return GoogleUserModel(
+
+    return UserCollectionModel(
       userId: data['userId'] ?? '',
-      authMethod: data['authMethod'] ?? 'google',
-      displayName: data['displayName'] ?? '',
-      phoneNumber: data['phoneNumber'] ?? '',
-      address: data['address'] ?? '',
-      role: data['role'] ?? '',
+      displayName: data['displayName'] ?? data['name'] ?? '',
+      authMethod: data['authMethod'] ?? 'email',
       email: data['email'] ?? '',
+      password: data.containsKey('password')
+          ? data['password']
+          : null, // อนุญาตให้ null ได้
+      phoneNumber: data['phoneNumber'] ?? '',
+      role: data['role'] ?? '',
+      address: data['address'] ?? '',
     );
   }
 
@@ -36,9 +43,11 @@ class GoogleUserModel {
       'userId': userId,
       'displayName': displayName,
       'authMethod': authMethod,
+      'email': email,
+      if (password != null) 'password': password,
       'phoneNumber': phoneNumber,
-      'address': address,
       'role': role,
+      'address': address,
     };
   }
 }
