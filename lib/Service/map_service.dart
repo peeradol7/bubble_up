@@ -20,9 +20,6 @@ class MapService {
     if (placemarks.isNotEmpty) {
       Placemark placemark = placemarks.first;
 
-      // คืนค่า Thoroughfare (ถนน)
-      print("Thoroughfare: ${placemark.locality}");
-
       return placemark.locality ?? "Unknown Thoroughfare";
     } else {
       return "No address found";

@@ -17,7 +17,7 @@ class RecommendedWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
-            'Laundry services you may like',
+            'ร้านซักรีดที่คุณอาจสนใจ',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

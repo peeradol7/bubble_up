@@ -29,7 +29,7 @@ class DisplayServiceWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Our Services',
+            'บริการของเรา',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
