@@ -2,8 +2,8 @@ import 'package:go_router/go_router.dart';
 import 'package:thammasat/View/email_sign_up/email_sign_up.dart';
 import 'package:thammasat/View/email_sign_up/input_password_page.dart';
 import 'package:thammasat/View/home_page/home_page.dart';
-import 'package:thammasat/View/landing_page.dart';
-import 'package:thammasat/View/login_page.dart';
+import 'package:thammasat/View/landing_widget/landing_page.dart';
+import 'package:thammasat/View/login_page/login_page.dart';
 
 class AppRoutes {
   static const String landingPage = '/';
@@ -14,7 +14,7 @@ class AppRoutes {
   static const String inputPassword = '/input-password';
 
   final route = GoRouter(
-    initialLocation: homepage,
+    initialLocation: landingPage,
     routes: [
       GoRoute(
           path: landingPage,

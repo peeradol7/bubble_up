@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:thammasat/Model/google_user_model.dart';
 import 'package:thammasat/Model/usersmodel.dart';
@@ -45,6 +44,7 @@ class AuthService {
           phoneNumber: '',
           address: '',
           role: '',
+          email: user.email!,
         );
 
         final userDoc =
@@ -90,8 +90,18 @@ class AuthService {
     required String password,
     required String name,
     required String phoneNumber,
+    required String role,
   }) async {
     try {
+      var querySnapshot = await _firestore
+          .collection(userCollection)
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        throw Exception("อีเมลนี้ถูกใช้ไปแล้ว");
+      }
+
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -103,14 +113,16 @@ class AuthService {
         return null;
       }
 
+      await user.sendEmailVerification();
+
       UsersModel userData = UsersModel(
         userId: user.uid,
         authMethod: 'email',
         name: name,
-        phone_number: phoneNumber,
+        phoneNumber: phoneNumber,
         email: email,
         password: password,
-        role: '',
+        role: role,
       );
 
       await _firestore
@@ -122,41 +134,6 @@ class AuthService {
     } catch (e) {
       print('Error during registration: $e');
       return null;
-    }
-  }
-
-  Future<bool> isEmailVerified() async {
-    User? user = auth.currentUser;
-    if (user != null) {
-      await user.reload();
-      return user.emailVerified;
-    }
-    return false;
-  }
-
-  Future<void> signOutIfNotVerified() async {
-    if (!await isEmailVerified()) {
-      await auth.signOut();
-    }
-  }
-
-  Future<void> checkEmailVerified(BuildContext context) async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user == null) {
-      return;
-    }
-
-    await user.reload();
-
-    if (user.emailVerified) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Your email is verified!')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please verify your email first.')),
-      );
     }
   }
 

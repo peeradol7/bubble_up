@@ -5,7 +5,7 @@ class UsersModel {
   final String email;
   final String authMethod;
   final String password;
-  final String phone_number;
+  final String phoneNumber;
   final String name;
   final String role;
 
@@ -13,7 +13,7 @@ class UsersModel {
     required this.userId,
     required this.email,
     required this.name,
-    required this.phone_number,
+    required this.phoneNumber,
     required this.password,
     required this.authMethod,
     required this.role,
@@ -26,7 +26,7 @@ class UsersModel {
       userId: data['userId'],
       email: data['email'],
       name: data['name'],
-      phone_number: data['phone_number'],
+      phoneNumber: data['phoneNumber'],
       password: data['password'],
       authMethod: data['authMethod'],
       role: data['role'],
@@ -37,7 +37,7 @@ class UsersModel {
       'userId': userId,
       'email': email,
       'name': name,
-      'phone_number': phone_number,
+      'phoneNumber': phoneNumber,
       'password': password,
       'authMethod': authMethod,
       'role': role,

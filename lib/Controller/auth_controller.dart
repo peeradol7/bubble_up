@@ -1,22 +1,38 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:thammasat/Model/usersmodel.dart';
+import 'package:thammasat/Service/%E0%B8%B5user_service.dart';
 import 'package:thammasat/Service/auth_service.dart';
 
 class AuthController extends GetxController {
   final AuthService authService = AuthService();
+  final UserService userService = UserService();
   var user = Rxn<User>();
+  var userModel = Rxn<UsersModel>();
   var isLoading = false.obs;
   RxString email = ''.obs;
   RxString password = ''.obs;
   RxString name = ''.obs;
   RxString phoneNumber = ''.obs;
   RxString confirmPassword = ''.obs;
+  RxString role = ''.obs;
+  var errorMessage = ''.obs;
+
+  Future<void> fetchUserData(String email, String password) async {
+    try {
+      UsersModel user = await userService.getUserData(email, password);
+      userModel.value = user;
+    } catch (e) {
+      errorMessage.value = e.toString();
+    }
+  }
 
   Future<void> signInWithEmail(
     String email,
     String password,
     String phoneNumber,
     String name,
+    String role,
   ) async {
     try {
       this.email.value = email;
@@ -29,6 +45,7 @@ class AuthController extends GetxController {
         password: password,
         name: name,
         phoneNumber: phoneNumber,
+        role: role,
       );
 
       if (user != null) {

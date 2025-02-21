@@ -43,9 +43,11 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
     String password,
     String phoneNumber,
     String name,
+    String role,
   ) async {
     try {
-      await authController.signInWithEmail(email, password, phoneNumber, name);
+      await authController.signInWithEmail(
+          email, password, phoneNumber, name, role);
       Get.snackbar('Success', 'Check your email');
     } catch (e) {
       print(e);
@@ -69,81 +71,83 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextFormField(
-                      onChanged: (value) {
-                        authController.phoneNumber.value = value;
-                      },
-                      keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                        labelText: "Phone Number",
-                        hintText: "Enter your phone number",
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.phone),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your phone number';
-                        }
-                        return null;
-                      },
+                    SizedBox(
+                      height: 20,
+                    ),
+                    buildTextField(
+                      label: "Phone Number",
+                      hint: "Enter your phone number",
+                      icon: Icons.phone,
+                      onChanged: (value) =>
+                          authController.phoneNumber.value = value,
+                      validator: (value) => value == null || value.isEmpty
+                          ? 'Please enter your phone number'
+                          : null,
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      onChanged: (value) {
-                        authController.name.value = value;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: "Name",
-                        hintText: "Enter your name",
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your name';
-                        }
-                        return null;
-                      },
+                    buildTextField(
+                      label: "Name",
+                      hint: "Enter your name",
+                      icon: Icons.person,
+                      onChanged: (value) => authController.name.value = value,
+                      validator: (value) => value == null || value.isEmpty
+                          ? 'Please enter your name'
+                          : null,
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      onChanged: (value) {
-                        authController.password.value = value;
-                      },
+                    buildTextField(
+                      label: "Password",
+                      hint: "Enter your password",
+                      icon: Icons.lock,
                       obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: "Password",
-                        hintText: "Enter your password",
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.lock),
-                      ),
+                      onChanged: (value) =>
+                          authController.password.value = value,
                       validator: passwordValidate,
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      onChanged: (value) {
-                        authController.confirmPassword.value = value;
-                      },
+                    buildTextField(
+                      label: "Confirm Password",
+                      hint: "Confirm your password",
+                      icon: Icons.lock,
                       obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: "Confirm Password",
-                        hintText: "Confirm your password",
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.lock),
-                      ),
+                      onChanged: (value) =>
+                          authController.confirmPassword.value = value,
                       validator: confirmPasswordValidate,
+                    ),
+                    const SizedBox(height: 20),
+                    Obx(
+                      () => Column(
+                        children: [
+                          RadioListTile<String>(
+                            title: const Text("Customer"),
+                            value: "Customer",
+                            groupValue: authController.role.value,
+                            onChanged: (value) {
+                              authController.role.value = value!;
+                            },
+                          ),
+                          RadioListTile<String>(
+                            title: const Text("Rider"),
+                            value: "Rider",
+                            groupValue: authController.role.value,
+                            onChanged: (value) {
+                              authController.role.value = value!;
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
-                          String name = authController.name.value;
-                          String phoneNumber = authController.phoneNumber.value;
-                          String password = authController.password.value;
-                          String email = authController.email.value;
-
-                          saveUser(email, password, phoneNumber, name);
-
+                          saveUser(
+                            authController.email.value,
+                            authController.password.value,
+                            authController.phoneNumber.value,
+                            authController.name.value,
+                            authController.role.value,
+                          );
                           context.go(AppRoutes.landingPage);
                         }
                       },
@@ -156,6 +160,27 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildTextField({
+    required String label,
+    required String hint,
+    required IconData icon,
+    bool obscureText = false,
+    required Function(String) onChanged,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      onChanged: onChanged,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        border: const OutlineInputBorder(),
+        prefixIcon: Icon(icon),
+      ),
+      validator: validator,
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thammasat/Controller/home_controller.dart';
 
-import 'widget/home_button_widget.dart';
+import 'home_button_widget.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -23,6 +23,9 @@ class _LandingPageState extends State<LandingPage> {
             hasScrollBody: true,
             child: Column(
               children: [
+                SizedBox(
+                  height: 30,
+                ),
                 Expanded(
                   child: PageView.builder(
                     onPageChanged: (index) =>
@@ -104,6 +107,9 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                   child: HomeButtonWidget(),
                 ),
+                SizedBox(
+                  height: 40,
+                )
               ],
             ),
           ),

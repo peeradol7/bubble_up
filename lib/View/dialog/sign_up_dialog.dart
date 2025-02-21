@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:thammasat/Controller/auth_controller.dart';
 import 'package:thammasat/app_routes.dart';
 
-import '../widget/sign_up_button.dart';
+import '../landing_widget/sign_up_button.dart';
 
 class SignUpDialog extends StatefulWidget {
   const SignUpDialog({super.key});
@@ -103,7 +103,8 @@ class _SignUpDialogState extends State<SignUpDialog> {
                 const SizedBox(height: 10),
                 btn.btnSignUp(
                   onPressed: () => {
-                    context.go(AppRoutes.emailSignUp),
+                    context.pop(),
+                    context.push(AppRoutes.emailSignUp),
                   },
                   label: 'Continue with Email',
                   iconPath: 'assets/email.png',
