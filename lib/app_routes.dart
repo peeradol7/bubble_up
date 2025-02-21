@@ -2,8 +2,11 @@ import 'package:go_router/go_router.dart';
 import 'package:thammasat/View/email_sign_up/email_sign_up.dart';
 import 'package:thammasat/View/email_sign_up/input_password_page.dart';
 import 'package:thammasat/View/home_page/home_page.dart';
+import 'package:thammasat/View/home_page/profile_page/edit_address_page.dart';
 import 'package:thammasat/View/landing_page/landing_page.dart';
 import 'package:thammasat/View/login_page/login_page.dart';
+
+import 'View/home_page/profile_page/edit_person_data.dart';
 
 class AppRoutes {
   static const String landingPage = '/';
@@ -12,6 +15,8 @@ class AppRoutes {
   static const String accoountPage = '/accounts-page';
   static const String homePage = '/home-page';
   static const String inputPassword = '/input-password';
+  static const String editAddressPage = '/edit-address-data';
+  static const String editPersonDataPage = '/edit-persion-data';
 
   final route = GoRouter(
     initialLocation: homePage,
@@ -45,6 +50,18 @@ class AppRoutes {
           name: loginPage,
           builder: (context, state) {
             return const LoginPage();
+          }),
+      GoRoute(
+          path: editAddressPage,
+          name: editAddressPage,
+          builder: (context, state) {
+            return const EditAddressPage();
+          }),
+      GoRoute(
+          path: editPersonDataPage,
+          name: editPersonDataPage,
+          builder: (context, state) {
+            return EditPersonData();
           }),
     ],
     redirect: (context, state) {

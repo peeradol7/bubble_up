@@ -21,6 +21,12 @@ class AuthController extends GetxController {
   RxString role = ''.obs;
   var errorMessage = ''.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    loadUserData();
+  }
+
   Future<void> fetchUserData(String email, String password) async {
     try {
       UserCollectionModel user =
@@ -45,6 +51,8 @@ class AuthController extends GetxController {
             updatedData['phoneNumber'] ?? userModel.value?.phoneNumber ?? '',
         authMethod: '',
       );
+      name.value = updatedData['name'] ?? 'Guest';
+      phoneNumber.value = updatedData['phoneNumber'];
 
       update();
       print("User data updated in GetX");

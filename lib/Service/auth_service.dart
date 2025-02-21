@@ -16,7 +16,7 @@ class AuthService {
   Future<User?> loginWithGoogle() async {
     try {
       final isAvailable = await _googleSignIn.isSignedIn();
-      print('Google Sign In available: $isAvailable');
+      print('Test Google Sign In available: $isAvailable');
 
       await _googleSignIn.signOut();
       await auth.signOut();

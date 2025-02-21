@@ -27,7 +27,6 @@ class HomePage extends StatelessWidget {
                 controller.selectedIndex.value = index;
               },
               children: [
-                // Home Page Content
                 CustomScrollView(
                   slivers: [
                     ShowLocationWidget(),

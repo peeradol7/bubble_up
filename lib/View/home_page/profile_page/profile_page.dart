@@ -82,7 +82,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (snapshot.hasData && snapshot.data != null) {
                   final displayName = snapshot.data!['name'] ?? 'Guest';
-
+                  authController.name.value = displayName;
                   return Container(
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -94,26 +94,29 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                displayName,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {},
-                                child: const Text(
-                                  'แก้ไขข้อมูลส่วนตัว',
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                            ],
-                          ),
+                          child: Obx(() => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    authController.name.value,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      context
+                                          .push(AppRoutes.editPersonDataPage);
+                                    },
+                                    child: const Text(
+                                      'แก้ไขข้อมูลส่วนตัว',
+                                      style: TextStyle(color: Colors.blue),
+                                    ),
+                                  ),
+                                ],
+                              )),
                         ),
                       ],
                     ),
@@ -123,8 +126,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 }
               },
             ),
-
-            // Menu Items
             Expanded(
               child: ListView(
                 children: [
@@ -136,7 +137,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 ],
               ),
             ),
-
             MenuBarWidget(),
           ],
         ),
