@@ -29,9 +29,7 @@ class UserCollectionModel {
       displayName: data['displayName'] ?? data['name'] ?? '',
       authMethod: data['authMethod'] ?? 'email',
       email: data['email'] ?? '',
-      password: data.containsKey('password')
-          ? data['password']
-          : null, // อนุญาตให้ null ได้
+      password: data.containsKey('password') ? data['password'] : null,
       phoneNumber: data['phoneNumber'] ?? '',
       role: data['role'] ?? '',
       address: data['address'] ?? '',

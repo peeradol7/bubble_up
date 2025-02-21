@@ -19,8 +19,10 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await authController.fetchUserData(email, password);
 
-      if (authController.userModel.value != null) {
+      if (authController.userModel.value!.role == 'customer') {
         context.go(AppRoutes.homePage);
+      } else {
+        context.go(AppRoutes.riderHomePage);
       }
     } catch (e) {
       setState(() {

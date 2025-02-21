@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:thammasat/Controller/map_controller.dart';
 
 class ShowLocationWidget extends StatefulWidget {
   const ShowLocationWidget({super.key});
@@ -8,6 +10,8 @@ class ShowLocationWidget extends StatefulWidget {
 }
 
 class _ShowLocationWidgetState extends State<ShowLocationWidget> {
+  final MapController mapController = Get.put(MapController());
+
   @override
   Widget build(BuildContext context) {
     const appbar = Color(0xFF01B9E4);
@@ -36,26 +40,41 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
             children: [
               const SizedBox(height: 20),
               Padding(
-                padding: EdgeInsets.only(
-                  left: 18,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                padding: EdgeInsets.only(left: 18, right: 18),
+                child: Stack(
                   children: [
-                    Icon(
-                      Icons.location_on,
-                      color: Colors.white,
-                      size: 30,
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        SizedBox(width: 1),
+                        Text(
+                          'Home',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 1),
-                    Text(
-                      'Home',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    Obx(() {
+                      var district = mapController.district.value;
+                      return Positioned(
+                        right: 0,
+                        left: 100,
+                        top: 5,
+                        child: Text(
+                          district.isNotEmpty
+                              ? district
+                              : 'Loading location...',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      );
+                    }),
                   ],
                 ),
               ),

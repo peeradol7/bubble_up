@@ -5,6 +5,7 @@ import 'package:thammasat/View/home_page/home_page.dart';
 import 'package:thammasat/View/home_page/profile_page/edit_address_page.dart';
 import 'package:thammasat/View/landing_page/landing_page.dart';
 import 'package:thammasat/View/login_page/login_page.dart';
+import 'package:thammasat/View/rider_page/rider_home_page.dart';
 
 import 'View/home_page/profile_page/edit_person_data.dart';
 
@@ -17,6 +18,7 @@ class AppRoutes {
   static const String inputPassword = '/input-password';
   static const String editAddressPage = '/edit-address-data';
   static const String editPersonDataPage = '/edit-persion-data';
+  static const String riderHomePage = '/rider-home-page';
 
   final route = GoRouter(
     initialLocation: homePage,
@@ -62,6 +64,12 @@ class AppRoutes {
           name: editPersonDataPage,
           builder: (context, state) {
             return EditPersonData();
+          }),
+      GoRoute(
+          path: riderHomePage,
+          name: riderHomePage,
+          builder: (context, state) {
+            return RiderHomePage();
           }),
     ],
     redirect: (context, state) {
