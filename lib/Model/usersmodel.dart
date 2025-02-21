@@ -8,6 +8,7 @@ class UsersModel {
   final String phoneNumber;
   final String name;
   final String role;
+  final String address;
 
   UsersModel({
     required this.userId,
@@ -17,6 +18,7 @@ class UsersModel {
     required this.password,
     required this.authMethod,
     required this.role,
+    required this.address,
   });
 
   factory UsersModel.fromFirestore(DocumentSnapshot doc) {
@@ -30,6 +32,7 @@ class UsersModel {
       password: data['password'],
       authMethod: data['authMethod'],
       role: data['role'],
+      address: data['address'],
     );
   }
   Map<String, dynamic> toMap() {
@@ -41,6 +44,7 @@ class UsersModel {
       'password': password,
       'authMethod': authMethod,
       'role': role,
+      'address': address,
     };
   }
 }

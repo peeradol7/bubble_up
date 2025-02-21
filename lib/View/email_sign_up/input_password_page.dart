@@ -46,7 +46,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
     String role,
   ) async {
     try {
-      await authController.signInWithEmail(
+      await authController.signUpWithEmail(
           email, password, phoneNumber, name, role);
       Get.snackbar('Success', 'Check your email');
     } catch (e) {

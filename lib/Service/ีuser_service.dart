@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../Model/usersmodel.dart';
+import 'shared_preferenes_service.dart';
 
 class UserService {
   static const String usersCollection = 'users';
@@ -24,7 +25,7 @@ class UserService {
     }
   }
 
-  Future<UsersModel> getUserData(String email, String password) async {
+  Future<UsersModel> emailLoginService(String email, String password) async {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
         email: email,
@@ -47,7 +48,19 @@ class UserService {
         throw Exception("ไม่พบข้อมูลผู้ใช้ในระบบ");
       }
 
-      return UsersModel.fromFirestore(userDoc);
+      UsersModel userData = UsersModel.fromFirestore(userDoc);
+
+      final prefsService = await SharedPreferencesService.getInstance();
+      await prefsService.saveUserData(
+        userData.userId,
+        userData.email,
+        userData.name,
+        userData.role,
+        userData.address,
+        userData.phoneNumber,
+      );
+
+      return userData;
     } catch (e) {
       throw Exception("เกิดข้อผิดพลาด: ${e.toString()}");
     }

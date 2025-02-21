@@ -4,6 +4,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:thammasat/Model/google_user_model.dart';
 import 'package:thammasat/Model/usersmodel.dart';
 
+import 'shared_preferenes_service.dart';
+
 class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -45,6 +47,16 @@ class AuthService {
           address: '',
           role: '',
           email: user.email!,
+        );
+
+        final prefsService = await SharedPreferencesService.getInstance();
+        await prefsService.saveUserData(
+          userData.userId,
+          userData.email,
+          userData.displayName,
+          userData.role,
+          userData.address,
+          userData.phoneNumber,
         );
 
         final userDoc =
@@ -123,6 +135,7 @@ class AuthService {
         email: email,
         password: password,
         role: role,
+        address: '',
       );
 
       await _firestore

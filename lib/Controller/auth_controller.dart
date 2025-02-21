@@ -4,6 +4,8 @@ import 'package:thammasat/Model/usersmodel.dart';
 import 'package:thammasat/Service/%E0%B8%B5user_service.dart';
 import 'package:thammasat/Service/auth_service.dart';
 
+import '../Service/shared_preferenes_service.dart';
+
 class AuthController extends GetxController {
   final AuthService authService = AuthService();
   final UserService userService = UserService();
@@ -20,14 +22,35 @@ class AuthController extends GetxController {
 
   Future<void> fetchUserData(String email, String password) async {
     try {
-      UsersModel user = await userService.getUserData(email, password);
+      UsersModel user = await userService.emailLoginService(email, password);
       userModel.value = user;
     } catch (e) {
       errorMessage.value = e.toString();
     }
   }
 
-  Future<void> signInWithEmail(
+  Future<bool> loadUserDataInitState() async {
+    final prefsService = await SharedPreferencesService.getInstance();
+    Map<String, String?> userData = prefsService.getUserData();
+
+    return userData.isNotEmpty;
+  }
+
+  Future<Map<String, String>?> loadUserData() async {
+    final prefsService = await SharedPreferencesService.getInstance();
+    Map<String, String?> userData = prefsService.getUserData();
+
+    if (userData.isNotEmpty) {
+      final cleanedUserData = userData.map((key, value) {
+        return MapEntry(key, value ?? '');
+      });
+
+      return cleanedUserData;
+    }
+    return null;
+  }
+
+  Future<void> signUpWithEmail(
     String email,
     String password,
     String phoneNumber,
@@ -81,6 +104,9 @@ class AuthController extends GetxController {
     try {
       await authService.logout();
       user.value = null;
+      userModel.value = null;
+      final prefsService = await SharedPreferencesService.getInstance();
+      prefsService.clearUserData();
     } catch (e) {
       Get.snackbar('Error', '$e', snackPosition: SnackPosition.BOTTOM);
     }
