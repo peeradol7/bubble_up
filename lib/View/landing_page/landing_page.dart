@@ -19,6 +19,11 @@ class _LandingPageState extends State<LandingPage> {
   final AuthController authController = Get.put(AuthController());
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<bool>(
@@ -32,10 +37,12 @@ class _LandingPageState extends State<LandingPage> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          if (snapshot.hasData && snapshot.data == true) {
-            Future.delayed(Duration.zero, () {
-              context.go(AppRoutes.homepage);
-            });
+          if (snapshot.hasData) {
+            if (snapshot.data == false) {
+              Future.delayed(Duration.zero, () {
+                context.go(AppRoutes.homepage);
+              });
+            }
           }
 
           return CustomScrollView(

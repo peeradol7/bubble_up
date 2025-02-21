@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:thammasat/Controller/auth_controller.dart';
 import 'package:thammasat/app_routes.dart';
 
-import '../landing_widget/sign_up_button.dart';
+import '../landing_page/sign_up_button.dart';
 
 class SignUpDialog extends StatefulWidget {
   const SignUpDialog({super.key});

@@ -29,7 +29,7 @@ class SharedPreferencesService {
   }
 
   Map<String, String?> getUserData() {
-    return {
+    Map<String, String?> userData = {
       'userId': _prefs.getString('userId'),
       'email': _prefs.getString('email'),
       'name': _prefs.getString('name'),
@@ -37,6 +37,11 @@ class SharedPreferencesService {
       'address': _prefs.getString('address'),
       'phoneNumber': _prefs.getString('phoneNumber'),
     };
+
+    // Print out the user data
+    print("User Data: $userData");
+
+    return userData;
   }
 
   Future<void> clearUserData() async {
