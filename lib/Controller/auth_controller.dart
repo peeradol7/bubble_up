@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:thammasat/Model/usersmodel.dart';
+import 'package:thammasat/Model/user_collection_model.dart';
 import 'package:thammasat/Service/%E0%B8%B5user_service.dart';
 import 'package:thammasat/Service/auth_service.dart';
 
@@ -46,7 +46,7 @@ class AuthController extends GetxController {
         authMethod: '',
       );
 
-      update(); // อัปเดต UI
+      update();
       print("User data updated in GetX");
     } catch (e) {
       print("Error updating user data in GetX: $e");

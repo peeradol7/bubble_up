@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../Model/usersmodel.dart';
+import '../Model/user_collection_model.dart';
 import 'shared_preferenes_service.dart';
 
 class UserService {
