@@ -16,7 +16,7 @@ class SignUpDialog extends StatefulWidget {
 class _SignUpDialogState extends State<SignUpDialog> {
   final CustomButton btn = CustomButton();
 
-  final AuthController authController = Get.put(AuthController());
+  final AuthController authController = Get.find<AuthController>();
 
   Future<void> handleLogin(BuildContext context) async {
     try {

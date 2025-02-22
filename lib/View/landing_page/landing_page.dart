@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thammasat/Controller/auth_controller.dart';
-import 'package:thammasat/Controller/home_controller.dart';
+import 'package:thammasat/Controller/slide_controller.dart';
 import 'package:thammasat/app_routes.dart';
 
+import '../../Service/shared_preferenes_service.dart';
 import 'home_button_widget.dart';
 
 class LandingPage extends StatefulWidget {
@@ -15,8 +16,8 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  final HomeController controller = Get.put(HomeController());
-  final AuthController authController = Get.put(AuthController());
+  final SlideController controller = Get.find<SlideController>();
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   void initState() {
@@ -30,21 +31,29 @@ class _LandingPageState extends State<LandingPage> {
         future: authController.loadUserDataInitState(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          if (snapshot.hasData) {
-            if (snapshot.data == false) {
-              Future.delayed(Duration.zero, () {
-                context.go(AppRoutes.homePage);
-              });
-            }
-          }
+          if (snapshot.hasData && snapshot.data == true) {
+            SharedPreferencesService.getInstance().then((prefs) {
+              final userData = prefs.getUserData();
+              final userRole = userData['role'];
 
+              if (userRole == 'customer') {
+                Future.delayed(Duration.zero, () {
+                  context.go(AppRoutes.homePage);
+                });
+              } else if (userRole == 'rider') {
+                Future.delayed(Duration.zero, () {
+                  context.go(AppRoutes.riderHomePage);
+                });
+              }
+            });
+          }
           return CustomScrollView(
             slivers: [
               SliverFillRemaining(

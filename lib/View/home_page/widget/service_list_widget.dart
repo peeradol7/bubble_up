@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ServiceListWidget {
-  final MenuController menuController = Get.put(MenuController());
+  final MenuController menuController = Get.find<MenuController>();
 
   Widget buildServiceItem(
     String title,

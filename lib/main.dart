@@ -1,7 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:thammasat/Controller/auth_controller.dart';
+import 'package:thammasat/Controller/laundry_controller.dart';
+import 'package:thammasat/Controller/map_controller.dart';
+import 'package:thammasat/Controller/menubar_controller.dart';
+import 'package:thammasat/Controller/position_controller.dart';
+import 'package:thammasat/Controller/service_list_controller.dart';
+import 'package:thammasat/Controller/slide_controller.dart';
 import 'package:thammasat/app_routes.dart';
 
+import 'Controller/location_controller.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -10,6 +19,15 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
+  Get.put(LocationController());
+  Get.put(LaundryController());
+  Get.put(AuthController());
+  Get.put(MapController());
+  Get.put(MenuController());
+  Get.put(MenuBarController());
+  Get.put(PositionController());
+  Get.put(ServiceListController());
+  Get.put(SlideController());
 }
 
 class MyApp extends StatelessWidget {

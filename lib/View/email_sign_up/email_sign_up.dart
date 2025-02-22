@@ -8,7 +8,7 @@ class EmailSignUp extends StatelessWidget {
   EmailSignUp({super.key});
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final AuthController authController = Get.put(AuthController());
+  final AuthController authController = Get.find<AuthController>();
 
   String? emailValidate(String? value, BuildContext context) {
     if (value == null || value.isEmpty) {

@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:thammasat/Controller/location_controller.dart';
 import 'package:thammasat/Controller/map_controller.dart';
 
-class ShowLocationWidget extends StatefulWidget {
-  const ShowLocationWidget({super.key});
+class ShowLocationWidget extends StatelessWidget {
+  final LocationController locationController = Get.find<LocationController>();
+  final MapController mapController = Get.find<MapController>();
+  final TextEditingController searchController = TextEditingController();
 
-  @override
-  State<ShowLocationWidget> createState() => _ShowLocationWidgetState();
-}
-
-class _ShowLocationWidgetState extends State<ShowLocationWidget> {
-  final MapController mapController = Get.put(MapController());
+  ShowLocationWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,7 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
             children: [
               const SizedBox(height: 20),
               Padding(
-                padding: EdgeInsets.only(left: 18, right: 18),
+                padding: EdgeInsets.symmetric(horizontal: 18),
                 child: Stack(
                   children: [
                     Row(
@@ -50,7 +48,7 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
                           color: Colors.white,
                           size: 30,
                         ),
-                        SizedBox(width: 1),
+                        SizedBox(width: 5),
                         Text(
                           'Home',
                           style: TextStyle(
@@ -64,7 +62,6 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
                     Obx(() {
                       var district = mapController.district.value;
                       return Positioned(
-                        right: 0,
                         left: 100,
                         top: 5,
                         child: Text(
@@ -78,29 +75,29 @@ class _ShowLocationWidgetState extends State<ShowLocationWidget> {
                   ],
                 ),
               ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18),
+                child: TextField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    locationController.searchText.value = value;
+                  },
+                  decoration: InputDecoration(
+                    hintText: "Search location",
+                    prefixIcon: Icon(Icons.search),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
-        title: Padding(
-          padding: EdgeInsets.only(
-            left: 25,
-            right: 25,
-            bottom: 10,
-          ),
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: "Search",
-              prefixIcon: Icon(Icons.search),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-                borderSide: BorderSide.none,
-              ),
-            ),
-          ),
-        ),
-        titlePadding: EdgeInsets.zero,
       ),
     );
   }

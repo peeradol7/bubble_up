@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final MapController mapController = Get.put(MapController());
+  final MapController mapController = Get.find<MapController>();
   @override
   void initState() {
     mapController.fetchDistrict();
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final MenuBarController controller = Get.put(MenuBarController());
+    final MenuBarController controller = Get.find<MenuBarController>();
 
     return Scaffold(
       backgroundColor: Colors.white,

@@ -4,14 +4,15 @@ import 'package:thammasat/Model/service_model.dart';
 import '../Model/laundrys_model.dart';
 
 class LaundryService {
-  static const String laundry = 'laundryStore';
-  static const String serviceList = 'servicelist';
+  static const String laundryCollection = 'laundryStore';
+  static const String serviceCollection = 'servicelist';
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<ServiceModel>> displayServiceList() async {
     try {
-      QuerySnapshot snapshot = await _firestore.collection(serviceList).get();
+      QuerySnapshot snapshot =
+          await _firestore.collection(serviceCollection).get();
 
       return snapshot.docs
           .map((doc) => ServiceModel.fromFirestore(doc))
@@ -23,7 +24,8 @@ class LaundryService {
 
   Future<List<LaundrysModel>> getLaundries() async {
     try {
-      QuerySnapshot snapshot = await _firestore.collection(laundry).get();
+      QuerySnapshot snapshot =
+          await _firestore.collection(laundryCollection).get();
 
       return snapshot.docs
           .map((doc) => LaundrysModel.fromFirestore(doc))
@@ -35,7 +37,8 @@ class LaundryService {
 
   Future<LaundrysModel?> getLaundryById(String id) async {
     try {
-      DocumentSnapshot doc = await _firestore.collection(laundry).doc(id).get();
+      DocumentSnapshot doc =
+          await _firestore.collection(laundryCollection).doc(id).get();
       if (doc.exists) {
         return LaundrysModel.fromFirestore(doc);
       }
@@ -43,5 +46,13 @@ class LaundryService {
     } catch (e) {
       throw Exception('Error fetching laundry by ID: $e');
     }
+  }
+
+  Stream<List<Map<String, dynamic>>> getLocationsStream() {
+    return _firestore.collection(laundryCollection).snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return {"id": doc.id, ...doc.data()};
+      }).toList();
+    });
   }
 }

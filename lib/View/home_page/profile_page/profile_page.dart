@@ -14,7 +14,7 @@ class ProfileWidget extends StatefulWidget {
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
-  final AuthController authController = Get.put(AuthController());
+  final AuthController authController = Get.find<AuthController>();
   final ButtonWidget buttonWidget = ButtonWidget();
   late Future<Map<String, String>?> userData;
 

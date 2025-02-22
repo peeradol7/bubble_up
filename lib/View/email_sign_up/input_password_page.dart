@@ -13,7 +13,7 @@ class InputPasswordPage extends StatefulWidget {
 }
 
 class _InputPasswordPageState extends State<InputPasswordPage> {
-  final AuthController authController = Get.put(AuthController());
+  final AuthController authController = Get.find<AuthController>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String? passwordValidate(String? value) {

@@ -45,7 +45,7 @@ class AuthService {
           authMethod: 'google',
           phoneNumber: '',
           address: '',
-          role: '',
+          role: 'customer',
           email: user.email!,
         );
 

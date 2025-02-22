@@ -64,7 +64,6 @@ class AuthController extends GetxController {
   Future<bool> loadUserDataInitState() async {
     final prefsService = await SharedPreferencesService.getInstance();
     Map<String, String?> userData = prefsService.getUserData();
-
     return userData.isNotEmpty;
   }
 

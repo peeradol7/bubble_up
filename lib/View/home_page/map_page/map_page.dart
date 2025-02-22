@@ -12,7 +12,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   GoogleMapController? _mapController;
-  final PositionController positionController = Get.put(PositionController());
+  final PositionController positionController = Get.find<PositionController>();
 
   @override
   Widget build(BuildContext context) {

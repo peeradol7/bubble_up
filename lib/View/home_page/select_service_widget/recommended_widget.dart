@@ -8,7 +8,7 @@ class RecommendedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LaundryController laundryController = Get.put(LaundryController());
+    final LaundryController laundryController = Get.find<LaundryController>();
     laundryController.fetchLaundryDataList();
 
     return Column(

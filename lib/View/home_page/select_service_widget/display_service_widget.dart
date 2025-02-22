@@ -12,7 +12,7 @@ class DisplayServiceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ServiceListController serviceController =
-        Get.put(ServiceListController());
+        Get.find<ServiceListController>();
     final ServiceListWidget serviceListWidget = ServiceListWidget();
 
     void nextPage() {
