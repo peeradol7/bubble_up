@@ -47,12 +47,4 @@ class LaundryService {
       throw Exception('Error fetching laundry by ID: $e');
     }
   }
-
-  Stream<List<Map<String, dynamic>>> getLocationsStream() {
-    return _firestore.collection(laundryCollection).snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return {"id": doc.id, ...doc.data()};
-      }).toList();
-    });
-  }
 }

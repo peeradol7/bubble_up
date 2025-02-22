@@ -35,42 +35,35 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Stack(
           children: [
-            Obx(() => PageView(
-                  controller: controller.pageController,
-                  onPageChanged: (index) {
-                    controller.selectedIndex.value = index;
-                  },
-                  physics: controller.selectedIndex.value == 1
-                      ? const NeverScrollableScrollPhysics()
-                      : const PageScrollPhysics(),
-                  children: [
-                    CustomScrollView(
-                      slivers: [
-                        ShowLocationWidget(),
-                        SliverToBoxAdapter(
-                          child: SizedBox(height: 20),
-                        ),
-                        SliverToBoxAdapter(
-                          child: DisplayServiceWidget(),
-                        ),
-                        SliverToBoxAdapter(
-                          child: PromotionBannerWidget(),
-                        ),
-                        SliverToBoxAdapter(
-                          child: RecommendedWidget(),
-                        ),
-                        SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 90,
-                          ),
-                        ),
-                      ],
-                    ),
-                    MapPage(),
-                    Center(child: Text('Status Page')),
-                    ProfileWidget(),
-                  ],
-                )),
+            // PageView จะอยู่ภายใต้ LocationResultListWidget
+            Positioned.fill(
+              child: Obx(() => PageView(
+                    controller: controller.pageController,
+                    onPageChanged: (index) {
+                      controller.selectedIndex.value = index;
+                    },
+                    physics: controller.selectedIndex.value == 1
+                        ? const NeverScrollableScrollPhysics()
+                        : const PageScrollPhysics(),
+                    children: [
+                      CustomScrollView(
+                        slivers: [
+                          ShowLocationWidget(),
+                          SliverToBoxAdapter(child: SizedBox(height: 1)),
+                          SliverToBoxAdapter(child: DisplayServiceWidget()),
+                          SliverToBoxAdapter(child: PromotionBannerWidget()),
+                          SliverToBoxAdapter(child: RecommendedWidget()),
+                          SliverToBoxAdapter(child: SizedBox(height: 90)),
+                        ],
+                      ),
+                      MapPage(),
+                      Center(child: Text('Status Page')),
+                      ProfileWidget(),
+                    ],
+                  )),
+            ),
+
+            // MenuBar อยู่ล่างสุดของจอ
             Positioned(
               bottom: 0,
               left: 0,
