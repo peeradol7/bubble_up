@@ -2,17 +2,16 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:thammasat/Model/laundrys_model.dart';
 import 'package:thammasat/Service/laundry_service.dart';
+import 'package:thammasat/Service/map_service.dart';
 
 class LaundryController extends GetxController {
   final LaundryService laundryService = LaundryService();
+  final MapService mapService = MapService();
 
   var laundryDataById = Rxn<LaundrysModel>();
   var laundryDataList = <LaundrysModel>[].obs;
   var markers = <Marker>[].obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  var price = ''.obs;
 
   Future<void> fetchLaundryDataList() async {
     try {

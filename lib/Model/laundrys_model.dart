@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LaundrysModel {
+  final String laundryId;
   final String laundryName;
   final String image;
   final double latitude;
@@ -8,6 +9,7 @@ class LaundrysModel {
   final String detail;
   final Map<String, dynamic> price;
   LaundrysModel({
+    required this.laundryId,
     required this.laundryName,
     required this.image,
     required this.latitude,
@@ -20,6 +22,7 @@ class LaundrysModel {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
     return LaundrysModel(
+      laundryId: data['laundryId'] ?? '',
       laundryName: data['laundryName'] ?? '',
       image: data['image'] ?? '',
       latitude: (data['latitude'] ?? 0.0).toDouble(),
@@ -31,6 +34,7 @@ class LaundrysModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'laundryId': laundryId,
       'laundryName': laundryName,
       'image': image,
       'latitude': latitude,

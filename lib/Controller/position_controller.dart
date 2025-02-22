@@ -11,7 +11,10 @@ class PositionController extends GetxController {
   RxDouble latitude = 0.0.obs;
   GoogleMapController? mapController;
   RxDouble longitude = 0.0.obs;
+  Rx<LatLng> currentLatLng = Rx<LatLng>(LatLng(0.0, 0.0));
+
   final MapService mapService = MapService();
+
   CameraPosition university = CameraPosition(
     target: LatLng(14.0657714366218, 100.60441486351333),
     zoom: 16,

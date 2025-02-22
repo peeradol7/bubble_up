@@ -25,4 +25,19 @@ class MapService {
       return "No address found";
     }
   }
+
+  Future<LatLng> getCurrentLatLng() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.denied) {
+      throw Exception("Permission denied");
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    // คืนค่าพิกัด LatLng (ละติจูดและลองจิจูด)
+    return LatLng(position.latitude, position.longitude);
+  }
 }
