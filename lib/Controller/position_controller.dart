@@ -9,6 +9,7 @@ import '../Service/map_service.dart';
 class PositionController extends GetxController {
   RxString district = ''.obs;
   RxDouble latitude = 0.0.obs;
+  GoogleMapController? mapController;
   RxDouble longitude = 0.0.obs;
   final MapService mapService = MapService();
   CameraPosition university = CameraPosition(
