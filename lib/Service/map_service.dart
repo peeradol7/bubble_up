@@ -1,5 +1,6 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapService {
   Future<String> getCurrentLocationAndAddress() async {
@@ -34,7 +35,7 @@ class MapService {
     }
 
     Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
+      desiredAccuracy: LocationAccuracy.best,
     );
 
     // คืนค่าพิกัด LatLng (ละติจูดและลองจิจูด)
