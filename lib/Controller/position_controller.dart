@@ -38,9 +38,18 @@ class PositionController extends GetxController {
 
   Future<void> fetchDistrict() async {
     try {
+      fetchLatLngData();
       var result = await mapService.getCurrentLocationAndAddress();
-
       district.value = result;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> fetchLatLngData() async {
+    try {
+      final data = await mapService.getCurrentLatLng();
+      currentLatLng.value = data;
     } catch (e) {
       throw Exception(e);
     }

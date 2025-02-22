@@ -17,15 +17,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  Get.put(PositionController());
   Get.put(LocationController());
   Get.put(LaundryController());
   Get.put(AuthController());
   Get.put(MenuController());
   Get.put(MenuBarController());
-  Get.put(PositionController());
   Get.put(ServiceListController());
   Get.put(SlideController());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
