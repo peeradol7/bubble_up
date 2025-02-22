@@ -4,11 +4,17 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../Service/map_service.dart';
+
 class PositionController extends GetxController {
   RxString district = ''.obs;
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
-
+  final MapService mapService = MapService();
+  CameraPosition university = CameraPosition(
+    target: LatLng(14.0657714366218, 100.60441486351333),
+    zoom: 16,
+  );
   StreamSubscription<Position>? _positionStreamSubscription;
 
   void startTracking() {
@@ -26,10 +32,16 @@ class PositionController extends GetxController {
     _positionStreamSubscription?.cancel();
   }
 
-  CameraPosition university = CameraPosition(
-    target: LatLng(14.0657714366218, 100.60441486351333),
-    zoom: 16,
-  );
+  Future<void> fetchDistrict() async {
+    try {
+      var result = await mapService.getCurrentLocationAndAddress();
+
+      district.value = result;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   @override
   void onClose() {
     stopTracking();

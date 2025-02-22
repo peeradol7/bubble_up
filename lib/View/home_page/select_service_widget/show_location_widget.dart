@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thammasat/Controller/location_controller.dart';
-import 'package:thammasat/Controller/map_controller.dart';
+import 'package:thammasat/Controller/position_controller.dart';
 import 'package:thammasat/View/home_page/select_service_widget/search_widget.dart';
 
 class ShowLocationWidget extends StatelessWidget {
   final LocationController locationController = Get.find<LocationController>();
-  final MapController mapController = Get.find<MapController>();
+  final PositionController mapController = Get.find<PositionController>();
   final TextEditingController searchController = TextEditingController();
 
   ShowLocationWidget({super.key});

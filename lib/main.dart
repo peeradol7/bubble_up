@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thammasat/Controller/auth_controller.dart';
 import 'package:thammasat/Controller/laundry_controller.dart';
-import 'package:thammasat/Controller/map_controller.dart';
 import 'package:thammasat/Controller/menubar_controller.dart';
 import 'package:thammasat/Controller/position_controller.dart';
 import 'package:thammasat/Controller/service_list_controller.dart';
@@ -22,7 +21,6 @@ void main() async {
   Get.put(LocationController());
   Get.put(LaundryController());
   Get.put(AuthController());
-  Get.put(MapController());
   Get.put(MenuController());
   Get.put(MenuBarController());
   Get.put(PositionController());

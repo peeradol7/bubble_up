@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:thammasat/Controller/map_controller.dart';
 import 'package:thammasat/View/home_page/select_service_widget/display_service_widget.dart';
 import 'package:thammasat/View/home_page/select_service_widget/menu_bar_widget.dart';
 import 'package:thammasat/View/home_page/select_service_widget/promotion_banner_widget.dart';
@@ -8,18 +7,18 @@ import 'package:thammasat/View/home_page/select_service_widget/recommended_widge
 import 'package:thammasat/View/home_page/select_service_widget/show_location_widget.dart';
 
 import '../../Controller/menubar_controller.dart';
+import '../../Controller/position_controller.dart';
 import 'map_page/map_page.dart';
 import 'profile_page/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final MapController mapController = Get.find<MapController>();
+  final PositionController mapController = Get.find<PositionController>();
   @override
   void initState() {
     mapController.fetchDistrict();
