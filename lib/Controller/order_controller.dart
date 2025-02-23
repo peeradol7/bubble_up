@@ -20,6 +20,7 @@ class OrderController extends GetxController {
 
   Future<void> addOrder(OrderModel order) async {
     await _orderService.createOrder(order);
+
     orders.add(order);
   }
 

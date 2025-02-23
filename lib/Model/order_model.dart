@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class OrderModel {
   final String orderId;
@@ -9,8 +10,8 @@ class OrderModel {
   final String paymentMethod;
   final String deliveryType;
   final String status;
+  final LatLng laundryAddress;
   final Map<String, dynamic> deliveryAddress;
-  final Map<String, dynamic> laundryAddress;
 
   OrderModel({
     required this.orderId,
@@ -21,8 +22,8 @@ class OrderModel {
     required this.paymentMethod,
     required this.deliveryType,
     required this.status,
-    required this.deliveryAddress,
     required this.laundryAddress,
+    required this.deliveryAddress,
   });
 
   factory OrderModel.fromFirestore(DocumentSnapshot doc) {
@@ -37,10 +38,12 @@ class OrderModel {
       deliveryType: data['deliveryType'],
       status: data['status'],
       deliveryAddress:
-          CustomerLocation.fromFirestore(data['customerAddress'] ?? {})
+          CustomerLocation.fromFirestore(data['deliveryAddress'] ?? {})
               .toJson(),
-      laundryAddress:
-          LanundryAddress.fromFirestore(data['laundryAddress'] ?? {}).toJson(),
+      laundryAddress: LatLng(
+        data['laundryAddress']['latitude'],
+        data['laundryAddress']['longitude'],
+      ),
     );
   }
 
@@ -54,6 +57,10 @@ class OrderModel {
       'deliveryType': deliveryType,
       'status': status,
       'deliveryAddress': deliveryAddress,
+      'laundryAddress': {
+        'latitude': laundryAddress.latitude,
+        'longitude': laundryAddress.longitude,
+      },
     };
   }
 }
@@ -68,28 +75,6 @@ class CustomerLocation {
   });
   factory CustomerLocation.fromFirestore(Map<String, dynamic> data) {
     return CustomerLocation(
-      latitude: data['latitude'],
-      longitude: data['longitude'],
-    );
-  }
-  Map<String, dynamic> toJson() {
-    return {
-      'latitude': latitude,
-      'longitude': longitude,
-    };
-  }
-}
-
-class LanundryAddress {
-  final double latitude;
-  final double longitude;
-
-  LanundryAddress({
-    required this.latitude,
-    required this.longitude,
-  });
-  factory LanundryAddress.fromFirestore(Map<String, dynamic> data) {
-    return LanundryAddress(
       latitude: data['latitude'],
       longitude: data['longitude'],
     );

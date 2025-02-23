@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:thammasat/Controller/auth_controller.dart';
 import 'package:thammasat/Controller/order_controller.dart';
 import 'package:thammasat/Controller/position_controller.dart';
 
 import '../../../../Controller/laundry_controller.dart';
 import '../../../../Model/order_model.dart';
+import '../../../../Service/shared_preferenes_service.dart';
 
 class ConfirmOrderButton extends StatelessWidget {
   ConfirmOrderButton({super.key});
@@ -22,7 +25,10 @@ class ConfirmOrderButton extends StatelessWidget {
       padding: EdgeInsets.all(16),
       child: GetX<LaundryController>(
         builder: (controller) => ElevatedButton.icon(
-          onPressed: controller.totalPrice.value > 0 ? () => saveOrder() : null,
+          onPressed: () {
+            saveOrder();
+            context.pop();
+          },
           icon: Icon(Icons.check, color: Colors.white),
           label: Text(
             'ยืนยันออเดอร์ ราคารวม: ${controller.totalPrice.value} บาท',
@@ -46,33 +52,20 @@ class ConfirmOrderButton extends StatelessWidget {
     );
   }
 
-  void saveOrder() {
-    final userId = authController.userModel.value!.userId;
-    final laundryId = laundryController.laundryDataById.value!.laundryId;
+  void saveOrder() async {
+    final prefsService = await SharedPreferencesService.getInstance();
+    final userData = prefsService.getUserData();
+
+    final userId = userData['userId'];
+    final address = userData['address'];
+
+    final laundryId = laundryController.laundryDataById.value?.laundryId;
     final totalPrice = laundryController.totalPrice.value;
-    final address = authController.userModel.value!.address;
     final paymentMethod = laundryController.paymentMethod.value;
     final deliveryType = laundryController.deliveryType.value;
     final status = laundryController.status.value;
-    final laundryLatitude = laundryController.laundryDataById.value!.latitude;
-    final laundryLongitude = laundryController.laundryDataById.value!.longitude;
+
     final customerLatitude = positionController.currentLatLng.value;
-
-    if (userId == null || userId.isEmpty) print('User ID is empty');
-    if (laundryId == null || laundryId.isEmpty) print('Laundry ID is empty');
-    if (totalPrice == null || totalPrice == 0) print('Total price is empty');
-    if (address == null || address.isEmpty) print('Address is empty');
-    if (paymentMethod == null || paymentMethod.isEmpty) {
-      print('Payment method is empty');
-    }
-    if (deliveryType == null || deliveryType.isEmpty) {
-      print('Delivery type is empty');
-    }
-    if (status == null || status.isEmpty) print('Status is empty');
-    if (laundryLatitude == null) print('Laundry latitude is empty');
-    if (laundryLongitude == null) print('Laundry longitude is empty');
-    if (customerLatitude == null) print('Customer latitude is empty');
-
     if (userId != null &&
         laundryId != null &&
         totalPrice != null &&
@@ -80,11 +73,12 @@ class ConfirmOrderButton extends StatelessWidget {
         paymentMethod != null &&
         deliveryType != null &&
         status != null &&
-        laundryLatitude != null &&
-        laundryLongitude != null &&
+        laundryController.laundryDataById.value!.latitude != null &&
+        laundryController.laundryDataById.value!.longitude != null &&
         customerLatitude != null) {
+      String orderId = FirebaseFirestore.instance.collection('orders').doc().id;
       OrderModel newOrder = OrderModel(
-        orderId: FirebaseFirestore.instance.collection('orders').doc().id,
+        orderId: orderId,
         userId: userId,
         laundryId: laundryId,
         totalPrice: totalPrice,
@@ -92,22 +86,16 @@ class ConfirmOrderButton extends StatelessWidget {
         paymentMethod: paymentMethod,
         deliveryType: deliveryType,
         status: status,
+        laundryAddress: LatLng(laundryController.laundryLatLng.value!.latitude,
+            laundryController.laundryLatLng.value!.longitude),
         deliveryAddress: {
           "latitude": customerLatitude.latitude,
           "longitude": customerLatitude.longitude,
         },
-        laundryAddress: {
-          'latitude': laundryLatitude,
-          'longitude': laundryLongitude,
-        },
       );
-
+      print(newOrder.laundryAddress);
+      print(newOrder.deliveryAddress);
       orderController.addOrder(newOrder);
-      Get.snackbar(
-        'บันทึกออเดอร์',
-        'บันทึกออเดอร์สมบูรณ์',
-        backgroundColor: Colors.green,
-      );
     } else {
       print('ข้อมูลไม่ครบถ้วน กรุณาตรวจสอบอีกครั้ง');
     }

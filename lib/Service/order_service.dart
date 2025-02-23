@@ -14,7 +14,7 @@ class OrderService {
           .collection(orderCollection)
           .doc(orderId)
           .set(order.toFirestore());
-
+      print('saved laundryAddress :: ${order.laundryAddress}');
       print("Order created successfully with ID: $orderId");
     } catch (e) {
       print("Error creating order: $e");
