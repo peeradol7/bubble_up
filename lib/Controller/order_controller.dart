@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 import '../Model/order_model.dart';
@@ -10,6 +11,25 @@ class OrderController extends GetxController {
   var isLoading = false.obs;
   final hasError = false.obs;
   final errorMessage = ''.obs;
+
+  void listenToOrders(String userId) {
+    isLoading(true);
+    hasError(false);
+
+    FirebaseFirestore.instance
+        .collection('orders')
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .listen((snapshot) {
+      orders.value =
+          snapshot.docs.map((doc) => OrderModel.fromFirestore(doc)).toList();
+      isLoading(false);
+    }, onError: (error) {
+      hasError(true);
+      errorMessage(error.toString());
+      isLoading(false);
+    });
+  }
 
   Future<void> fetchOrdersByUserId(String? userId) async {
     try {

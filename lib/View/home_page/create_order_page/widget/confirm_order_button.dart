@@ -63,6 +63,7 @@ class ConfirmOrderButton extends StatelessWidget {
     final address = userData['address'];
 
     final laundryId = laundryController.laundryDataById.value?.laundryId;
+    final laundryName = laundryController.laundryDataById.value?.laundryName;
     final totalPrice = laundryController.totalPrice.value;
     final paymentMethod = laundryController.paymentMethod.value;
     final deliveryType = laundryController.deliveryType.value;
@@ -72,8 +73,10 @@ class ConfirmOrderButton extends StatelessWidget {
     if (userId != null &&
         laundryId != null &&
         address != null &&
+        laundryName != null &&
         customerLatitude != null) {
       String orderId = FirebaseFirestore.instance.collection('orders').doc().id;
+      print('Order id is ***$orderId');
       OrderModel newOrder = OrderModel(
         orderId: orderId,
         userId: userId,
@@ -89,6 +92,7 @@ class ConfirmOrderButton extends StatelessWidget {
           "latitude": customerLatitude.latitude,
           "longitude": customerLatitude.longitude,
         },
+        laundryName: laundryName,
       );
       print(newOrder.laundryAddress);
       print(newOrder.deliveryAddress);

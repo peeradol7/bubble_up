@@ -48,7 +48,6 @@ class AddOrderWidget extends StatelessWidget {
                     groupValue: laundryController.price.value,
                     onChanged: (value) {
                       laundryController.price.value = value!;
-                      // Calculate and update total price here instead
                       _updateTotalPrice();
                     },
                   );

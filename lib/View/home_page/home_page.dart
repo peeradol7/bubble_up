@@ -26,13 +26,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     mapController.fetchDistrict();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final MenuBarController controller = Get.find<MenuBarController>();
-    final AuthController authController = Get.find<AuthController>();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

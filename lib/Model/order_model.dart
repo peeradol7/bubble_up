@@ -12,11 +12,13 @@ class OrderModel {
   final String status;
   final LatLng laundryAddress;
   final Map<String, dynamic> deliveryAddress;
+  final String laundryName;
 
   OrderModel({
     required this.orderId,
     required this.userId,
     required this.laundryId,
+    required this.laundryName,
     required this.totalPrice,
     required this.address,
     required this.paymentMethod,
@@ -27,9 +29,15 @@ class OrderModel {
   });
 
   factory OrderModel.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+    final data = doc.data() as Map<String, dynamic>?;
+
+    // Add a null check for data
+    if (data == null) {
+      throw Exception("Document data is null");
+    }
+
     return OrderModel(
-      orderId: data['orderId'] ?? '', // เพิ่ม default value
+      orderId: data['orderId'] ?? '',
       userId: data['userId'] ?? '',
       laundryId: data['laundryId'] ?? '',
       totalPrice: data['totalPrice'] ?? 0,
@@ -37,20 +45,26 @@ class OrderModel {
       paymentMethod: data['paymentMethod'] ?? '',
       deliveryType: data['deliveryType'] ?? '',
       status: data['status'] ?? '',
+      // Handle the optional null value for deliveryAddress
       deliveryAddress: data['deliveryAddress'] != null
-          ? CustomerLocation.fromFirestore(data['deliveryAddress']).toJson()
+          ? CustomerLocation.fromFirestore(
+                  data['deliveryAddress'] as Map<String, dynamic>)
+              .toJson()
           : CustomerLocation(latitude: 0, longitude: 0).toJson(),
+      // Handle optional null value for laundryAddress
       laundryAddress: data['laundryAddress'] != null
           ? LatLng(
-              data['laundryAddress']['latitude'] ?? 0,
-              data['laundryAddress']['longitude'] ?? 0,
+              data['laundryAddress']['latitude'] ?? 0.0,
+              data['laundryAddress']['longitude'] ?? 0.0,
             )
           : const LatLng(0, 0),
+      laundryName: data['laundryName'] ?? '',
     );
   }
 
   Map<String, dynamic> toFirestore() {
     return {
+      'orderId': orderId,
       'userId': userId,
       'laundryId': laundryId,
       'totalPrice': totalPrice,
@@ -63,6 +77,7 @@ class OrderModel {
         'latitude': laundryAddress.latitude,
         'longitude': laundryAddress.longitude,
       },
+      'laundryName': laundryName,
     };
   }
 }

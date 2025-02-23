@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thammasat/Controller/auth_controller.dart';
+import 'package:thammasat/Controller/notification_controller.dart';
 import 'package:thammasat/Controller/order_controller.dart';
 
 class StatusPage extends StatelessWidget {
-  const StatusPage({super.key});
-
+  StatusPage({super.key});
+  final NotificationController notificationController =
+      Get.find<NotificationController>();
   @override
   Widget build(BuildContext context) {
     final OrderController orderController = Get.find<OrderController>();
@@ -28,58 +30,65 @@ class StatusPage extends StatelessWidget {
               return const Center(child: Text("No user data available"));
             }
 
-            String? userId;
-            try {
-              userId = snapshot.data!['userId'] as String;
-            } catch (e) {
-              return const Center(child: Text('Invalid user data format'));
-            }
+            final userId = snapshot.data!['userId'] as String;
 
-            if (userId.isEmpty || userId == 'Guest') {
-              return const Center(child: Text('Please login to view orders'));
-            }
+            orderController.listenToOrders(userId);
 
-            return FutureBuilder<void>(
-              future: orderController.fetchOrdersByUserId(userId),
-              builder: (context, _) {
-                return Obx(() {
-                  if (orderController.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+            return Obx(() {
+              if (orderController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-                  if (orderController.hasError.value) {
-                    return Center(
-                        child: Text(orderController.errorMessage.value));
-                  }
+              if (orderController.hasError.value) {
+                return Center(child: Text(orderController.errorMessage.value));
+              }
 
-                  if (orderController.orders.isEmpty) {
-                    return const Center(child: Text('No orders found.'));
-                  }
+              if (orderController.orders.isEmpty) {
+                return const Center(child: Text('No orders found.'));
+              }
 
-                  return ListView.builder(
-                    itemCount: orderController.orders.length,
-                    itemBuilder: (context, index) {
-                      final order = orderController.orders[index];
-                      return Card(
-                        margin: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          title: Text('Order ID: ${order.orderId}'),
-                          subtitle: Text(
-                              'Total Price: \$${order.totalPrice}\nStatus: ${order.status}'),
-                          trailing: const Icon(Icons.arrow_forward),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                      );
-                    },
+              return ListView.builder(
+                itemCount: orderController.orders.length,
+                itemBuilder: (context, index) {
+                  final order = orderController.orders[index];
+
+                  return Card(
+                    margin: const EdgeInsets.all(8.0),
+                    color: getStatusColor(order.status),
+                    child: ListTile(
+                      title: Text('ชื่อร้าน: ${order.laundryName}'),
+                      subtitle: Text(
+                          'Total Price: \$${order.totalPrice}\nStatus: ${order.status}'),
+                      trailing: const Icon(Icons.arrow_forward),
+                      onTap: () {},
+                    ),
                   );
-                });
-              },
-            );
+                },
+              );
+            });
           },
         ),
       ),
     );
+  }
+
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return Colors.orange.shade100;
+      case 'in progress':
+        return Colors.blue.shade100;
+      case 'completed':
+        return completed();
+      case 'cancelled':
+        return Colors.red.shade100;
+      default:
+        return Colors.grey.shade200;
+    }
+  }
+
+  Color completed() {
+    notificationController.showOrderCompleteNotification();
+    return Colors.green.shade100;
   }
 }
