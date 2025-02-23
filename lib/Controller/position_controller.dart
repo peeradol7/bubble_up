@@ -11,8 +11,8 @@ class PositionController extends GetxController {
   RxDouble latitude = 0.0.obs;
   GoogleMapController? mapController;
   RxDouble longitude = 0.0.obs;
-  Rx<LatLng> currentLatLng = Rx<LatLng>(LatLng(0.0, 0.0));
-
+  var currentLatLng = Rxn<LatLng>();
+  StreamSubscription<LatLng>? locationSubscription;
   final MapService mapService = MapService();
 
   CameraPosition university = CameraPosition(
@@ -46,13 +46,12 @@ class PositionController extends GetxController {
     }
   }
 
-  Future<void> fetchLatLngData() async {
-    try {
-      final data = await mapService.getCurrentLatLng();
-      currentLatLng.value = data;
-    } catch (e) {
-      throw Exception(e);
-    }
+  void fetchLatLngData() {
+    locationSubscription =
+        mapService.trackCurrentLatLng().listen((LatLng latLng) {
+      currentLatLng.value = latLng;
+      print("ตำแหน่งปัจจุบัน: ${latLng.latitude}, ${latLng.longitude}");
+    });
   }
 
   @override

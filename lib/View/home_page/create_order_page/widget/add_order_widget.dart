@@ -16,13 +16,14 @@ class AddOrderWidget extends StatelessWidget {
       if (data == null) {
         return const Center(child: Text("กำลังโหลด..."));
       }
-      int selectedDeliveryPrice =
+
+      final selectedDeliveryPrice =
           deliveryPrices[laundryController.deliveryType.value] ?? 0;
-      int selectedLaundryPrice = data.price[laundryController.price.value] ?? 0;
+      final selectedLaundryPrice =
+          data.price[laundryController.price.value] ?? 0;
 
-      int totalPrice = selectedLaundryPrice + selectedDeliveryPrice;
+      final totalPrice = selectedLaundryPrice + selectedDeliveryPrice;
 
-      laundryController.totalPrice.value = totalPrice;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -47,6 +48,8 @@ class AddOrderWidget extends StatelessWidget {
                     groupValue: laundryController.price.value,
                     onChanged: (value) {
                       laundryController.price.value = value!;
+                      // Calculate and update total price here instead
+                      _updateTotalPrice();
                     },
                   );
                 }).toList(),
@@ -73,6 +76,8 @@ class AddOrderWidget extends StatelessWidget {
                   groupValue: laundryController.deliveryType.value,
                   onChanged: (value) {
                     laundryController.deliveryType.value = value!;
+                    // Calculate and update total price here instead
+                    _updateTotalPrice();
                   },
                 ),
                 RadioListTile<String>(
@@ -81,6 +86,8 @@ class AddOrderWidget extends StatelessWidget {
                   groupValue: laundryController.deliveryType.value,
                   onChanged: (value) {
                     laundryController.deliveryType.value = value!;
+                    // Calculate and update total price here instead
+                    _updateTotalPrice();
                   },
                 ),
               ],
@@ -90,5 +97,20 @@ class AddOrderWidget extends StatelessWidget {
         ],
       );
     });
+  }
+
+  void _updateTotalPrice() {
+    final data = laundryController.laundryDataById.value;
+    final deliveryPrices = laundryController.deliveryPrices.value;
+
+    if (data != null) {
+      final selectedDeliveryPrice =
+          deliveryPrices[laundryController.deliveryType.value] ?? 0;
+      final selectedLaundryPrice =
+          data.price[laundryController.price.value] ?? 0;
+
+      laundryController.totalPrice.value =
+          selectedLaundryPrice + selectedDeliveryPrice;
+    }
   }
 }

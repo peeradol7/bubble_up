@@ -22,7 +22,7 @@ class AppRoutes {
   static const String riderHomePage = '/rider-home-page';
   static const String createOrderPage = '/create-order';
   final route = GoRouter(
-    initialLocation: '$createOrderPage/2KLqiYyaw0XhQrQQjMsc',
+    initialLocation: landingPage,
     routes: [
       GoRoute(
           path: landingPage,

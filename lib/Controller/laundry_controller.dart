@@ -65,8 +65,20 @@ class LaundryController extends GetxController {
 
   Future<Map<String, int>> calculatePriceForRider() async {
     final currentLocation = positionController.currentLatLng.value;
-    final laundryLatitude = laundryDataById.value!.latitude;
-    final laundryLongitude = laundryDataById.value!.longitude;
+    final laundryData = laundryDataById.value;
+
+    if (currentLocation == null || laundryData == null) {
+      print("เกิดข้อผิดพลาด: ตำแหน่งปัจจุบันหรือละติจูดของร้านซักรีดเป็น null");
+      return {};
+    }
+
+    final laundryLatitude = laundryData.latitude;
+    final laundryLongitude = laundryData.longitude;
+
+    if (laundryLatitude == null || laundryLongitude == null) {
+      print("เกิดข้อผิดพลาด: ละติจูดหรือลองจิจูดของร้านซักรีดเป็น null");
+      return {};
+    }
 
     double distanceInMeters = await Geolocator.distanceBetween(
       currentLocation.latitude,
@@ -85,6 +97,7 @@ class LaundryController extends GetxController {
       'normal': normalPrice,
     };
 
+    print("ระยะทาง: ${distanceInKilometers.toStringAsFixed(2)} กิโลเมตร");
     print("ส่งด่วน: ${deliveryPrices['express']} บาท");
     print("ส่งปกติ: ${deliveryPrices['normal']} บาท");
 

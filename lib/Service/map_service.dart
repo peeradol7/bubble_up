@@ -27,18 +27,15 @@ class MapService {
     }
   }
 
-  Future<LatLng> getCurrentLatLng() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-
-    if (permission == LocationPermission.denied) {
-      throw Exception("Permission denied");
-    }
-
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.best,
+  Stream<LatLng> trackCurrentLatLng() {
+    const LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.best,
+      distanceFilter: 0,
+      timeLimit: Duration(seconds: 5),
     );
 
-    // คืนค่าพิกัด LatLng (ละติจูดและลองจิจูด)
-    return LatLng(position.latitude, position.longitude);
+    return Geolocator.getPositionStream(locationSettings: locationSettings).map(
+      (Position position) => LatLng(position.latitude, position.longitude),
+    );
   }
 }

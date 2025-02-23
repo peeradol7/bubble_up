@@ -12,21 +12,10 @@ class ConfirmOrderButton extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
       child: GetX<LaundryController>(
         builder: (controller) => ElevatedButton.icon(
           onPressed: controller.totalPrice.value > 0
-              ? () => _handleConfirmOrder()
+              ? () => handleConfirmOrder()
               : null,
           icon: Icon(Icons.check, color: Colors.white),
           label: Text(
@@ -51,7 +40,7 @@ class ConfirmOrderButton extends StatelessWidget {
     );
   }
 
-  void _handleConfirmOrder() {
+  void handleConfirmOrder() {
     print(
       'Confirming order with total price: ${laundryController.totalPrice.value}',
     );
