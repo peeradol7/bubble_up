@@ -28,7 +28,7 @@ class OrderModel {
   factory OrderModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return OrderModel(
-      orderId: doc.id,
+      orderId: data['orderId'],
       userId: data['userId'],
       laundryId: data['laundryId'],
       totalPrice: data['totalPrice'],

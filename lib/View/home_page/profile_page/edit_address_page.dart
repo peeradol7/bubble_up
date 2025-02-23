@@ -18,7 +18,7 @@ class EditAddressPage extends StatelessWidget {
       final String currentAddress =
           userController.userModel.value?.address ?? '';
 
-      controller.text = userController.address.value;
+      controller.text = currentAddress;
 
       return Scaffold(
         appBar: AppBar(
@@ -102,7 +102,8 @@ class EditAddressPage extends StatelessWidget {
                         if (_formKey.currentState!.validate()) {
                           try {
                             final updatedData = {
-                              'address': userController.address.value,
+                              'address':
+                                  userController.userModel.value?.address,
                             };
 
                             final authService = AuthService();

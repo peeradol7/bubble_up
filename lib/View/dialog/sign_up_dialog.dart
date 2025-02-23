@@ -24,7 +24,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
 
       await Future.delayed(Duration(milliseconds: 500));
 
-      if (authController.user.value == null) {
+      if (authController.userModel.value == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login failed. Please try again.')),
         );

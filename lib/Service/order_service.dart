@@ -4,14 +4,18 @@ import '../Model/order_model.dart';
 
 class OrderService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String collectionPath = "orders";
+  final String orderCollection = "orders";
 
   Future<void> createOrder(OrderModel order) async {
     try {
+      String orderId = _firestore.collection(orderCollection).doc().id;
+
       await _firestore
-          .collection(collectionPath)
-          .doc(order.orderId)
+          .collection(orderCollection)
+          .doc(orderId)
           .set(order.toFirestore());
+
+      print("Order created successfully with ID: $orderId");
     } catch (e) {
       print("Error creating order: $e");
       throw e;
@@ -21,7 +25,7 @@ class OrderService {
   Future<OrderModel?> getOrderById(String orderId) async {
     try {
       DocumentSnapshot doc =
-          await _firestore.collection(collectionPath).doc(orderId).get();
+          await _firestore.collection(orderCollection).doc(orderId).get();
       if (doc.exists) {
         return OrderModel.fromFirestore(doc);
       }
@@ -35,7 +39,7 @@ class OrderService {
   Future<List<OrderModel>> getOrdersByUserId(String userId) async {
     try {
       QuerySnapshot querySnapshot = await _firestore
-          .collection(collectionPath)
+          .collection(orderCollection)
           .where("userId", isEqualTo: userId)
           .get();
 
@@ -52,7 +56,7 @@ class OrderService {
       String orderId, Map<String, dynamic> updatedData) async {
     try {
       await _firestore
-          .collection(collectionPath)
+          .collection(orderCollection)
           .doc(orderId)
           .update(updatedData);
     } catch (e) {
@@ -63,7 +67,7 @@ class OrderService {
 
   Future<void> deleteOrder(String orderId) async {
     try {
-      await _firestore.collection(collectionPath).doc(orderId).delete();
+      await _firestore.collection(orderCollection).doc(orderId).delete();
     } catch (e) {
       print("Error deleting order: $e");
       throw e;

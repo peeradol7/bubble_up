@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 40),
                 // Email TextField
                 TextField(
-                  onChanged: (value) => authController.email.value = value,
+                  onChanged: (value) => authController.userModel.value,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'Email',
@@ -121,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 55,
                   child: ElevatedButton(
                     onPressed: () {
-                      final email = authController.email.value;
+                      final email = authController.userModel.value!.email;
                       final password = authController.password.value;
                       _login(email, password);
                     },

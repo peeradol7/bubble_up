@@ -125,7 +125,7 @@ class AuthService {
     }
   }
 
-  Future<User?> saveUserEmailPassword({
+  Future<UserCollectionModel?> saveUserEmailPassword({
     required String email,
     required String password,
     required String name,
@@ -171,7 +171,7 @@ class AuthService {
           .doc(user.uid)
           .set(userData.toMap());
 
-      return user;
+      return userData;
     } catch (e) {
       print('Error during registration: $e');
       return null;

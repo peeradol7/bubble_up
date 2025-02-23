@@ -48,4 +48,24 @@ class UserCollectionModel {
       'address': address,
     };
   }
+
+  UserCollectionModel copyWith({
+    String? userId,
+    String? email,
+    String? displayName,
+    String? role,
+    String? address,
+    String? phoneNumber,
+    String? authMethod,
+  }) {
+    return UserCollectionModel(
+      userId: userId ?? this.userId,
+      email: email ?? this.email,
+      displayName: displayName ?? this.displayName,
+      role: role ?? this.role,
+      address: address ?? this.address,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      authMethod: authMethod ?? this.authMethod,
+    );
+  }
 }

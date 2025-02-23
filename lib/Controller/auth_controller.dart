@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:thammasat/Model/user_collection_model.dart';
 import 'package:thammasat/Service/%E0%B8%B5user_service.dart';
@@ -10,18 +9,14 @@ class AuthController extends GetxController {
   final AuthService authService = AuthService();
   final UserService userService = UserService();
 
-  var user = Rxn<User>();
   var userModel = Rxn<UserCollectionModel>();
   var isLoading = false.obs;
-  RxString email = ''.obs;
-  RxString password = ''.obs;
-  RxString name = ''.obs;
-  RxString phoneNumber = ''.obs;
-  RxString confirmPassword = ''.obs;
-  RxString role = ''.obs;
-  RxString address = ''.obs;
   var errorMessage = ''.obs;
-
+  final phoneNumber = ''.obs;
+  final name = ''.obs;
+  final password = ''.obs;
+  final confirmPassword = ''.obs;
+  final role = ''.obs;
   @override
   void onInit() {
     super.onInit();
@@ -53,8 +48,6 @@ class AuthController extends GetxController {
             updatedData['phoneNumber'] ?? userModel.value?.phoneNumber ?? '',
         authMethod: '',
       );
-      name.value = updatedData['displayName'] ?? 'Guest';
-      phoneNumber.value = updatedData['phoneNumber'];
 
       update();
       print("User data updated in GetX");
@@ -66,7 +59,10 @@ class AuthController extends GetxController {
   Future<bool> loadUserDataInitState() async {
     final prefsService = await SharedPreferencesService.getInstance();
     Map<String, String?> userData = prefsService.getUserData();
-    return userData.isNotEmpty;
+    if (userData.isNotEmpty) {
+      return true;
+    }
+    return false;
   }
 
   Future<Map<String, String>?> loadUserData() async {
@@ -77,7 +73,6 @@ class AuthController extends GetxController {
       final cleanedUserData = userData.map((key, value) {
         return MapEntry(key, value ?? '');
       });
-
       return cleanedUserData;
     }
     return null;
@@ -91,12 +86,7 @@ class AuthController extends GetxController {
     String role,
   ) async {
     try {
-      this.email.value = email;
-      this.password.value = password;
-      this.name.value = name;
-      this.phoneNumber.value = phoneNumber;
-
-      User? user = await authService.saveUserEmailPassword(
+      UserCollectionModel? user = await authService.saveUserEmailPassword(
         email: email,
         password: password,
         name: name,
@@ -105,6 +95,7 @@ class AuthController extends GetxController {
       );
 
       if (user != null) {
+        userModel.value = user;
         Get.snackbar('Success', 'User registered successfully');
       } else {
         Get.snackbar('Error', 'User registration failed');
@@ -119,16 +110,16 @@ class AuthController extends GetxController {
     try {
       isLoading(true);
       await googleLogin();
-    } catch (e) {
-      print('Exception : $e');
+    } finally {
+      isLoading(false);
     }
   }
 
   Future<void> googleLogin() async {
     final result = await authService.loginWithGoogle();
     if (result != null) {
-      user.value = result;
-      fetchDataById(result.uid);
+      final userData = await authService.fetchUserDataByUserId(result.uid);
+      userModel.value = userData;
     } else {
       print('Google login failed: user is null');
     }
@@ -137,7 +128,6 @@ class AuthController extends GetxController {
   Future<void> fetchDataById(String userId) async {
     try {
       final data = await authService.fetchUserDataByUserId(userId);
-
       userModel.value = data;
     } catch (e) {
       print(e);
@@ -147,7 +137,6 @@ class AuthController extends GetxController {
   Future<void> logoutController() async {
     try {
       await authService.logout();
-      user.value = null;
       userModel.value = null;
       final prefsService = await SharedPreferencesService.getInstance();
       prefsService.clearUserData();
@@ -159,6 +148,7 @@ class AuthController extends GetxController {
   Future<void> deleteAccountController() async {
     try {
       await authService.deleteAccount();
+      userModel.value = null;
       Get.snackbar("Success", "บัญชีผู้ใช้ถูกลบเรียบร้อยแล้ว");
     } catch (e) {
       Get.snackbar("Error", e.toString());
@@ -168,6 +158,9 @@ class AuthController extends GetxController {
   Future<void> editAddress(String userId, String address) async {
     try {
       await userService.editAddress(userId, address);
+      if (userModel.value != null) {
+        userModel.value = userModel.value!.copyWith(address: address);
+      }
     } catch (e) {
       print(e);
     }

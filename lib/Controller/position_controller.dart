@@ -50,7 +50,6 @@ class PositionController extends GetxController {
     locationSubscription =
         mapService.trackCurrentLatLng().listen((LatLng latLng) {
       currentLatLng.value = latLng;
-      print("ตำแหน่งปัจจุบัน: ${latLng.latitude}, ${latLng.longitude}");
     });
   }
 

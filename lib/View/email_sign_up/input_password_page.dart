@@ -16,6 +16,13 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
   final AuthController authController = Get.find<AuthController>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  // Local state variables
+  final phoneNumber = ''.obs;
+  final name = ''.obs;
+  final password = ''.obs;
+  final confirmPassword = ''.obs;
+  final role = ''.obs;
+
   String? passwordValidate(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
@@ -30,24 +37,42 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
     if (value == null || value.isEmpty) {
       return 'Please confirm your password';
     }
-    if (value != authController.password.value) {
+    if (value != password.value) {
       return 'Passwords do not match';
     }
     return null;
   }
 
-  void saveUser(String email, String password, String phoneNumber, String name,
-      String role) async {
+  void saveUser() async {
     try {
+      if (role.value.isEmpty) {
+        Get.snackbar(
+          'Error',
+          'Please select a role',
+          backgroundColor: Colors.red[100],
+          colorText: Colors.red[900],
+          borderRadius: 10,
+        );
+        return;
+      }
+
       await authController.signUpWithEmail(
-          email, password, phoneNumber, name, role);
+        authController.userModel.value?.email ?? '',
+        password.value,
+        phoneNumber.value,
+        name.value,
+        role.value,
+      );
+
       Get.snackbar(
         'Success',
         'Check your email',
-        backgroundColor: Color(0xFF01B9E4),
+        backgroundColor: const Color(0xFF01B9E4),
         colorText: Colors.white,
         borderRadius: 10,
       );
+
+      context.go(AppRoutes.landingPage);
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -74,22 +99,22 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
         labelText: label,
         labelStyle: TextStyle(color: Colors.grey[600]),
         hintText: hint,
-        prefixIcon: Icon(icon, color: Color(0xFF01B9E4)),
+        prefixIcon: Icon(icon, color: const Color(0xFF01B9E4)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey[300]!),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(0xFF01B9E4)),
+          borderSide: const BorderSide(color: Color(0xFF01B9E4)),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.red),
+          borderSide: const BorderSide(color: Colors.red),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.red),
+          borderSide: const BorderSide(color: Colors.red),
         ),
         filled: true,
         fillColor: Colors.grey[50],
@@ -106,10 +131,10 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
         elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Color(0xFF01B9E4)),
+          icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF01B9E4)),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
+        title: const Text(
           'Complete Profile',
           style: TextStyle(
             color: Colors.black87,
@@ -126,7 +151,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Almost There!",
                     style: TextStyle(
                       fontSize: 28,
@@ -134,7 +159,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                       color: Color(0xFF01B9E4),
                     ),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Text(
                     "Please fill in your details to complete registration",
                     style: TextStyle(
@@ -142,47 +167,45 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                       color: Colors.grey[600],
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   buildTextField(
                     label: "Phone Number",
                     hint: "Enter your phone number",
                     icon: Icons.phone,
-                    onChanged: (value) =>
-                        authController.phoneNumber.value = value,
+                    onChanged: (value) => phoneNumber.value = value,
                     validator: (value) => value == null || value.isEmpty
                         ? 'Please enter your phone number'
                         : null,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   buildTextField(
                     label: "Name",
                     hint: "Enter your name",
                     icon: Icons.person,
-                    onChanged: (value) => authController.name.value = value,
+                    onChanged: (value) => name.value = value,
                     validator: (value) => value == null || value.isEmpty
                         ? 'Please enter your name'
                         : null,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   buildTextField(
                     label: "Password",
                     hint: "Enter your password",
                     icon: Icons.lock,
                     obscureText: true,
-                    onChanged: (value) => authController.password.value = value,
+                    onChanged: (value) => password.value = value,
                     validator: passwordValidate,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   buildTextField(
                     label: "Confirm Password",
                     hint: "Confirm your password",
                     icon: Icons.lock,
                     obscureText: true,
-                    onChanged: (value) =>
-                        authController.confirmPassword.value = value,
+                    onChanged: (value) => confirmPassword.value = value,
                     validator: confirmPasswordValidate,
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -204,52 +227,45 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                             ),
                           ),
                           RadioListTile<String>(
-                            title: Text("Customer"),
+                            title: const Text("Customer"),
                             value: "Customer",
-                            groupValue: authController.role.value,
-                            activeColor: Color(0xFF01B9E4),
+                            groupValue: role.value,
+                            activeColor: const Color(0xFF01B9E4),
                             onChanged: (value) {
-                              authController.role.value = value!;
+                              role.value = value!;
                             },
                           ),
                           RadioListTile<String>(
-                            title: Text("Rider"),
+                            title: const Text("Rider"),
                             value: "Rider",
-                            groupValue: authController.role.value,
-                            activeColor: Color(0xFF01B9E4),
+                            groupValue: role.value,
+                            activeColor: const Color(0xFF01B9E4),
                             onChanged: (value) {
-                              authController.role.value = value!;
+                              role.value = value!;
                             },
                           ),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   SizedBox(
                     width: double.infinity,
                     height: 55,
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
-                          saveUser(
-                            authController.email.value,
-                            authController.password.value,
-                            authController.phoneNumber.value,
-                            authController.name.value,
-                            authController.role.value,
-                          );
-                          context.go(AppRoutes.landingPage);
+                          saveUser();
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF01B9E4),
+                        backgroundColor: const Color(0xFF01B9E4),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         elevation: 2,
                       ),
-                      child: Text(
+                      child: const Text(
                         "Create Account",
                         style: TextStyle(
                             fontSize: 18,
@@ -258,7 +274,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
