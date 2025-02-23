@@ -39,43 +39,88 @@ class AuthService {
       final user = userCredential.user;
 
       if (user != null) {
-        final userData = UserCollectionModel(
-          userId: user.uid,
-          displayName: user.displayName ?? 'user',
-          authMethod: 'google',
-          phoneNumber: '',
-          address: '',
-          role: 'customer',
-          email: user.email!,
-        );
-
-        final prefsService = await SharedPreferencesService.getInstance();
-        await prefsService.saveUserData(
-          userData.userId,
-          userData.email,
-          userData.displayName,
-          userData.role,
-          userData.address,
-          userData.phoneNumber,
-        );
-
         final userDoc =
             await _firestore.collection(userCollection).doc(user.uid).get();
 
-        if (!userDoc.exists) {
+        if (userDoc.exists) {
+          final existingData = userDoc.data() as Map<String, dynamic>;
+          final updatedData = {
+            'displayName':
+                user.displayName ?? existingData['displayName'] ?? 'user',
+            'email': user.email ?? existingData['email'],
+            'authMethod': 'google',
+            // รักษาข้อมูลเดิมที่มีอยู่
+            'phoneNumber': existingData['phoneNumber'] ?? '',
+            'address': existingData['address'] ?? '',
+            'role': existingData['role'] ??
+                'customer', // ถ้า role เป็น null ให้ใช้ customer
+          };
+
+          await _firestore
+              .collection(userCollection)
+              .doc(user.uid)
+              .update(updatedData);
+
+          final prefsService = await SharedPreferencesService.getInstance();
+          await prefsService.saveUserData(
+            user.uid,
+            updatedData['email'],
+            updatedData['displayName'],
+            updatedData['role'],
+            updatedData['address'],
+            updatedData['phoneNumber'],
+          );
+        } else {
+          final userData = UserCollectionModel(
+            userId: user.uid,
+            displayName: user.displayName ?? 'user',
+            authMethod: 'google',
+            phoneNumber: null,
+            address: null,
+            role: 'customer',
+            email: user.email!,
+          );
+
           await _firestore
               .collection(userCollection)
               .doc(user.uid)
               .set(userData.toMap());
+
+          final prefsService = await SharedPreferencesService.getInstance();
+          await prefsService.saveUserData(
+            userData.userId,
+            userData.email,
+            userData.displayName,
+            userData.role,
+            userData.address ?? '',
+            userData.phoneNumber ?? '',
+          );
+
           print('Saved new user data to Firestore');
-        } else {}
+        }
       }
 
       return userCredential.user;
     } catch (e, stackTrace) {
       print('Detailed error: $e');
       print('Stack trace: $stackTrace');
+      return null;
+    }
+  }
 
+  Future<UserCollectionModel?> fetchUserDataByUserId(String userId) async {
+    try {
+      DocumentSnapshot doc =
+          await _firestore.collection(userCollection).doc(userId).get();
+
+      if (doc.exists) {
+        return UserCollectionModel.fromFirestore(doc);
+      } else {
+        print("User not found!");
+        return null;
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
       return null;
     }
   }

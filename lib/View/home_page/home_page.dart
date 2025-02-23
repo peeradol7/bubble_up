@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:thammasat/Controller/auth_controller.dart';
 import 'package:thammasat/View/home_page/select_service_widget/display_service_widget.dart';
 import 'package:thammasat/View/home_page/select_service_widget/laundry_list_widget.dart';
 import 'package:thammasat/View/home_page/select_service_widget/menu_bar_widget.dart';
@@ -20,6 +21,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final PositionController mapController = Get.find<PositionController>();
+  final AuthController authController = Get.find<AuthController>();
+
   @override
   void initState() {
     mapController.fetchDistrict();

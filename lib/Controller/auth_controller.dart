@@ -45,14 +45,15 @@ class AuthController extends GetxController {
       userModel.value = UserCollectionModel(
         userId: userModel.value?.userId ?? '',
         email: updatedData['email'] ?? userModel.value?.email ?? '',
-        displayName: updatedData['name'] ?? userModel.value?.displayName ?? '',
+        displayName:
+            updatedData['displayName'] ?? userModel.value?.displayName ?? '',
         role: updatedData['role'] ?? userModel.value?.role ?? '',
         address: updatedData['address'] ?? userModel.value?.address ?? '',
         phoneNumber:
             updatedData['phoneNumber'] ?? userModel.value?.phoneNumber ?? '',
         authMethod: '',
       );
-      name.value = updatedData['name'] ?? 'Guest';
+      name.value = updatedData['displayName'] ?? 'Guest';
       phoneNumber.value = updatedData['phoneNumber'];
 
       update();
@@ -127,8 +128,19 @@ class AuthController extends GetxController {
     final result = await authService.loginWithGoogle();
     if (result != null) {
       user.value = result;
+      fetchDataById(result.uid);
     } else {
       print('Google login failed: user is null');
+    }
+  }
+
+  Future<void> fetchDataById(String userId) async {
+    try {
+      final data = await authService.fetchUserDataByUserId(userId);
+
+      userModel.value = data;
+    } catch (e) {
+      print(e);
     }
   }
 

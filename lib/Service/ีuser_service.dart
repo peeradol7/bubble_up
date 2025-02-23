@@ -58,8 +58,8 @@ class UserService {
         userData.email,
         userData.displayName,
         userData.role,
-        userData.address,
-        userData.phoneNumber,
+        userData.address ?? '',
+        userData.phoneNumber ?? '',
       );
 
       return userData;

@@ -6,9 +6,9 @@ class UserCollectionModel {
   final String authMethod;
   final String email;
   final String? password;
-  final String phoneNumber;
+  final String? phoneNumber;
   final String role;
-  final String address;
+  final String? address;
 
   UserCollectionModel({
     required this.userId,
@@ -16,9 +16,9 @@ class UserCollectionModel {
     required this.authMethod,
     required this.email,
     this.password,
-    required this.phoneNumber,
+    this.phoneNumber,
     required this.role,
-    required this.address,
+    this.address,
   });
 
   factory UserCollectionModel.fromFirestore(DocumentSnapshot doc) {
