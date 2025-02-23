@@ -9,4 +9,8 @@ class NotificationController extends GetxController {
     super.onInit();
     notificationService.requestNotificationPermission();
   }
+
+  Future<void> requestNotificationPermission() async {
+    await notificationService.requestNotificationPermission();
+  }
 }

@@ -1,39 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:thammasat/Controller/notification_controller.dart';
 import 'package:thammasat/app_routes.dart';
 
 import '../../../Service/auth_service.dart';
 
 class SettingPage extends StatelessWidget {
-  const SettingPage({super.key});
-
-  Future<void> _requestNotificationPermission() async {
-    final status = await Permission.notification.request();
-    if (status.isGranted) {
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
-
-      const AndroidInitializationSettings initializationSettingsAndroid =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
-
-      const DarwinInitializationSettings initializationSettingsIOS =
-          DarwinInitializationSettings(
-        requestAlertPermission: true,
-        requestBadgePermission: true,
-        requestSoundPermission: true,
-      );
-
-      const InitializationSettings initializationSettings =
-          InitializationSettings(
-        android: initializationSettingsAndroid,
-        iOS: initializationSettingsIOS,
-      );
-
-      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    }
-  }
+  SettingPage({super.key});
+  final NotificationController notificationController =
+      Get.find<NotificationController>();
 
   Future<void> _showDeleteConfirmation(BuildContext context) async {
     return showDialog(
@@ -131,7 +108,8 @@ class SettingPage extends StatelessWidget {
                         value: snapshot.data ?? false,
                         onChanged: (bool value) async {
                           if (value) {
-                            await _requestNotificationPermission();
+                            await notificationController
+                                .requestNotificationPermission();
                           } else {
                             await openAppSettings();
                           }

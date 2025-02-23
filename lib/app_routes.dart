@@ -61,7 +61,7 @@ class AppRoutes {
           path: editAddressPage,
           name: editAddressPage,
           builder: (context, state) {
-            return const EditAddressPage();
+            return EditAddressPage();
           }),
       GoRoute(
           path: editPersonDataPage,
