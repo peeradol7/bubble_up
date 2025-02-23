@@ -4,9 +4,7 @@ import 'package:get/get.dart';
 import '../../../Controller/location_controller.dart';
 
 class SearchWidget extends GetView<LocationController> {
-  const SearchWidget({
-    Key? key,
-  }) : super(key: key);
+  const SearchWidget({Key? key});
 
   @override
   Widget build(BuildContext context) {

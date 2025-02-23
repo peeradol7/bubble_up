@@ -9,21 +9,6 @@ class UserService {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  Future<void> addRole(String userId, String role) async {
-    try {
-      DocumentReference userDocRef =
-          _firestore.collection(usersCollection).doc(userId);
-
-      await userDocRef.update({
-        'role': role,
-      });
-
-      print('Role added successfully!');
-    } catch (e) {
-      print('Error adding role: $e');
-      throw Exception('Error adding role');
-    }
-  }
 
   Future<void> editAddress(String userId, String address) async {
     try {

@@ -11,6 +11,7 @@ import 'package:thammasat/Controller/slide_controller.dart';
 import 'package:thammasat/app_routes.dart';
 
 import 'Controller/location_controller.dart';
+import 'Controller/notification_controller.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -27,6 +28,7 @@ void main() async {
   Get.put(ServiceListController());
   Get.put(SlideController());
   Get.put(OrderController());
+  Get.put(NotificationController());
   runApp(const MyApp());
 }
 

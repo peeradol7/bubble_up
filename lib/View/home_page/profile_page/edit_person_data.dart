@@ -64,22 +64,60 @@ class EditPersonData extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 30),
-                    edit.buildTextField(
+                    TextFormField(
                       controller: nameController,
-                      label: 'Display name',
-                      icon: Icons.person_outline,
+                      decoration: InputDecoration(
+                        labelText: 'Display name',
+                        hintText: 'กรุณากรอกชื่อที่แสดง',
+                        prefixIcon: Icon(Icons.person_outline),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'กรุณากรอกชื่อที่แสดง';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 16),
-                    edit.buildTextField(
+                    TextFormField(
                       controller: passwordController,
-                      label: 'password',
-                      icon: Icons.lock_outline,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        hintText: 'กรุณากรอกรหัสผ่าน',
+                        prefixIcon: Icon(Icons.lock_outline),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'กรุณากรอกรหัสผ่าน';
+                        }
+                        return null;
+                      },
+                      obscureText: true,
                     ),
                     const SizedBox(height: 16),
-                    edit.buildTextField(
+                    TextFormField(
                       controller: phoneController,
-                      label: 'Phone number',
-                      icon: Icons.phone_outlined,
+                      decoration: InputDecoration(
+                        labelText: 'Phone number',
+                        hintText: 'กรุณากรอกเบอร์โทรศัพท์',
+                        prefixIcon: Icon(Icons.phone_outlined),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'กรุณากรอกเบอร์โทรศัพท์';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.phone,
                     ),
                     const SizedBox(height: 32),
                     ElevatedButton(

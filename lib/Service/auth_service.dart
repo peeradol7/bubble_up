@@ -164,6 +164,43 @@ class AuthService {
     }
   }
 
+  Future<void> deleteAccount() async {
+    try {
+      final User? currentUser = auth.currentUser;
+      if (currentUser == null) {
+        throw Exception("ไม่พบข้อมูลผู้ใช้");
+      }
+
+      final String userId = currentUser.uid;
+
+      await _firestore.collection(userCollection).doc(userId).delete();
+
+      if (await _googleSignIn.isSignedIn()) {
+        await _googleSignIn.disconnect();
+        await _googleSignIn.signOut();
+      }
+
+      await currentUser.delete();
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+
+      print('ลบบัญชีผู้ใช้เรียบร้อยแล้ว');
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'requires-recent-login':
+          throw Exception(
+              "กรุณาเข้าสู่ระบบใหม่อีกครั้งก่อนลบบัญชี เนื่องจากเวลาผ่านไปนานเกินไป");
+        case 'user-not-found':
+          throw Exception("ไม่พบบัญชีผู้ใช้");
+        default:
+          throw Exception("เกิดข้อผิดพลาดในการลบบัญชี: ${e.message}");
+      }
+    } catch (e) {
+      throw Exception("เกิดข้อผิดพลาดในการลบบัญชี: $e");
+    }
+  }
+
   Future<void> logout() async {
     FirebaseAuth.instance.signOut();
   }

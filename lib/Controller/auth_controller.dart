@@ -142,4 +142,21 @@ class AuthController extends GetxController {
       Get.snackbar('Error', '$e', snackPosition: SnackPosition.BOTTOM);
     }
   }
+
+  Future<void> deleteAccountController() async {
+    try {
+      await authService.deleteAccount();
+      Get.snackbar("Success", "บัญชีผู้ใช้ถูกลบเรียบร้อยแล้ว");
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
+  Future<void> editAddress(String userId, String address) async {
+    try {
+      await userService.editAddress(userId, address);
+    } catch (e) {
+      print(e);
+    }
+  }
 }
