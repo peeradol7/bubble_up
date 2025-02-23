@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:thammasat/Controller/auth_controller.dart';
 import 'package:thammasat/Controller/laundry_controller.dart';
 import 'package:thammasat/Controller/menubar_controller.dart';
+import 'package:thammasat/Controller/order_controller.dart';
 import 'package:thammasat/Controller/position_controller.dart';
 import 'package:thammasat/Controller/service_list_controller.dart';
 import 'package:thammasat/Controller/slide_controller.dart';
@@ -25,6 +26,7 @@ void main() async {
   Get.put(MenuBarController());
   Get.put(ServiceListController());
   Get.put(SlideController());
+  Get.put(OrderController());
   runApp(const MyApp());
 }
 

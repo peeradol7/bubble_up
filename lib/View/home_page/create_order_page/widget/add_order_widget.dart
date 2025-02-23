@@ -76,7 +76,6 @@ class AddOrderWidget extends StatelessWidget {
                   groupValue: laundryController.deliveryType.value,
                   onChanged: (value) {
                     laundryController.deliveryType.value = value!;
-                    // Calculate and update total price here instead
                     _updateTotalPrice();
                   },
                 ),
@@ -86,9 +85,27 @@ class AddOrderWidget extends StatelessWidget {
                   groupValue: laundryController.deliveryType.value,
                   onChanged: (value) {
                     laundryController.deliveryType.value = value!;
-                    // Calculate and update total price here instead
                     _updateTotalPrice();
                   },
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'ชำระเงินโดย',
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    ),
+                    RadioListTile<String>(
+                      title: Text('เงินสด'),
+                      value: 'เงินสด',
+                      groupValue: laundryController.paymentMethod.value,
+                      onChanged: (value) {
+                        laundryController.paymentMethod.value = value!;
+                        _updateTotalPrice();
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

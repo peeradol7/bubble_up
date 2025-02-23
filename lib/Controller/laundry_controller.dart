@@ -18,6 +18,8 @@ class LaundryController extends GetxController {
   var deliveryPrices = <String, int>{}.obs;
   var deliveryType = ''.obs;
   var totalPrice = 0.obs;
+  var paymentMethod = ''.obs;
+  var status = 'pending'.obs;
 
   Future<void> fetchLaundryDataList() async {
     try {
@@ -68,7 +70,7 @@ class LaundryController extends GetxController {
     final laundryData = laundryDataById.value;
 
     if (currentLocation == null || laundryData == null) {
-      print("เกิดข้อผิดพลาด: ตำแหน่งปัจจุบันหรือละติจูดของร้านซักรีดเป็น null");
+      print("LatLng ปัจจุบันหรือละติจูดของร้านซักรีดเป็น null");
       return {};
     }
 
@@ -76,7 +78,7 @@ class LaundryController extends GetxController {
     final laundryLongitude = laundryData.longitude;
 
     if (laundryLatitude == null || laundryLongitude == null) {
-      print("เกิดข้อผิดพลาด: ละติจูดหรือลองจิจูดของร้านซักรีดเป็น null");
+      print(" LatLng ของร้านซักรีดเป็น null");
       return {};
     }
 

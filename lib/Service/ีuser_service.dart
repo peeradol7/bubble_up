@@ -25,6 +25,22 @@ class UserService {
     }
   }
 
+  Future<void> editAddress(String userId, String address) async {
+    try {
+      DocumentReference userDocRef =
+          _firestore.collection(usersCollection).doc(userId);
+
+      await userDocRef.update({
+        'address': address,
+      });
+
+      print('address added successfully!');
+    } catch (e) {
+      print('Error adding address: $e');
+      throw Exception('Error adding role');
+    }
+  }
+
   Future<UserCollectionModel> emailLoginService(
       String email, String password) async {
     try {

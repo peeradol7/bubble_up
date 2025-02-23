@@ -129,8 +129,12 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             Expanded(
               child: ListView(
                 children: [
-                  buttonWidget.buildMenuItem('My Address', () {}),
-                  buttonWidget.buildMenuItem('Setting', () {}),
+                  buttonWidget.buildMenuItem('My Address', () {
+                    AppRoutes.editAddressPage;
+                  }),
+                  buttonWidget.buildMenuItem('Setting', () {
+                    AppRoutes.settingPage;
+                  }),
                   buttonWidget.buildMenuItem('Logout', () {
                     _showLogoutDialog();
                   }),
