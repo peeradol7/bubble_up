@@ -16,7 +16,7 @@ class DisplayLaundryName extends StatelessWidget {
       }
 
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // จัดชิดซ้าย
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(

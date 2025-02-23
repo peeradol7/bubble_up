@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final MenuBarController controller = Get.find<MenuBarController>();
-
+    final AuthController authController = Get.find<AuthController>();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

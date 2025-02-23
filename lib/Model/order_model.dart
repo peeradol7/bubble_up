@@ -29,21 +29,23 @@ class OrderModel {
   factory OrderModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return OrderModel(
-      orderId: data['orderId'],
-      userId: data['userId'],
-      laundryId: data['laundryId'],
-      totalPrice: data['totalPrice'],
-      address: data['address'],
-      paymentMethod: data['paymentMethod'],
-      deliveryType: data['deliveryType'],
-      status: data['status'],
-      deliveryAddress:
-          CustomerLocation.fromFirestore(data['deliveryAddress'] ?? {})
-              .toJson(),
-      laundryAddress: LatLng(
-        data['laundryAddress']['latitude'],
-        data['laundryAddress']['longitude'],
-      ),
+      orderId: data['orderId'] ?? '', // เพิ่ม default value
+      userId: data['userId'] ?? '',
+      laundryId: data['laundryId'] ?? '',
+      totalPrice: data['totalPrice'] ?? 0,
+      address: data['address'] ?? '',
+      paymentMethod: data['paymentMethod'] ?? '',
+      deliveryType: data['deliveryType'] ?? '',
+      status: data['status'] ?? '',
+      deliveryAddress: data['deliveryAddress'] != null
+          ? CustomerLocation.fromFirestore(data['deliveryAddress']).toJson()
+          : CustomerLocation(latitude: 0, longitude: 0).toJson(),
+      laundryAddress: data['laundryAddress'] != null
+          ? LatLng(
+              data['laundryAddress']['latitude'] ?? 0,
+              data['laundryAddress']['longitude'] ?? 0,
+            )
+          : const LatLng(0, 0),
     );
   }
 

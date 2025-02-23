@@ -10,6 +10,21 @@ class SharedPreferencesService {
     return SharedPreferencesService(prefs);
   }
 
+  Map<String, String?> getUserData() {
+    Map<String, String?> userData = {
+      'userId': _prefs.getString('userId'),
+      'email': _prefs.getString('email'),
+      'name': _prefs.getString('name'),
+      'role': _prefs.getString('role'),
+      'address': _prefs.getString('address'),
+      'phoneNumber': _prefs.getString('phoneNumber'),
+    };
+
+    print("User Data: $userData");
+
+    return userData;
+  }
+
   Future<void> saveUserData(
     String userId,
     String email,
@@ -26,21 +41,6 @@ class SharedPreferencesService {
     _prefs.setString('phoneNumber', phoneNumber);
 
     print('data Save *** $userId,$name,$address,$role,$phoneNumber');
-  }
-
-  Map<String, String?> getUserData() {
-    Map<String, String?> userData = {
-      'userId': _prefs.getString('userId'),
-      'email': _prefs.getString('email'),
-      'name': _prefs.getString('name'),
-      'role': _prefs.getString('role'),
-      'address': _prefs.getString('address'),
-      'phoneNumber': _prefs.getString('phoneNumber'),
-    };
-
-    print("User Data: $userData");
-
-    return userData;
   }
 
   Future<void> clearUserData() async {

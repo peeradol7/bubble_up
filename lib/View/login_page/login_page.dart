@@ -94,7 +94,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(height: 20),
-                // Password TextField
                 TextField(
                   onChanged: (value) => authController.password.value = value,
                   obscureText: true,

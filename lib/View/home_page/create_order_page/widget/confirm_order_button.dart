@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:thammasat/Controller/auth_controller.dart';
+import 'package:thammasat/Controller/notification_controller.dart';
 import 'package:thammasat/Controller/order_controller.dart';
 import 'package:thammasat/Controller/position_controller.dart';
 
@@ -17,7 +18,8 @@ class ConfirmOrderButton extends StatelessWidget {
   final LaundryController laundryController = Get.find<LaundryController>();
   final OrderController orderController = Get.find<OrderController>();
   final AuthController authController = Get.find<AuthController>();
-
+  final NotificationController notificationController =
+      Get.find<NotificationController>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,6 +29,7 @@ class ConfirmOrderButton extends StatelessWidget {
         builder: (controller) => ElevatedButton.icon(
           onPressed: () {
             saveOrder();
+            notificationController.showOrderSuccessNotification();
             context.pop();
           },
           icon: Icon(Icons.check, color: Colors.white),
@@ -68,13 +71,7 @@ class ConfirmOrderButton extends StatelessWidget {
     final customerLatitude = positionController.currentLatLng.value;
     if (userId != null &&
         laundryId != null &&
-        totalPrice != null &&
         address != null &&
-        paymentMethod != null &&
-        deliveryType != null &&
-        status != null &&
-        laundryController.laundryDataById.value!.latitude != null &&
-        laundryController.laundryDataById.value!.longitude != null &&
         customerLatitude != null) {
       String orderId = FirebaseFirestore.instance.collection('orders').doc().id;
       OrderModel newOrder = OrderModel(
