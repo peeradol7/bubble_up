@@ -12,6 +12,7 @@ class MapPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    laundryController.updateMarkers(context);
     return Scaffold(
       body: Obx(() => GoogleMap(
             initialCameraPosition: positionController.university,

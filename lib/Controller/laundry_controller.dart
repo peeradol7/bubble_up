@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:thammasat/Controller/position_controller.dart';
 import 'package:thammasat/Model/laundrys_model.dart';
@@ -25,7 +27,6 @@ class LaundryController extends GetxController {
     try {
       var data = await laundryService.getLaundries();
       laundryDataList.value = data;
-      _updateMarkers();
     } catch (e) {
       print('Error fetching data :  $e');
     }
@@ -51,7 +52,7 @@ class LaundryController extends GetxController {
     }).toList();
   }
 
-  void _updateMarkers() {
+  void updateMarkers(BuildContext context) {
     markers.value = laundryDataList.map((laundry) {
       return Marker(
         markerId: MarkerId(laundry.laundryName),
@@ -61,6 +62,11 @@ class LaundryController extends GetxController {
           snippet: 'คลิกเพื่อดูรายละเอียด',
         ),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        onTap: () {
+          final laundryPath = '/create-order/${laundry.laundryId}';
+          context.push(laundryPath);
+          fetchLaundryById(laundry.laundryId);
+        },
       );
     }).toList();
   }

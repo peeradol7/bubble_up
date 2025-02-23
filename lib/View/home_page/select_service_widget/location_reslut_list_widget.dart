@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+import 'package:thammasat/Controller/laundry_controller.dart';
 
 import '../../../Controller/location_controller.dart';
+import '../../../app_routes.dart';
 
 class LocationResultListWidget extends GetView<LocationController> {
-  const LocationResultListWidget({Key? key}) : super(key: key);
-
+  LocationResultListWidget({Key? key}) : super(key: key);
+  final LaundryController laundryController = Get.find<LaundryController>();
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -51,7 +54,7 @@ class LocationResultListWidget extends GetView<LocationController> {
                 shrinkWrap: true,
                 itemCount: filteredDocs.length,
                 itemBuilder: (context, index) =>
-                    _buildListItem(filteredDocs[index], index),
+                    _buildListItem(filteredDocs[index], index, context),
               ),
             ),
           );
@@ -60,7 +63,7 @@ class LocationResultListWidget extends GetView<LocationController> {
     });
   }
 
-  Widget _buildListItem(DocumentSnapshot doc, int index) {
+  Widget _buildListItem(DocumentSnapshot doc, int index, BuildContext context) {
     try {
       final data = doc.data() as Map<String, dynamic>;
 
@@ -69,7 +72,26 @@ class LocationResultListWidget extends GetView<LocationController> {
       }
 
       return GestureDetector(
-        onTap: () {
+        onTap: () async {
+          final createOrderPath = AppRoutes.createOrderPage;
+
+          // ดึงค่า ID จากข้อมูลเอกสาร
+          final id = data['laundryId'];
+
+          if (id == null) {
+            print('Error: Laundry ID is null');
+            return;
+          }
+
+          await laundryController.fetchLaundryById(id);
+
+          if (laundryController.laundryDataById.value == null) {
+            print('Error: Laundry data is still null after fetching.');
+            return;
+          }
+
+          context.push('$createOrderPath/$id');
+
           controller.handleLocationSelection(data, index);
           controller.searchController.clear();
           controller.searchText.value = '';
