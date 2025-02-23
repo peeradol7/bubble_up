@@ -33,6 +33,10 @@ class EditPersonData extends StatelessWidget {
           ),
           backgroundColor: const Color(0xFF01B9E4),
           elevation: 0,
+          leading: IconButton(
+            onPressed: context.pop,
+            icon: Icon(Icons.arrow_back),
+          ),
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -74,31 +78,6 @@ class EditPersonData extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'กรุณากรอกชื่อที่แสดง';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: passwordController,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: 'กรุณากรอกรหัสผ่าน',
-                        prefixIcon: Icon(Icons.lock_outline),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'กรุณากรอกรหัสผ่าน';
-                        }
-                        return null;
-                      },
-                      obscureText: true,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -111,13 +90,20 @@ class EditPersonData extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'กรุณากรอกเบอร์โทรศัพท์';
-                        }
-                        return null;
-                      },
                       keyboardType: TextInputType.phone,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        hintText: 'กรุณากรอกรหัสผ่าน',
+                        prefixIcon: Icon(Icons.lock_outline),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      obscureText: true,
                     ),
                     const SizedBox(height: 32),
                     ElevatedButton(

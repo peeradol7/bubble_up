@@ -7,8 +7,8 @@ import '../../../Service/auth_service.dart';
 class EditAddressPage extends StatelessWidget {
   EditAddressPage({super.key});
 
-  final TextEditingController addressController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,8 @@ class EditAddressPage extends StatelessWidget {
     return Obx(() {
       final String currentAddress =
           userController.userModel.value?.address ?? '';
-      addressController.text = currentAddress;
+
+      controller.text = userController.address.value;
 
       return Scaffold(
         appBar: AppBar(
@@ -75,9 +76,8 @@ class EditAddressPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 32),
-                    // ฟอร์มกรอกที่อยู่
                     TextFormField(
-                      controller: addressController,
+                      controller: controller,
                       decoration: InputDecoration(
                         labelText: 'ที่อยู่',
                         hintText: 'กรุณากรอกที่อยู่ของคุณ',
@@ -97,13 +97,12 @@ class EditAddressPage extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 32),
-                    // ปุ่มบันทึก
                     ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           try {
                             final updatedData = {
-                              'address': addressController.text.trim(),
+                              'address': userController.address.value,
                             };
 
                             final authService = AuthService();
@@ -146,9 +145,9 @@ class EditAddressPage extends StatelessWidget {
                             ? 'เพิ่มที่อยู่'
                             : 'บันทึกที่อยู่',
                         style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
                   ],

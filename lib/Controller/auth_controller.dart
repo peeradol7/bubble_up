@@ -19,6 +19,7 @@ class AuthController extends GetxController {
   RxString phoneNumber = ''.obs;
   RxString confirmPassword = ''.obs;
   RxString role = ''.obs;
+  RxString address = ''.obs;
   var errorMessage = ''.obs;
 
   @override

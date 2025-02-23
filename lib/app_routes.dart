@@ -70,14 +70,14 @@ class AppRoutes {
             return EditPersonData();
           }),
       GoRoute(
-          path: riderHomePage,
-          name: riderHomePage,
+          path: settingPage,
+          name: settingPage,
           builder: (context, state) {
             return SettingPage();
           }),
       GoRoute(
-          path: settingPage,
-          name: settingPage,
+          path: riderHomePage,
+          name: riderHomePage,
           builder: (context, state) {
             return RiderHomePage();
           }),
