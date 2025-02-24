@@ -2,17 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class OrderModel {
-  final String orderId;
+  final String? orderId;
   final String userId;
   final String laundryId;
   final int totalPrice;
   final String address;
   final String paymentMethod;
   final String deliveryType;
-  final String status;
+  final String? status;
   final LatLng laundryAddress;
   final Map<String, dynamic> deliveryAddress;
-  final String laundryName;
+  final String? laundryName;
 
   OrderModel({
     required this.orderId,
@@ -45,7 +45,6 @@ class OrderModel {
       paymentMethod: data['paymentMethod'] ?? '',
       deliveryType: data['deliveryType'] ?? '',
       status: data['status'] ?? '',
-      // Handle the optional null value for deliveryAddress
       deliveryAddress: data['deliveryAddress'] != null
           ? CustomerLocation.fromFirestore(
                   data['deliveryAddress'] as Map<String, dynamic>)

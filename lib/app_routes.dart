@@ -9,6 +9,7 @@ import 'package:thammasat/View/landing_page/landing_page.dart';
 import 'package:thammasat/View/login_page/login_page.dart';
 import 'package:thammasat/View/rider_page/rider_home_page.dart';
 
+import 'View/error_page.dart';
 import 'View/home_page/profile_page/edit_person_data.dart';
 
 class AppRoutes {
@@ -28,72 +29,50 @@ class AppRoutes {
     initialLocation: landingPage,
     routes: [
       GoRoute(
-          path: landingPage,
-          name: landingPage,
-          builder: (context, state) {
-            return const LandingPage();
-          }),
+        path: landingPage,
+        builder: (context, state) => const LandingPage(),
+      ),
       GoRoute(
-          path: homePage,
-          name: homePage,
-          builder: (context, state) {
-            return const HomePage();
-          }),
+        path: homePage,
+        builder: (context, state) => const HomePage(),
+      ),
       GoRoute(
-          path: emailSignUp,
-          name: emailSignUp,
-          builder: (context, state) {
-            return EmailSignUp();
-          }),
+        path: emailSignUp,
+        builder: (context, state) => EmailSignUp(),
+      ),
       GoRoute(
-          path: inputPassword,
-          name: inputPassword,
-          builder: (context, state) {
-            return InputPasswordPage();
-          }),
+        path: inputPassword,
+        builder: (context, state) => InputPasswordPage(),
+      ),
       GoRoute(
-          path: loginPage,
-          name: loginPage,
-          builder: (context, state) {
-            return const LoginPage();
-          }),
+        path: loginPage,
+        builder: (context, state) => const LoginPage(),
+      ),
       GoRoute(
-          path: editAddressPage,
-          name: editAddressPage,
-          builder: (context, state) {
-            return EditAddressPage();
-          }),
+        path: editAddressPage,
+        builder: (context, state) => EditAddressPage(),
+      ),
       GoRoute(
-          path: editPersonDataPage,
-          name: editPersonDataPage,
-          builder: (context, state) {
-            return EditPersonData();
-          }),
+        path: editPersonDataPage,
+        builder: (context, state) => EditPersonData(),
+      ),
       GoRoute(
-          path: settingPage,
-          name: settingPage,
-          builder: (context, state) {
-            return SettingPage();
-          }),
+        path: settingPage,
+        builder: (context, state) => SettingPage(),
+      ),
       GoRoute(
-          path: riderHomePage,
-          name: riderHomePage,
-          builder: (context, state) {
-            return RiderHomePage();
-          }),
+        path: riderHomePage,
+        builder: (context, state) => RiderHomePage(),
+      ),
       GoRoute(
-          path: '$createOrderPage/:laundryId',
-          name: createOrderPage,
-          builder: (context, state) {
-            final laundryId = state.pathParameters['laundryId'] ?? '';
-            return CreateOrderPage(
-              laundryId: laundryId,
-            );
-          }),
+        path: '$createOrderPage/:laundryId',
+        builder: (context, state) {
+          final laundryId = state.pathParameters['laundryId'] ?? '';
+          return CreateOrderPage(laundryId: laundryId);
+        },
+      ),
     ],
-    redirect: (context, state) {
-      print('---path => ${state.uri.toString()}');
-      return null;
-    },
+    errorBuilder: (context, state) => const ErrorPage(),
+    debugLogDiagnostics: true,
   );
 }

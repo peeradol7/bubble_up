@@ -37,9 +37,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appRoutes = AppRoutes();
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      routerConfig: AppRoutes().route,
+      routerConfig: appRoutes.route,
       theme: ThemeData.fallback(),
     );
   }

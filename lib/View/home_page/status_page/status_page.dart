@@ -54,7 +54,7 @@ class StatusPage extends StatelessWidget {
 
                   return Card(
                     margin: const EdgeInsets.all(8.0),
-                    color: getStatusColor(order.status),
+                    color: getStatusColor(order.status!),
                     child: ListTile(
                       title: Text('ชื่อร้าน: ${order.laundryName}'),
                       subtitle: Text(
@@ -88,7 +88,6 @@ class StatusPage extends StatelessWidget {
   }
 
   Color completed() {
-    notificationController.showOrderCompleteNotification();
     return Colors.green.shade100;
   }
 }

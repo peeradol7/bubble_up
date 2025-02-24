@@ -36,7 +36,6 @@ class OrderController extends GetxController {
       print("Debug - userId received: '$userId'");
       print("Debug - userId type: ${userId.runtimeType}");
 
-      // ตรวจสอบ null และ empty
       if (userId == null || userId.isEmpty) {
         print("Debug - userId is null or empty");
         hasError.value = true;
@@ -49,7 +48,6 @@ class OrderController extends GetxController {
       hasError.value = false;
       errorMessage.value = '';
 
-      // สร้าง local variable เพื่อให้แน่ใจว่าเป็น String
       final String validUserId = userId;
       print("Debug - about to call service with userId: '$validUserId'");
 

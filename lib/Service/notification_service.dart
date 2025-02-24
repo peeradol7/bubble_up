@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -46,39 +45,26 @@ class NotificationService {
     }
   }
 
-  Future<void> showNotification(
-      {required String title, required String body}) async {
-    const AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings('@mipmap/launcher_icon');
-
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: androidInitializationSettings,
-    );
-
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    const Color iconColor = Colors.blue;
-
-    const AndroidNotificationDetails androidNotificationDetails =
+  Future<void> showNotification({
+    required String title,
+    required String body,
+  }) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      'order_channel_id',
-      'Order Notifications',
-      channelDescription: 'Notifications for order status updates',
+      'default_notification_channel',
+      'Default',
       importance: Importance.max,
       priority: Priority.high,
-      color: iconColor,
     );
 
-    const NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
       0,
       title,
       body,
-      notificationDetails,
+      platformChannelSpecifics,
     );
   }
 }
