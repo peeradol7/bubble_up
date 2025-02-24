@@ -22,6 +22,7 @@ class AuthService {
       await auth.signOut();
 
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
       if (googleUser == null) {
         print('Sign in aborted by user');
         return null;
@@ -36,6 +37,7 @@ class AuthService {
       );
 
       final userCredential = await auth.signInWithCredential(credential);
+
       final user = userCredential.user;
 
       if (user != null) {
@@ -49,11 +51,9 @@ class AuthService {
                 user.displayName ?? existingData['displayName'] ?? 'user',
             'email': user.email ?? existingData['email'],
             'authMethod': 'google',
-            // รักษาข้อมูลเดิมที่มีอยู่
             'phoneNumber': existingData['phoneNumber'] ?? '',
             'address': existingData['address'] ?? '',
-            'role': existingData['role'] ??
-                'customer', // ถ้า role เป็น null ให้ใช้ customer
+            'role': existingData['role'] ?? 'customer',
           };
 
           await _firestore

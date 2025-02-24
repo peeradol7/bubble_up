@@ -18,7 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _login(String email, String password) async {
     try {
       await authController.fetchUserData(email, password);
-
       if (authController.userModel.value!.role == 'customer') {
         context.go(AppRoutes.homePage);
       } else {

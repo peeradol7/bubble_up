@@ -7,16 +7,11 @@ class NotificationService {
 
   Future<void> requestNotificationPermission() async {
     try {
-      print("Requesting notification permission...");
       final status = await Permission.notification.request();
 
       if (status.isGranted) {
-        print("Notification permission granted!");
-
         final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
             FlutterLocalNotificationsPlugin();
-
-        print("Initializing notification plugin...");
 
         const AndroidInitializationSettings initializationSettingsAndroid =
             AndroidInitializationSettings('@mipmap/ic_launcher');

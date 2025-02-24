@@ -50,7 +50,6 @@ class OrderModel {
                   data['deliveryAddress'] as Map<String, dynamic>)
               .toJson()
           : CustomerLocation(latitude: 0, longitude: 0).toJson(),
-      // Handle optional null value for laundryAddress
       laundryAddress: data['laundryAddress'] != null
           ? LatLng(
               data['laundryAddress']['latitude'] ?? 0.0,

@@ -74,5 +74,9 @@ class AppRoutes {
     ],
     errorBuilder: (context, state) => const ErrorPage(),
     debugLogDiagnostics: true,
+    redirect: (context, state) {
+      print('state.url ===> ${state.uri}');
+      return null;
+    },
   );
 }

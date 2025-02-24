@@ -14,7 +14,9 @@ class LaundryController extends GetxController {
   final PositionController positionController = Get.find<PositionController>();
 
   var laundryDataById = Rxn<LaundrysModel>();
+
   var laundryDataList = <LaundrysModel>[].obs;
+
   var markers = <Marker>[].obs;
   var price = ''.obs;
   var deliveryPrices = <String, int>{}.obs;

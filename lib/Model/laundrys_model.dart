@@ -8,6 +8,7 @@ class LaundrysModel {
   final double longitude;
   final String detail;
   final Map<String, dynamic> price;
+
   LaundrysModel({
     required this.laundryId,
     required this.laundryName,

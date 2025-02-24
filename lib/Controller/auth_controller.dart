@@ -10,6 +10,7 @@ class AuthController extends GetxController {
   final UserService userService = UserService();
 
   var userModel = Rxn<UserCollectionModel>();
+
   var isLoading = false.obs;
   var errorMessage = ''.obs;
   final phoneNumber = ''.obs;
@@ -17,6 +18,7 @@ class AuthController extends GetxController {
   final password = ''.obs;
   final confirmPassword = ''.obs;
   final role = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -128,7 +130,11 @@ class AuthController extends GetxController {
   Future<void> fetchDataById(String userId) async {
     try {
       final data = await authService.fetchUserDataByUserId(userId);
+
       userModel.value = data;
+
+      final displayName = userModel.value!.displayName;
+      print(displayName);
     } catch (e) {
       print(e);
     }
