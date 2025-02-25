@@ -8,7 +8,7 @@ class OrderService {
 
   Future<List<OrderModel>> getOrdersByUserId(String userId) async {
     try {
-      print("Service - received userId: '$userId'"); // debug log
+      print("Service - received userId: '$userId'");
 
       if (userId.isEmpty) {
         return [];
@@ -21,21 +21,14 @@ class OrderService {
           .where("userId", isEqualTo: userId)
           .get();
 
-      print(
-          "Service - query completed, docs count: ${querySnapshot.docs.length}");
-
       final orders = querySnapshot.docs.map((doc) {
-        print("Service - converting doc ${doc.id}"); // debug log
         return OrderModel.fromFirestore(doc);
       }).toList();
 
-      print("Service - conversion completed, orders count: ${orders.length}");
       return orders;
     } catch (e, stackTrace) {
-      print("Service error details:");
-      print("Error: $e");
       print("StackTrace: $stackTrace");
-      throw e; // ส่ง error กลับไปให้ controller จัดการ
+      throw e;
     }
   }
 

@@ -133,27 +133,36 @@ class AuthService {
     required String role,
   }) async {
     try {
+      print('Attempting to create user with email: $email');
+
+      // ตรวจสอบว่ามีอีเมลนี้ในระบบแล้วหรือไม่
       var querySnapshot = await _firestore
           .collection(userCollection)
           .where('email', isEqualTo: email)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
+        print('Email is already in use');
         throw Exception("อีเมลนี้ถูกใช้ไปแล้ว");
       }
 
+      print('Creating user with Firebase Authentication...');
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
+      print(
+          'User created with Firebase Auth. UID: ${userCredential.user?.uid}');
       User? user = userCredential.user;
       if (user == null) {
         print('Error: User registration failed, user is null');
         return null;
       }
 
+      print('Sending email verification...');
       await user.sendEmailVerification();
+      print('Email verification sent successfully');
 
       UserCollectionModel userData = UserCollectionModel(
         userId: user.uid,
@@ -166,15 +175,18 @@ class AuthService {
         address: '',
       );
 
+      print('Saving user data to Firestore...');
       await _firestore
           .collection(userCollection)
           .doc(user.uid)
           .set(userData.toMap());
+      print('User data saved to Firestore successfully');
 
       return userData;
     } catch (e) {
       print('Error during registration: $e');
-      return null;
+      print('Error stack trace: ${StackTrace.current}');
+      throw e; // ส่งข้อผิดพลาดต่อเพื่อให้ดักจับในระดับที่สูงขึ้น
     }
   }
 

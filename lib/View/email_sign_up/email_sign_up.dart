@@ -69,7 +69,7 @@ class EmailSignUp extends StatelessWidget {
                   SizedBox(height: 40),
                   TextFormField(
                     onChanged: (value) {
-                      authController.userModel.value?.email;
+                      authController.email.value = value;
                     },
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(

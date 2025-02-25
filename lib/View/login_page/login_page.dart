@@ -15,13 +15,30 @@ class _LoginPageState extends State<LoginPage> {
   final AuthController authController = Get.find<AuthController>();
   String errorMessage = '';
 
-  Future<void> _login(String email, String password) async {
+  Future<void> _login() async {
     try {
-      await authController.fetchUserData(email, password);
-      if (authController.userModel.value!.role == 'customer') {
-        context.go(AppRoutes.homePage);
+      await authController.fetchUserData(
+          authController.email.value, authController.password.value);
+
+      if (authController.userModel.value != null) {
+        final role = authController.userModel.value?.role;
+        print("VIEW: role = $role");
+
+        if (role != null) {
+          if (role == 'customer') {
+            context.go(AppRoutes.homePage);
+          } else {
+            context.go(AppRoutes.riderHomePage);
+          }
+        } else {
+          setState(() {
+            errorMessage = "ข้อมูล role ไม่ถูกต้อง";
+          });
+        }
       } else {
-        context.go(AppRoutes.riderHomePage);
+        setState(() {
+          errorMessage = "ไม่ได้รับข้อมูลผู้ใช้";
+        });
       }
     } catch (e) {
       setState(() {
@@ -74,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 40),
                 // Email TextField
                 TextField(
-                  onChanged: (value) => authController.userModel.value,
+                  onChanged: (value) => authController.email.value = value,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'Email',
@@ -119,9 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 55,
                   child: ElevatedButton(
                     onPressed: () {
-                      final email = authController.userModel.value!.email;
-                      final password = authController.password.value;
-                      _login(email, password);
+                      _login();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF01B9E4),

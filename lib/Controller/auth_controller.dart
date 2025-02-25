@@ -13,10 +13,12 @@ class AuthController extends GetxController {
 
   var isLoading = false.obs;
   var errorMessage = ''.obs;
+  final email = ''.obs;
   final phoneNumber = ''.obs;
   final name = ''.obs;
   final password = ''.obs;
   final confirmPassword = ''.obs;
+
   final role = ''.obs;
 
   @override
@@ -29,8 +31,11 @@ class AuthController extends GetxController {
     try {
       UserCollectionModel user =
           await userService.emailLoginService(email, password);
+
       userModel.value = user;
     } catch (e) {
+      userModel.value = null;
+
       errorMessage.value = e.toString();
     }
   }
@@ -98,13 +103,39 @@ class AuthController extends GetxController {
 
       if (user != null) {
         userModel.value = user;
-        Get.snackbar('Success', 'User registered successfully');
+        // ตรวจสอบว่ามี context ก่อนแสดง Snackbar
+        if (Get.context != null && Get.isSnackbarOpen == false) {
+          Get.snackbar(
+            'Success',
+            'User registered successfully',
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        }
       } else {
-        Get.snackbar('Error', 'User registration failed');
+        if (Get.context != null && Get.isSnackbarOpen == false) {
+          Get.snackbar(
+            'Error',
+            'User registration failed',
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        }
       }
     } catch (e) {
-      print('Error: $e');
-      Get.snackbar('Error', 'Something went wrong');
+      print('Error during signUpWithEmail: $e');
+      // แสดงข้อผิดพลาดที่เฉพาะเจาะจงมากขึ้น
+      String errorMessage = 'Something went wrong';
+
+      if (e.toString().contains('firebase_auth')) {
+        errorMessage = 'Authentication error: ' + e.toString();
+      }
+
+      if (Get.context != null && Get.isSnackbarOpen == false) {
+        Get.snackbar(
+          'Error',
+          errorMessage,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
     }
   }
 

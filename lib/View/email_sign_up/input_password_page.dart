@@ -16,12 +16,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
   final AuthController authController = Get.find<AuthController>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // Local state variables
-  final phoneNumber = ''.obs;
-  final name = ''.obs;
-  final password = ''.obs;
-  final confirmPassword = ''.obs;
-  final role = ''.obs;
+  String errorMessage = '';
 
   String? passwordValidate(String? value) {
     if (value == null || value.isEmpty) {
@@ -37,7 +32,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
     if (value == null || value.isEmpty) {
       return 'Please confirm your password';
     }
-    if (value != password.value) {
+    if (value != authController.password.value) {
       return 'Passwords do not match';
     }
     return null;
@@ -45,7 +40,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
 
   void saveUser() async {
     try {
-      if (role.value.isEmpty) {
+      if (authController.role.value.isEmpty) {
         Get.snackbar(
           'Error',
           'Please select a role',
@@ -57,11 +52,11 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
       }
 
       await authController.signUpWithEmail(
-        authController.userModel.value?.email ?? '',
-        password.value,
-        phoneNumber.value,
-        name.value,
-        role.value,
+        authController.email.value,
+        authController.password.value,
+        authController.phoneNumber.value,
+        authController.name.value,
+        authController.role.value,
       );
 
       Get.snackbar(
@@ -74,13 +69,15 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
 
       context.go(AppRoutes.landingPage);
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString(),
-        backgroundColor: Colors.red[100],
-        colorText: Colors.red[900],
-        borderRadius: 10,
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.snackbar(
+          'Error',
+          e.toString(),
+          backgroundColor: Colors.red[100],
+          colorText: Colors.red[900],
+          borderRadius: 10,
+        );
+      });
     }
   }
 
@@ -172,7 +169,8 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                     label: "Phone Number",
                     hint: "Enter your phone number",
                     icon: Icons.phone,
-                    onChanged: (value) => phoneNumber.value = value,
+                    onChanged: (value) =>
+                        authController.phoneNumber.value = value,
                     validator: (value) => value == null || value.isEmpty
                         ? 'Please enter your phone number'
                         : null,
@@ -182,7 +180,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                     label: "Name",
                     hint: "Enter your name",
                     icon: Icons.person,
-                    onChanged: (value) => name.value = value,
+                    onChanged: (value) => authController.name.value = value,
                     validator: (value) => value == null || value.isEmpty
                         ? 'Please enter your name'
                         : null,
@@ -193,7 +191,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                     hint: "Enter your password",
                     icon: Icons.lock,
                     obscureText: true,
-                    onChanged: (value) => password.value = value,
+                    onChanged: (value) => authController.password.value = value,
                     validator: passwordValidate,
                   ),
                   const SizedBox(height: 20),
@@ -202,7 +200,8 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                     hint: "Confirm your password",
                     icon: Icons.lock,
                     obscureText: true,
-                    onChanged: (value) => confirmPassword.value = value,
+                    onChanged: (value) =>
+                        authController.confirmPassword.value = value,
                     validator: confirmPasswordValidate,
                   ),
                   const SizedBox(height: 30),
@@ -229,19 +228,19 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                           RadioListTile<String>(
                             title: const Text("Customer"),
                             value: "Customer",
-                            groupValue: role.value,
+                            groupValue: authController.role.value,
                             activeColor: const Color(0xFF01B9E4),
                             onChanged: (value) {
-                              role.value = value!;
+                              authController.role.value = value!;
                             },
                           ),
                           RadioListTile<String>(
                             title: const Text("Rider"),
                             value: "Rider",
-                            groupValue: role.value,
+                            groupValue: authController.role.value,
                             activeColor: const Color(0xFF01B9E4),
                             onChanged: (value) {
-                              role.value = value!;
+                              authController.role.value = value!;
                             },
                           ),
                         ],
@@ -254,8 +253,17 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                     height: 55,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
+                        final email = authController.email.value;
+                        final password = authController.password.value;
+                        if (email != null &&
+                            email.isNotEmpty &&
+                            password != null &&
+                            password.isNotEmpty) {
                           saveUser();
+                        } else {
+                          setState(() {
+                            errorMessage = "Please enter email and password";
+                          });
                         }
                       },
                       style: ElevatedButton.styleFrom(

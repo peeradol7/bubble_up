@@ -53,6 +53,7 @@ class UserService {
       UserCollectionModel userData = UserCollectionModel.fromFirestore(userDoc);
 
       final prefsService = await SharedPreferencesService.getInstance();
+
       await prefsService.saveUserData(
         userData.userId,
         userData.email,
@@ -64,6 +65,8 @@ class UserService {
 
       return userData;
     } catch (e) {
+      print(StackTrace.current);
+
       throw Exception("เกิดข้อผิดพลาด: ${e.toString()}");
     }
   }
