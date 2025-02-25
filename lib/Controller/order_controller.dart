@@ -37,12 +37,19 @@ class OrderController extends GetxController {
     });
   }
 
+  Future<void> fetchOrdersByorderId(String orderId) async {
+    try {
+      final data = await _orderService.getOrderById(orderId);
+      orderByid.value = data;
+    } catch (e) {}
+  }
+
   Future<void> fetchOrdersByUserId(String? userId) async {
     try {
       if (userId == null || userId.isEmpty) {
         hasError.value = true;
         errorMessage.value = 'ไม่พบข้อมูลผู้ใช้';
-        orders.value = []; // เคลียร์ค่าเก่าถ้ามี
+        orders.value = [];
         return;
       }
 

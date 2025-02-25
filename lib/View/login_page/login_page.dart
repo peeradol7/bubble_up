@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
             context.go(AppRoutes.homePage);
           }
           if (role == 'Rider') {
-            context.go(AppRoutes.riderHomePage);
+            context.go(AppRoutes.orderListPage);
           }
         } else {
           setState(() {

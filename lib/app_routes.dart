@@ -7,6 +7,7 @@ import 'package:thammasat/View/home_page/profile_page/edit_address_page.dart';
 import 'package:thammasat/View/home_page/profile_page/setting_page.dart';
 import 'package:thammasat/View/landing_page/landing_page.dart';
 import 'package:thammasat/View/login_page/login_page.dart';
+import 'package:thammasat/View/rider_page/order_detail_page.dart';
 import 'package:thammasat/View/rider_page/order_list_page.dart';
 
 import 'View/error_page.dart';
@@ -21,9 +22,10 @@ class AppRoutes {
   static const String inputPassword = '/input-password';
   static const String editAddressPage = '/edit-address-data';
   static const String editPersonDataPage = '/edit-persion-data';
-  static const String riderHomePage = '/rider-home-page';
+  static const String orderListPage = '/rider-home-page';
   static const String createOrderPage = '/create-order';
   static const String settingPage = '/setting';
+  static const String orderDetail = '/order-detail';
 
   final route = GoRouter(
     initialLocation: landingPage,
@@ -61,14 +63,21 @@ class AppRoutes {
         builder: (context, state) => SettingPage(),
       ),
       GoRoute(
-        path: riderHomePage,
-        builder: (context, state) => OrderListPage(),
-      ),
-      GoRoute(
         path: '$createOrderPage/:laundryId',
         builder: (context, state) {
           final laundryId = state.pathParameters['laundryId'] ?? '';
           return CreateOrderPage(laundryId: laundryId);
+        },
+      ),
+      GoRoute(
+        path: orderListPage,
+        builder: (context, state) => OrderListPage(),
+      ),
+      GoRoute(
+        path: '$orderDetail/:orderId',
+        builder: (context, state) {
+          final orderId = state.pathParameters['orderId'] ?? '';
+          return OrderDetailPage(orderId: orderId);
         },
       ),
     ],

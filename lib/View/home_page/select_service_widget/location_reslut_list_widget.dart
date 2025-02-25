@@ -75,7 +75,6 @@ class LocationResultListWidget extends GetView<LocationController> {
         onTap: () async {
           final createOrderPath = AppRoutes.createOrderPage;
 
-          // ดึงค่า ID จากข้อมูลเอกสาร
           final id = data['laundryId'];
 
           if (id == null) {

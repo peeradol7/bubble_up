@@ -49,7 +49,7 @@ class _LandingPageState extends State<LandingPage> {
                 });
               } else if (userRole == 'Rider') {
                 Future.delayed(Duration.zero, () {
-                  context.go(AppRoutes.riderHomePage);
+                  context.go(AppRoutes.orderListPage);
                 });
               }
             });

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:thammasat/Controller/order_controller.dart';
+import 'package:thammasat/app_routes.dart';
 
 class OrderListPage extends StatelessWidget {
   OrderListPage({super.key});
@@ -37,7 +39,13 @@ class OrderListPage extends StatelessWidget {
                   ],
                 ),
                 trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {},
+                onTap: () {
+                  final route = AppRoutes.orderDetail;
+                  final orderId = order.orderId;
+                  orderController.fetchOrdersByorderId(orderId!);
+                  print(orderId);
+                  context.push('$route/$orderId');
+                },
               ),
             );
           },
