@@ -47,7 +47,7 @@ class _LandingPageState extends State<LandingPage> {
                 Future.delayed(Duration.zero, () {
                   context.go(AppRoutes.homePage);
                 });
-              } else if (userRole == 'rider') {
+              } else if (userRole == 'Rider') {
                 Future.delayed(Duration.zero, () {
                   context.go(AppRoutes.riderHomePage);
                 });

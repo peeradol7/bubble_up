@@ -8,18 +8,30 @@ class OrderService {
 
   Future<List<OrderModel>> getOrdersByUserId(String userId) async {
     try {
-      print("Service - received userId: '$userId'");
-
       if (userId.isEmpty) {
         return [];
       }
-
-      print("Service - collection path: '$orderCollection'");
 
       final QuerySnapshot querySnapshot = await _firestore
           .collection(orderCollection)
           .where("userId", isEqualTo: userId)
           .get();
+
+      final orders = querySnapshot.docs.map((doc) {
+        return OrderModel.fromFirestore(doc);
+      }).toList();
+
+      return orders;
+    } catch (e, stackTrace) {
+      print("StackTrace: $stackTrace");
+      throw e;
+    }
+  }
+
+  Future<List<OrderModel>> getOrdersList() async {
+    try {
+      final QuerySnapshot querySnapshot =
+          await _firestore.collection(orderCollection).get();
 
       final orders = querySnapshot.docs.map((doc) {
         return OrderModel.fromFirestore(doc);

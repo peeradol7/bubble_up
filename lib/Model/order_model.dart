@@ -31,7 +31,6 @@ class OrderModel {
   factory OrderModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>?;
 
-    // Add a null check for data
     if (data == null) {
       throw Exception("Document data is null");
     }

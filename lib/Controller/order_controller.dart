@@ -11,6 +11,12 @@ class OrderController extends GetxController {
   var isLoading = false.obs;
   final hasError = false.obs;
   final errorMessage = ''.obs;
+  final orderList = <OrderModel>[].obs;
+  @override
+  void onInit() {
+    displayListOrders();
+    super.onInit();
+  }
 
   void listenToOrders(String userId) {
     isLoading(true);
@@ -33,11 +39,7 @@ class OrderController extends GetxController {
 
   Future<void> fetchOrdersByUserId(String? userId) async {
     try {
-      print("Debug - userId received: '$userId'");
-      print("Debug - userId type: ${userId.runtimeType}");
-
       if (userId == null || userId.isEmpty) {
-        print("Debug - userId is null or empty");
         hasError.value = true;
         errorMessage.value = 'ไม่พบข้อมูลผู้ใช้';
         orders.value = []; // เคลียร์ค่าเก่าถ้ามี
@@ -49,18 +51,11 @@ class OrderController extends GetxController {
       errorMessage.value = '';
 
       final String validUserId = userId;
-      print("Debug - about to call service with userId: '$validUserId'");
 
       final result = await _orderService.getOrdersByUserId(validUserId);
-      print("Debug - service call successful, orders count: ${result.length}");
 
       orders.value = result;
-    } catch (e, stackTrace) {
-      // เพิ่ม stackTrace เพื่อดู error details
-      print("Debug - Error in fetchOrdersByUserId:");
-      print("Error: $e");
-      print("StackTrace: $stackTrace");
-
+    } catch (e) {
       hasError.value = true;
       errorMessage.value = 'เกิดข้อผิดพลาดในการโหลดข้อมูล';
       orders.value = []; // เคลียร์ค่าเก่าเมื่อเกิด error
@@ -84,5 +79,17 @@ class OrderController extends GetxController {
   Future<void> deleteOrder(String orderId) async {
     await _orderService.deleteOrder(orderId);
     orders.removeWhere((order) => order.orderId == orderId);
+  }
+
+  Future<void> displayListOrders() async {
+    try {
+      isLoading.value = true;
+      final data = await _orderService.getOrdersList();
+      orderList.value = data;
+    } catch (e) {
+      print("Error loading orders: $e");
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

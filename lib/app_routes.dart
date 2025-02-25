@@ -7,7 +7,7 @@ import 'package:thammasat/View/home_page/profile_page/edit_address_page.dart';
 import 'package:thammasat/View/home_page/profile_page/setting_page.dart';
 import 'package:thammasat/View/landing_page/landing_page.dart';
 import 'package:thammasat/View/login_page/login_page.dart';
-import 'package:thammasat/View/rider_page/rider_home_page.dart';
+import 'package:thammasat/View/rider_page/order_list_page.dart';
 
 import 'View/error_page.dart';
 import 'View/home_page/profile_page/edit_person_data.dart';
@@ -62,7 +62,7 @@ class AppRoutes {
       ),
       GoRoute(
         path: riderHomePage,
-        builder: (context, state) => RiderHomePage(),
+        builder: (context, state) => OrderListPage(),
       ),
       GoRoute(
         path: '$createOrderPage/:laundryId',

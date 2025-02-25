@@ -27,7 +27,8 @@ class _LoginPageState extends State<LoginPage> {
         if (role != null) {
           if (role == 'customer') {
             context.go(AppRoutes.homePage);
-          } else {
+          }
+          if (role == 'Rider') {
             context.go(AppRoutes.riderHomePage);
           }
         } else {
