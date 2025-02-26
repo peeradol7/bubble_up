@@ -25,9 +25,11 @@ class LaundryController extends GetxController {
   var paymentMethod = ''.obs;
   var status = 'pending'.obs;
   var laundryLatLng = Rxn<LatLng>();
+
   Future<void> fetchLaundryDataList() async {
     try {
       var data = await laundryService.getLaundries();
+
       laundryDataList.value = data;
     } catch (e) {
       print('Error fetching data :  $e');
@@ -37,7 +39,9 @@ class LaundryController extends GetxController {
   Future<void> fetchLaundryById(String id) async {
     try {
       LaundrysModel? data = await laundryService.getLaundryById(id);
+
       laundryDataById.value = data;
+
       laundryLatLng.value = LatLng(
           laundryDataById.value!.latitude, laundryDataById.value!.longitude);
 

@@ -38,10 +38,30 @@ class OrderController extends GetxController {
   }
 
   Future<void> fetchOrdersByorderId(String orderId) async {
+    if (orderId.isEmpty) {
+      print('Error: Empty order ID provided');
+      return;
+    }
+
+    print('Starting to fetch order by ID: $orderId');
+    isLoading.value = true;
+    // Clear previous order data
+    orderByid.value = null;
+
     try {
       final data = await _orderService.getOrderById(orderId);
+      print('Fetch result: ${data != null ? "Order found" : "No order found"}');
       orderByid.value = data;
-    } catch (e) {}
+
+      if (data != null) {
+        print('Order details fetched: ${data.orderId}, ${data.laundryName}');
+      }
+    } catch (e) {
+      print('Error fetching order by ID: $e');
+    } finally {
+      isLoading.value = false;
+      print('Fetch completed, isLoading set to false');
+    }
   }
 
   Future<void> fetchOrdersByUserId(String? userId) async {
@@ -75,6 +95,7 @@ class OrderController extends GetxController {
     await _orderService.createOrder(order);
 
     orders.add(order);
+    update();
   }
 
   Future<void> updateOrder(
@@ -89,10 +110,13 @@ class OrderController extends GetxController {
   }
 
   Future<void> displayListOrders() async {
+    isLoading.value = true;
+
     try {
-      isLoading.value = true;
+      print('Fetching all orders');
       final data = await _orderService.getOrdersList();
-      orderList.value = data;
+      orderList.assignAll(data);
+      print('Fetched ${orderList.length} orders successfully');
     } catch (e) {
       print("Error loading orders: $e");
     } finally {

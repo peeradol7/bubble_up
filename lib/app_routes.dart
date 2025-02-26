@@ -28,7 +28,7 @@ class AppRoutes {
   static const String orderDetail = '/order-detail';
 
   final route = GoRouter(
-    initialLocation: landingPage,
+    initialLocation: orderListPage,
     routes: [
       GoRoute(
         path: landingPage,

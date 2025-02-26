@@ -48,10 +48,25 @@ class OrderService {
     try {
       String orderId = _firestore.collection(orderCollection).doc().id;
 
+      OrderModel updatedOrder = OrderModel(
+        orderId: orderId,
+        userId: order.userId,
+        laundryId: order.laundryId,
+        laundryName: order.laundryName,
+        totalPrice: order.totalPrice,
+        address: order.address,
+        paymentMethod: order.paymentMethod,
+        deliveryType: order.deliveryType,
+        status: 'Pending',
+        laundryAddress: order.laundryAddress,
+        deliveryAddress: order.deliveryAddress,
+      );
+
       await _firestore
           .collection(orderCollection)
           .doc(orderId)
-          .set(order.toFirestore());
+          .set(updatedOrder.toFirestore());
+
       print("Order created successfully with ID: $orderId");
     } catch (e) {
       print("Error creating order: $e");
@@ -63,13 +78,19 @@ class OrderService {
     try {
       DocumentSnapshot doc =
           await _firestore.collection(orderCollection).doc(orderId).get();
+      print('Document ID: ${doc.id}');
+      print('Fetching from collection: $orderCollection');
+
       if (doc.exists) {
+        print("Document data: ${doc.data()}");
         return OrderModel.fromFirestore(doc);
+      } else {
+        print("Document does not exist.");
+        return null;
       }
-      return null;
     } catch (e) {
       print("Error getting order: $e");
-      throw e;
+      return null;
     }
   }
 

@@ -31,34 +31,54 @@ class OrderModel {
   factory OrderModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>?;
 
+    print("Parsing document ID: ${doc.id}");
+    print("Raw data: $data");
+
     if (data == null) {
       throw Exception("Document data is null");
     }
 
-    return OrderModel(
-      orderId: data['orderId'] ?? '',
-      userId: data['userId'] ?? '',
-      laundryId: data['laundryId'] ?? '',
-      totalPrice: data['totalPrice'] ?? 0,
-      address: data['address'] ?? '',
-      paymentMethod: data['paymentMethod'] ?? '',
-      deliveryType: data['deliveryType'] ?? '',
-      status: data['status'] ?? '',
-      deliveryAddress: data['deliveryAddress'] != null
-          ? CustomerLocation.fromFirestore(
-                  data['deliveryAddress'] as Map<String, dynamic>)
-              .toJson()
-          : CustomerLocation(latitude: 0, longitude: 0).toJson(),
-      laundryAddress: data['laundryAddress'] != null
-          ? LatLng(
-              data['laundryAddress']['latitude'] ?? 0.0,
-              data['laundryAddress']['longitude'] ?? 0.0,
-            )
-          : const LatLng(0, 0),
-      laundryName: data['laundryName'] ?? '',
-    );
-  }
+    if (data['deliveryAddress'] != null) {
+      print("deliveryAddress structure: ${data['deliveryAddress']}");
+    }
 
+    if (data['laundryAddress'] != null) {
+      print("laundryAddress structure: ${data['laundryAddress']}");
+    }
+
+    try {
+      return OrderModel(
+        orderId: data['orderId'] ?? doc.id,
+        userId: data['userId'] ?? '',
+        laundryId: data['laundryId'] ?? '',
+        totalPrice: data['totalPrice'] ?? 0,
+        address: data['address'] ?? '',
+        paymentMethod: data['paymentMethod'] ?? '',
+        deliveryType: data['deliveryType'] ?? '',
+        status: data['status'] ?? '',
+        deliveryAddress: data['deliveryAddress'] != null
+            ? (data['deliveryAddress'] is Map
+                ? CustomerLocation.fromFirestore(
+                        Map<String, dynamic>.from(data['deliveryAddress']))
+                    .toJson()
+                : CustomerLocation(latitude: 0, longitude: 0).toJson())
+            : CustomerLocation(latitude: 0, longitude: 0).toJson(),
+        laundryAddress: data['laundryAddress'] != null &&
+                data['laundryAddress'] is Map &&
+                data['laundryAddress']['latitude'] != null &&
+                data['laundryAddress']['longitude'] != null
+            ? LatLng(
+                (data['laundryAddress']['latitude'] as num).toDouble(),
+                (data['laundryAddress']['longitude'] as num).toDouble(),
+              )
+            : const LatLng(0, 0),
+        laundryName: data['laundryName'] ?? '',
+      );
+    } catch (e) {
+      print("Error parsing OrderModel: $e");
+      throw Exception("Failed to parse OrderModel: $e");
+    }
+  }
   Map<String, dynamic> toFirestore() {
     return {
       'orderId': orderId,
@@ -83,16 +103,15 @@ class CustomerLocation {
   final double latitude;
   final double longitude;
 
-  CustomerLocation({
-    required this.latitude,
-    required this.longitude,
-  });
+  CustomerLocation({required this.latitude, required this.longitude});
+
   factory CustomerLocation.fromFirestore(Map<String, dynamic> data) {
     return CustomerLocation(
-      latitude: data['latitude'],
-      longitude: data['longitude'],
+      latitude: data['latitude'] ?? 0.0,
+      longitude: data['longitude'] ?? 0.0,
     );
   }
+
   Map<String, dynamic> toJson() {
     return {
       'latitude': latitude,

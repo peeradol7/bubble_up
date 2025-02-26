@@ -23,41 +23,30 @@ class NotificationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print('NotificationController: onInit called');
     notificationService.requestNotificationPermission();
     _initializeController();
   }
 
   Future<void> _initializeController() async {
     try {
-      print('NotificationController: Initializing...');
       await requestNotificationPermission();
       await _setupOrderListener();
-      print('NotificationController: Initialization complete');
-    } catch (e) {
-      print('NotificationController: Initialization error: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> requestNotificationPermission() async {
-    print('NotificationController: Requesting notification permission');
     try {
       await notificationService.requestNotificationPermission();
-      print('NotificationController: Notification permission granted');
-    } catch (e) {
-      print('NotificationController: Permission request error: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> _setupOrderListener() async {
-    print('NotificationController: Setting up order listener');
     try {
       final authController = Get.find<AuthController>();
       final userData = await authController.loadUserData();
 
       if (userData != null) {
         final userId = userData['userId'] as String;
-        print('NotificationController: Found userId: $userId');
 
         await _orderSubscription?.cancel();
 
@@ -67,23 +56,15 @@ class NotificationController extends GetxController {
             .snapshots()
             .listen(
           (snapshot) {
-            print(
-                'NotificationController: Received snapshot with ${snapshot.docChanges.length} changes');
             _handleSnapshotChanges(snapshot);
           },
-          onError: (error) {
-            print('NotificationController: Stream error: $error');
-          },
+          onError: (error) {},
           cancelOnError: false,
         );
 
         isListening.value = true;
-        print('NotificationController: Listener setup complete');
-      } else {
-        print('NotificationController: No user data found');
-      }
+      } else {}
     } catch (e, stack) {
-      print('NotificationController: Setup error: $e');
       print('Stack trace: $stack');
     }
   }
@@ -91,44 +72,29 @@ class NotificationController extends GetxController {
   void _handleSnapshotChanges(QuerySnapshot snapshot) {
     try {
       for (var change in snapshot.docChanges) {
-        print('NotificationController: Processing change type: ${change.type}');
-
         if (change.type == DocumentChangeType.modified) {
           final order = OrderModel.fromFirestore(change.doc);
           if (order.orderId != null && order.status != null) {
-            print(
-                'NotificationController: Modified order status: ${order.status}');
             _processStatusChange(order);
-          } else {
-            print(
-                'NotificationController: Skipping order with null orderId or status');
-          }
+          } else {}
         }
       }
-    } catch (e) {
-      print('NotificationController: Error handling snapshot changes: $e');
-    }
+    } catch (e) {}
   }
 
   void _processStatusChange(OrderModel order) {
     try {
       if (order.orderId == null || order.status == null) {
-        print(
-            'NotificationController: Invalid order data - orderId or status is null');
         return;
       }
 
       final notificationId = '${order.orderId}-${order.status}';
-      print(
-          'NotificationController: Processing status change for ID: $notificationId');
 
       if (!_processedNotifications.contains(notificationId)) {
         _processedNotifications.add(notificationId);
         lastProcessedOrder.value = order;
 
         final laundryName = order.laundryName ?? 'Unknown';
-        print(
-            'NotificationController: Preparing notification for status: ${order.status}');
 
         String title = '';
         String message = '';
@@ -212,7 +178,6 @@ class NotificationController extends GetxController {
   }
 
   Future<void> refreshListener() async {
-    print('NotificationController: Manually refreshing listener');
     await _setupOrderListener();
   }
 

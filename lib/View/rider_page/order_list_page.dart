@@ -42,9 +42,9 @@ class OrderListPage extends StatelessWidget {
                 onTap: () {
                   final route = AppRoutes.orderDetail;
                   final orderId = order.orderId;
-                  orderController.fetchOrdersByorderId(orderId!);
                   print(orderId);
                   context.push('$route/$orderId');
+                  orderController.fetchOrdersByorderId(orderId!);
                 },
               ),
             );

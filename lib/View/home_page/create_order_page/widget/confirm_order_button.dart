@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -67,36 +66,37 @@ class ConfirmOrderButton extends StatelessWidget {
     final totalPrice = laundryController.totalPrice.value;
     final paymentMethod = laundryController.paymentMethod.value;
     final deliveryType = laundryController.deliveryType.value;
-    final status = laundryController.status.value;
-
+    final status = 'Pending';
     final customerLatitude = positionController.currentLatLng.value;
+
     if (userId != null &&
         laundryId != null &&
         address != null &&
         laundryName != null &&
         customerLatitude != null) {
-      String orderId = FirebaseFirestore.instance.collection('orders').doc().id;
-      print('Order id is ***$orderId');
       OrderModel newOrder = OrderModel(
-        orderId: orderId,
+        orderId: null,
         userId: userId,
         laundryId: laundryId,
+        laundryName: laundryName,
         totalPrice: totalPrice,
         address: address,
         paymentMethod: paymentMethod,
         deliveryType: deliveryType,
         status: status,
-        laundryAddress: LatLng(laundryController.laundryLatLng.value!.latitude,
-            laundryController.laundryLatLng.value!.longitude),
         deliveryAddress: {
           "latitude": customerLatitude.latitude,
           "longitude": customerLatitude.longitude,
         },
-        laundryName: laundryName,
+        laundryAddress: LatLng(
+          laundryController.laundryDataById.value?.latitude ?? 0,
+          laundryController.laundryDataById.value?.longitude ?? 0,
+        ),
       );
-      print(newOrder.laundryAddress);
-      print(newOrder.deliveryAddress);
-      orderController.addOrder(newOrder);
+
+      await orderController.addOrder(newOrder);
+
+      print("บันทึกคำสั่งซื้อสำเร็จ!");
     } else {
       print('ข้อมูลไม่ครบถ้วน กรุณาตรวจสอบอีกครั้ง');
     }

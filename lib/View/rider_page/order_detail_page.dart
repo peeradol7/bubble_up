@@ -16,8 +16,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   @override
   void initState() {
     super.initState();
-    // Fetch the order data once the page is loaded
-    orderController.fetchOrdersByorderId(widget.orderId);
+    print('Order id ที่ได้รับ ${widget.orderId}');
   }
 
   @override

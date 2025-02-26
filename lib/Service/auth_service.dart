@@ -135,7 +135,6 @@ class AuthService {
     try {
       print('Attempting to create user with email: $email');
 
-      // ตรวจสอบว่ามีอีเมลนี้ในระบบแล้วหรือไม่
       var querySnapshot = await _firestore
           .collection(userCollection)
           .where('email', isEqualTo: email)
@@ -159,10 +158,7 @@ class AuthService {
         print('Error: User registration failed, user is null');
         return null;
       }
-
-      print('Sending email verification...');
       await user.sendEmailVerification();
-      print('Email verification sent successfully');
 
       UserCollectionModel userData = UserCollectionModel(
         userId: user.uid,
@@ -175,7 +171,6 @@ class AuthService {
         address: '',
       );
 
-      print('Saving user data to Firestore...');
       await _firestore
           .collection(userCollection)
           .doc(user.uid)
