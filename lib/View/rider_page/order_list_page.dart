@@ -12,45 +12,72 @@ class OrderListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('รายการออเดอร์')),
-      body: Obx(() {
-        if (orderController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (orderController.orderList.isEmpty) {
-          return const Center(child: Text('ไม่มีออเดอร์'));
-        }
+      body: Obx(
+        () {
+          if (orderController.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (orderController.orderList.isEmpty) {
+            return const Center(child: Text('ไม่มีออเดอร์'));
+          }
 
-        return ListView.builder(
-          itemCount: orderController.orderList.length,
-          itemBuilder: (context, index) {
-            final order = orderController.orderList[index];
+          return ListView.builder(
+            itemCount: orderController.orderList.length,
+            itemBuilder: (context, index) {
+              final order = orderController.orderList[index];
 
-            return Card(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: ListTile(
-                title: Text(order.laundryName!,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("ราคา: ${order.totalPrice} บาท"),
-                    Text("ประเภทส่ง: ${order.deliveryType}"),
-                    Text("วิธีชำระเงิน: ${order.paymentMethod}"),
-                  ],
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: ListTile(
+                  title: Text(order.laundryName!,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("ราคา: ${order.totalPrice} บาท"),
+                      Text("ประเภทส่ง: ${order.deliveryType}"),
+                      Text("วิธีชำระเงิน: ${order.paymentMethod}"),
+                    ],
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    final route = AppRoutes.orderDetail;
+                    final orderId = order.orderId;
+                    context.push('$route/$orderId');
+                    orderController.fetchOrdersByorderId(orderId!);
+                  },
                 ),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  final route = AppRoutes.orderDetail;
-                  final orderId = order.orderId;
-                  print(orderId);
-                  context.push('$route/$orderId');
-                  orderController.fetchOrdersByorderId(orderId!);
-                },
-              ),
-            );
-          },
-        );
-      }),
+              );
+            },
+          );
+        },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'ออเดอร์',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.work),
+            label: 'งานของฉัน',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'บัญชี',
+          ),
+        ],
+        currentIndex: 0,
+        onTap: (index) {
+          if (index == 0) {
+            context.push(AppRoutes.myOrder);
+          } else if (index == 1) {
+            context.push(AppRoutes.myOrder);
+          } else if (index == 2) {
+            context.push(AppRoutes.accoountPage);
+          }
+        },
+      ),
     );
   }
 }

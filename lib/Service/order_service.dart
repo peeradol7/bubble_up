@@ -30,8 +30,10 @@ class OrderService {
 
   Future<List<OrderModel>> getOrdersList() async {
     try {
-      final QuerySnapshot querySnapshot =
-          await _firestore.collection(orderCollection).get();
+      final QuerySnapshot querySnapshot = await _firestore
+          .collection(orderCollection)
+          .where('status', isEqualTo: 'pending')
+          .get();
 
       final orders = querySnapshot.docs.map((doc) {
         return OrderModel.fromFirestore(doc);

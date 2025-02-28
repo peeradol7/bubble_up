@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 class MenuBarController extends GetxController {
   var selectedIndex = 0.obs;
-
   final pageController = PageController();
 
   void changePage(BuildContext context, int index) {
