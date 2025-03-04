@@ -61,7 +61,7 @@ class ConfirmOrderButton extends StatelessWidget {
 
     final userId = userData['userId'];
     final address = userData['address'];
-
+    final phoneNumber = userData['phoneNumber'];
     final laundryId = laundryController.laundryDataById.value?.laundryId;
     final laundryName = laundryController.laundryDataById.value?.laundryName;
     final totalPrice = laundryController.totalPrice.value;
@@ -74,6 +74,7 @@ class ConfirmOrderButton extends StatelessWidget {
         laundryId != null &&
         address != null &&
         laundryName != null &&
+        phoneNumber != null &&
         customerLatitude != null) {
       OrderModel newOrder = OrderModel(
         orderId: null,
@@ -85,6 +86,7 @@ class ConfirmOrderButton extends StatelessWidget {
         paymentMethod: paymentMethod,
         deliveryType: deliveryType,
         status: status,
+        phoneNumber: phoneNumber,
         deliveryAddress: {
           "latitude": customerLatitude.latitude,
           "longitude": customerLatitude.longitude,

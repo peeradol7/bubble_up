@@ -15,6 +15,7 @@ class OrderModel {
   final String? laundryName;
   final String? riderName;
   final String? riderId;
+  final String phoneNumber;
 
   OrderModel({
     required this.orderId,
@@ -30,6 +31,7 @@ class OrderModel {
     required this.deliveryAddress,
     this.riderName,
     this.riderId,
+    required this.phoneNumber,
   });
 
   factory OrderModel.fromFirestore(DocumentSnapshot doc) {
@@ -68,6 +70,7 @@ class OrderModel {
         laundryName: data['laundryName'] ?? '',
         riderName: data['riderName'] ?? '',
         riderId: data['riderId'] ?? '',
+        phoneNumber: data['phoneNumber'] ?? 'ไม่มีเบอร์ติดต่อ',
       );
     } catch (e) {
       print("Error parsing OrderModel: $e");
@@ -92,6 +95,7 @@ class OrderModel {
       'laundryName': laundryName,
       'riderName': riderName,
       'riderId': riderId,
+      'phoneNumber': phoneNumber,
     };
   }
 }

@@ -147,4 +147,9 @@ class OrderController extends GetxController {
       print(e);
     }
   }
+
+  Future<void> updateOrderStatusController(
+      String orderId, String status) async {
+    await _orderService.updateOrderStatus(orderId: orderId, status: status);
+  }
 }

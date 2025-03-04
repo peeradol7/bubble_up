@@ -35,12 +35,16 @@ class OrderService {
           .where("riderId", isEqualTo: riderId)
           .get();
 
+      print("Orders fetched: ${querySnapshot.docs.length}");
+
       final orders = querySnapshot.docs.map((doc) {
+        print("Order data: ${doc.data()}"); // ตรวจสอบข้อมูลที่ได้
         return OrderModel.fromFirestore(doc);
       }).toList();
 
       return orders;
     } catch (e, stackTrace) {
+      print("Error: $e");
       print("StackTrace: $stackTrace");
       throw e;
     }
@@ -82,6 +86,7 @@ class OrderService {
         deliveryAddress: order.deliveryAddress,
         riderId: null,
         riderName: null,
+        phoneNumber: order.phoneNumber,
       );
 
       await _firestore
@@ -139,6 +144,20 @@ class OrderService {
           .collection(orderCollection)
           .doc(orderId)
           .update(updatedData);
+    } catch (e) {
+      print("Error updating order: $e");
+      throw e;
+    }
+  }
+
+  Future<void> updateOrderStatus({
+    required String orderId,
+    required String status,
+  }) async {
+    try {
+      await _firestore.collection(orderCollection).doc(orderId).update({
+        'status': status,
+      });
     } catch (e) {
       print("Error updating order: $e");
       throw e;

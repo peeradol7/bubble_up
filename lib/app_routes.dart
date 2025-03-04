@@ -13,6 +13,7 @@ import 'package:thammasat/View/rider_page/order_list_page.dart';
 
 import 'View/error_page.dart';
 import 'View/home_page/profile_page/edit_person_data.dart';
+import 'View/rider_page/process_page/process_order_page.dart';
 
 class AppRoutes {
   static const String landingPage = '/';
@@ -28,6 +29,7 @@ class AppRoutes {
   static const String settingPage = '/setting';
   static const String orderDetail = '/order-detail';
   static const String myOrderPage = '/my-order';
+  static const String processOrderPage = '/process-order-page';
 
   final route = GoRouter(
     initialLocation: landingPage,
@@ -84,6 +86,13 @@ class AppRoutes {
         builder: (context, state) {
           final orderId = state.pathParameters['orderId'] ?? '';
           return OrderDetailPage(orderId: orderId);
+        },
+      ),
+      GoRoute(
+        path: '$processOrderPage/:orderId',
+        builder: (context, state) {
+          final orderId = state.pathParameters['orderId'] ?? '';
+          return ProcessOrderPage(orderId: orderId);
         },
       ),
     ],
