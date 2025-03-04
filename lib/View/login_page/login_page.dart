@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
           authController.email.value, authController.password.value);
 
       if (authController.userModel.value != null) {
-        final role = authController.userModel.value?.role;
+        final role = await authController.userModel.value?.role;
         print("VIEW: role = $role");
 
         if (role != null) {

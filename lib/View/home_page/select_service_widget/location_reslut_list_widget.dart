@@ -84,11 +84,6 @@ class LocationResultListWidget extends GetView<LocationController> {
 
           await laundryController.fetchLaundryById(id);
 
-          if (laundryController.laundryDataById.value == null) {
-            print('Error: Laundry data is still null after fetching.');
-            return;
-          }
-
           context.push('$createOrderPath/$id');
 
           controller.handleLocationSelection(data, index);

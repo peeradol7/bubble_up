@@ -4,15 +4,24 @@ import 'package:get/get.dart';
 class MenuBarController extends GetxController {
   var selectedIndex = 0.obs;
 
-  final pageController = PageController();
+  late PageController pageController;
+
+  @override
+  void onInit() {
+    super.onInit();
+    pageController = PageController(initialPage: selectedIndex.value);
+  }
 
   void changePage(BuildContext context, int index) {
     selectedIndex.value = index;
-    pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+
+    if (pageController.hasClients) {
+      pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override

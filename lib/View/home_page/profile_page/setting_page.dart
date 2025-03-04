@@ -7,8 +7,14 @@ import 'package:thammasat/app_routes.dart';
 
 import '../../../Service/auth_service.dart';
 
-class SettingPage extends StatelessWidget {
+class SettingPage extends StatefulWidget {
   SettingPage({super.key});
+
+  @override
+  State<SettingPage> createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
   final NotificationController notificationController =
       Get.find<NotificationController>();
 
@@ -110,6 +116,7 @@ class SettingPage extends StatelessWidget {
                           if (value) {
                             await notificationController
                                 .requestNotificationPermission();
+                            openAppSettings();
                           } else {
                             await openAppSettings();
                           }
@@ -123,7 +130,6 @@ class SettingPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            // ลบบัญชี
             Card(
               elevation: 2,
               shape: RoundedRectangleBorder(

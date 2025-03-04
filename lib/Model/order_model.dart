@@ -13,6 +13,8 @@ class OrderModel {
   final LatLng laundryAddress;
   final Map<String, dynamic> deliveryAddress;
   final String? laundryName;
+  final String? riderName;
+  final String? riderId;
 
   OrderModel({
     required this.orderId,
@@ -26,24 +28,15 @@ class OrderModel {
     required this.status,
     required this.laundryAddress,
     required this.deliveryAddress,
+    this.riderName,
+    this.riderId,
   });
 
   factory OrderModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>?;
 
-    print("Parsing document ID: ${doc.id}");
-    print("Raw data: $data");
-
     if (data == null) {
       throw Exception("Document data is null");
-    }
-
-    if (data['deliveryAddress'] != null) {
-      print("deliveryAddress structure: ${data['deliveryAddress']}");
-    }
-
-    if (data['laundryAddress'] != null) {
-      print("laundryAddress structure: ${data['laundryAddress']}");
     }
 
     try {
@@ -73,6 +66,8 @@ class OrderModel {
               )
             : const LatLng(0, 0),
         laundryName: data['laundryName'] ?? '',
+        riderName: data['riderName'] ?? '',
+        riderId: data['riderId'] ?? '',
       );
     } catch (e) {
       print("Error parsing OrderModel: $e");
@@ -95,6 +90,8 @@ class OrderModel {
         'longitude': laundryAddress.longitude,
       },
       'laundryName': laundryName,
+      'riderName': riderName,
+      'riderId': riderId,
     };
   }
 }

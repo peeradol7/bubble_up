@@ -23,6 +23,7 @@ class EditPersonData extends StatelessWidget {
         passwordController.text =
             userController.userModel.value!.password ?? '';
       }
+
       print(userController.userModel.value);
       return Scaffold(
         appBar: AppBar(

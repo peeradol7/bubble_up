@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:thammasat/Controller/order_controller.dart';
+
+import '../../Service/shared_preferenes_service.dart';
 
 class OrderDetailPage extends StatefulWidget {
   final String orderId;
@@ -16,7 +19,25 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   @override
   void initState() {
     super.initState();
-    print('Order id ที่ได้รับ ${widget.orderId}');
+  }
+
+  void updateorder() {
+    SharedPreferencesService.getInstance().then(
+      (prefs) {
+        final userData = prefs.getUserData();
+        final name = userData['name'];
+        final userId = userData['userId'];
+        String riderId = 'rider$userId';
+
+        orderController.updateOrderByRider(
+          widget.orderId,
+          riderId,
+          name!,
+          'In progress',
+        );
+        print('อัพเดทข้อมูลสำเร็จ');
+      },
+    );
   }
 
   @override
@@ -51,14 +72,31 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               Text("วิธีชำระเงิน: ${order.paymentMethod}",
                   style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 20),
-              const Text("ที่อยู่จัดส่ง:",
+              const Text("ที่อยู่จัดส่งของลูกค้า:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               Text(order.address ?? 'ไม่ได้ใส่ที่อยู่'),
               const SizedBox(height: 20),
-              const Text("ที่อยู่ร้านซักรีด:",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              Text(
-                  "(${order.laundryAddress.latitude}, ${order.laundryAddress.longitude})"),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStatePropertyAll(Colors.green)),
+                      onPressed: () {
+                        updateorder();
+                        context.pop();
+                      },
+                      child: Text(
+                        'รับออเดอร์',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         );

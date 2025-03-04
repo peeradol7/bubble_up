@@ -19,6 +19,7 @@ class ConfirmOrderButton extends StatelessWidget {
   final AuthController authController = Get.find<AuthController>();
   final NotificationController notificationController =
       Get.find<NotificationController>();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -95,8 +96,6 @@ class ConfirmOrderButton extends StatelessWidget {
       );
 
       await orderController.addOrder(newOrder);
-
-      print("บันทึกคำสั่งซื้อสำเร็จ!");
     } else {
       print('ข้อมูลไม่ครบถ้วน กรุณาตรวจสอบอีกครั้ง');
     }

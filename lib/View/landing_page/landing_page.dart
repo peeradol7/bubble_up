@@ -43,7 +43,7 @@ class _LandingPageState extends State<LandingPage> {
               final userData = prefs.getUserData();
               final userRole = userData['role'];
 
-              if (userRole == 'Rider') {
+              if (userRole == 'customer') {
                 Future.delayed(Duration.zero, () {
                   context.go(AppRoutes.homePage);
                 });

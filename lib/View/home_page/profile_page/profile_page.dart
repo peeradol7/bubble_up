@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thammasat/Controller/auth_controller.dart';
 import 'package:thammasat/View/home_page/profile_page/widget/button_widget.dart';
-import 'package:thammasat/View/home_page/select_service_widget/menu_bar_widget.dart';
+import 'package:thammasat/View/home_page/widget/menu_bar_widget.dart';
 import 'package:thammasat/app_routes.dart';
 
 class ProfileWidget extends StatefulWidget {

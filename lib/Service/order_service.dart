@@ -28,10 +28,30 @@ class OrderService {
     }
   }
 
+  Future<List<OrderModel>> getOrderByRiderId(String riderId) async {
+    try {
+      final QuerySnapshot querySnapshot = await _firestore
+          .collection(orderCollection)
+          .where("riderId", isEqualTo: riderId)
+          .get();
+
+      final orders = querySnapshot.docs.map((doc) {
+        return OrderModel.fromFirestore(doc);
+      }).toList();
+
+      return orders;
+    } catch (e, stackTrace) {
+      print("StackTrace: $stackTrace");
+      throw e;
+    }
+  }
+
   Future<List<OrderModel>> getOrdersList() async {
     try {
-      final QuerySnapshot querySnapshot =
-          await _firestore.collection(orderCollection).get();
+      final QuerySnapshot querySnapshot = await _firestore
+          .collection(orderCollection)
+          .where('status', isEqualTo: 'pending')
+          .get();
 
       final orders = querySnapshot.docs.map((doc) {
         return OrderModel.fromFirestore(doc);
@@ -60,6 +80,8 @@ class OrderService {
         status: 'Pending',
         laundryAddress: order.laundryAddress,
         deliveryAddress: order.deliveryAddress,
+        riderId: null,
+        riderName: null,
       );
 
       await _firestore
@@ -74,18 +96,34 @@ class OrderService {
     }
   }
 
+  Future<void> updateOrderForRider({
+    required String orderId,
+    required String riderId,
+    required String riderName,
+    required String status,
+  }) async {
+    try {
+      await _firestore.collection(orderCollection).doc(orderId).update({
+        'riderId': riderId,
+        'riderName': riderName,
+        'status': status,
+      });
+
+      print("Order updated successfully: $orderId");
+    } catch (e) {
+      print("Error updating order: $e");
+      throw e;
+    }
+  }
+
   Future<OrderModel?> getOrderById(String orderId) async {
     try {
       DocumentSnapshot doc =
           await _firestore.collection(orderCollection).doc(orderId).get();
-      print('Document ID: ${doc.id}');
-      print('Fetching from collection: $orderCollection');
 
       if (doc.exists) {
-        print("Document data: ${doc.data()}");
         return OrderModel.fromFirestore(doc);
       } else {
-        print("Document does not exist.");
         return null;
       }
     } catch (e) {

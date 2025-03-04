@@ -7,11 +7,13 @@ import '../Service/order_service.dart';
 class OrderController extends GetxController {
   final OrderService _orderService = OrderService();
   final orderByid = Rxn<OrderModel>();
+  final orderByRiderId = <OrderModel>[].obs;
   var orders = <OrderModel>[].obs;
   var isLoading = false.obs;
   final hasError = false.obs;
   final errorMessage = ''.obs;
   final orderList = <OrderModel>[].obs;
+
   @override
   void onInit() {
     displayListOrders();
@@ -37,27 +39,40 @@ class OrderController extends GetxController {
     });
   }
 
+  Future<void> updateOrderByRider(
+    String orderId,
+    String riderId,
+    String riderName,
+    String status,
+  ) async {
+    try {
+      await _orderService.updateOrderForRider(
+        orderId: orderId,
+        riderId: riderId,
+        riderName: riderName,
+        status: status,
+      );
+      update();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> fetchOrdersByorderId(String orderId) async {
     if (orderId.isEmpty) {
-      print('Error: Empty order ID provided');
       return;
     }
 
-    print('Starting to fetch order by ID: $orderId');
     isLoading.value = true;
-    // Clear previous order data
     orderByid.value = null;
 
     try {
       final data = await _orderService.getOrderById(orderId);
-      print('Fetch result: ${data != null ? "Order found" : "No order found"}');
       orderByid.value = data;
 
-      if (data != null) {
-        print('Order details fetched: ${data.orderId}, ${data.laundryName}');
-      }
+      if (data != null) {}
     } catch (e) {
-      print('Error fetching order by ID: $e');
+      print(e);
     } finally {
       isLoading.value = false;
       print('Fetch completed, isLoading set to false');
@@ -85,7 +100,7 @@ class OrderController extends GetxController {
     } catch (e) {
       hasError.value = true;
       errorMessage.value = 'เกิดข้อผิดพลาดในการโหลดข้อมูล';
-      orders.value = []; // เคลียร์ค่าเก่าเมื่อเกิด error
+      orders.value = [];
     } finally {
       isLoading.value = false;
     }
@@ -121,6 +136,15 @@ class OrderController extends GetxController {
       print("Error loading orders: $e");
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchOrderByRiderId(String riderId) async {
+    try {
+      final data = await _orderService.getOrderByRiderId(riderId);
+      orderByRiderId.value = data;
+    } catch (e) {
+      print(e);
     }
   }
 }

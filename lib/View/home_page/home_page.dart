@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:thammasat/Controller/auth_controller.dart';
 import 'package:thammasat/View/home_page/select_service_widget/display_service_widget.dart';
 import 'package:thammasat/View/home_page/select_service_widget/laundry_list_widget.dart';
-import 'package:thammasat/View/home_page/select_service_widget/menu_bar_widget.dart';
 import 'package:thammasat/View/home_page/select_service_widget/promotion_banner_widget.dart';
 import 'package:thammasat/View/home_page/select_service_widget/show_location_widget.dart';
+import 'package:thammasat/View/home_page/widget/menu_bar_widget.dart';
 
 import '../../Controller/menubar_controller.dart';
 import '../../Controller/position_controller.dart';
@@ -26,7 +26,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     mapController.fetchDistrict();
-
     super.initState();
   }
 
