@@ -101,6 +101,28 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           ),
         );
       }),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              print("กดรับออเดอร์");
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text(
+              "รับออเดอร์",
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
