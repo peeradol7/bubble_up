@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thammasat/Controller/laundry_controller.dart';
-import 'package:thammasat/View/home_page/create_order_page/widget/add_order_widget.dart';
 import 'package:thammasat/View/home_page/create_order_page/widget/confirm_order_button.dart';
 import 'package:thammasat/View/home_page/create_order_page/widget/display_laundry_name.dart';
+import 'package:thammasat/View/home_page/create_order_page/widget/order_form_widget.dart';
 
 import 'widget/display_image_laundry_widget.dart';
 
@@ -38,7 +38,7 @@ class CreateOrderPage extends StatelessWidget {
               SliverToBoxAdapter(
                   child: Padding(
                       padding: const EdgeInsets.all(11.0),
-                      child: AddOrderWidget())),
+                      child: OrderFormWidget())),
               SliverToBoxAdapter(
                   child: Padding(
                       padding: const EdgeInsets.all(11.0),

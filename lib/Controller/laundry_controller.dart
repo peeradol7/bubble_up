@@ -22,9 +22,16 @@ class LaundryController extends GetxController {
   var deliveryPrices = <String, int>{}.obs;
   var deliveryType = ''.obs;
   var totalPrice = 0.obs;
-  var paymentMethod = ''.obs;
+  var paymentMethod = 'เงินสด'.obs;
   var status = 'pending'.obs;
   var laundryLatLng = Rxn<LatLng>();
+
+  void clearValue() {
+    price.value = '';
+    deliveryType.value = '';
+    paymentMethod.value = '';
+    totalPrice.value = 0;
+  }
 
   Future<void> fetchLaundryDataList() async {
     try {

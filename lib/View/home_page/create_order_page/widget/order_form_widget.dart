@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 
 import '../../../../Controller/laundry_controller.dart';
 
-class AddOrderWidget extends StatelessWidget {
-  AddOrderWidget({super.key});
+class OrderFormWidget extends StatelessWidget {
+  OrderFormWidget({super.key});
   final LaundryController laundryController = Get.find<LaundryController>();
 
   @override
@@ -100,6 +100,8 @@ class AddOrderWidget extends StatelessWidget {
                       value: 'เงินสด',
                       groupValue: laundryController.paymentMethod.value,
                       onChanged: (value) {
+                        laundryController.clearValue();
+
                         laundryController.paymentMethod.value = value!;
                         _updateTotalPrice();
                       },

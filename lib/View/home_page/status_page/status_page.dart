@@ -23,11 +23,11 @@ class StatusPage extends StatelessWidget {
             }
 
             if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return Center(child: Text('ข้อผิดพลาด: ${snapshot.error}'));
             }
 
             if (!snapshot.hasData || snapshot.data == null) {
-              return const Center(child: Text("No user data available"));
+              return const Center(child: Text("ไม่มีข้อมูลผู้ใช้"));
             }
 
             final userId = snapshot.data!['userId'] as String;
@@ -44,23 +44,26 @@ class StatusPage extends StatelessWidget {
               }
 
               if (orderController.orders.isEmpty) {
-                return const Center(child: Text('No orders found.'));
+                return const Center(child: Text('ไม่พบออเดอร์'));
               }
 
               return ListView.builder(
                 itemCount: orderController.orders.length,
                 itemBuilder: (context, index) {
                   final order = orderController.orders[index];
+                  final orderStatus = order.status ?? "ไม่ระบุสถานะ";
+
+                  final riderName =
+                      order.riderName ?? "ยังไม่มีไรเดอร์รับออเดอร์";
 
                   return Card(
                     margin: const EdgeInsets.all(8.0),
-                    color: getStatusColor(order.status!),
+                    color: getStatusColor(orderStatus),
                     child: ListTile(
                       title: Text('ชื่อร้าน: ${order.laundryName}'),
                       subtitle: Text(
-                          'Total Price: \$${order.totalPrice}\nStatus: ${order.status}'),
-                      trailing: const Icon(Icons.arrow_forward),
-                      onTap: () {},
+                          'ราคารวม: ${order.totalPrice} บาท\nสถานะ: ${orderStatus}\nผู้รับออเดอร์: ${riderName}'),
+                      onLongPress: () {},
                     ),
                   );
                 },
@@ -76,18 +79,22 @@ class StatusPage extends StatelessWidget {
     switch (status.toLowerCase()) {
       case 'pending':
         return Colors.orange.shade100;
-      case 'in progress':
+      case 'order accepted':
         return Colors.blue.shade100;
+      case 'pickup in progress':
+        return Colors.purple.shade100;
+      case 'at laundry shop':
+        return Colors.cyan.shade100;
+      case 'laundry in process':
+        return Colors.yellow.shade100;
+      case 'delivery in progress':
+        return Colors.teal.shade100;
       case 'completed':
-        return completed();
+        return Colors.green.shade100;
       case 'cancelled':
         return Colors.red.shade100;
       default:
         return Colors.grey.shade200;
     }
-  }
-
-  Color completed() {
-    return Colors.green.shade100;
   }
 }
