@@ -21,7 +21,6 @@ class _ProcessOrderPageState extends State<ProcessOrderPage> {
   @override
   void initState() {
     super.initState();
-    // Fetch order details when the page is first initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       orderController.fetchOrdersByorderId(widget.orderId);
     });
@@ -35,12 +34,10 @@ class _ProcessOrderPageState extends State<ProcessOrderPage> {
       ),
       body: GetX<OrderController>(
         builder: (controller) {
-          // Check if order is loading
           if (controller.isLoading.value) {
             return Center(child: CircularProgressIndicator());
           }
-
-          // Check if order is null
+          orderController.fetchOrdersByorderId(widget.orderId);
           final order = controller.orderByid.value;
           if (order == null) {
             return Center(
@@ -117,10 +114,7 @@ class _ProcessOrderPageState extends State<ProcessOrderPage> {
                           order.deliveryAddress['longitude'],
                           'Delivery Location',
                         ),
-                        icon: Icon(
-                          Icons.home,
-                          color: Colors.white,
-                        ),
+                        icon: Icon(Icons.home, color: Colors.white),
                         label: Text('ไปที่อยู่ลูกค้า'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
@@ -130,26 +124,49 @@ class _ProcessOrderPageState extends State<ProcessOrderPage> {
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                WidgetStatePropertyAll(Colors.green[300]),
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            'รับผ้าจากลูกค้า',
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    ),
-                  ],
-                )
+                SizedBox(height: 16),
+                if (order.status == 'Order Accepted')
+                  _buildStatusButton('รับผ้าจากลูกค้า', 'Pickup in Progress',
+                      Colors.green, order.orderId!, null),
+                if (order.status == 'Pickup in Progress')
+                  _buildStatusButton('ส่งผ้าไปร้านซัก', 'At Laundry Shop',
+                      Colors.blue, order.orderId!, null),
+                if (order.status == 'At Laundry Shop')
+                  _buildStatusButton(
+                      'ร้านซักรีดกำลังซักผ้า',
+                      'Laundry in Process',
+                      Colors.orange,
+                      order.orderId!,
+                      null),
+                if (order.status == 'Laundry in Process')
+                  _buildStatusButton('กำลังนำผ้าไปส่ง', 'Delivery in Progress',
+                      Colors.purple, order.orderId!, null),
+                if (order.status == 'Delivery in Progress')
+                  _buildStatusButton('ส่งผ้าเรียบร้อย', 'Completed',
+                      Colors.teal, order.orderId!, DateTime.now()),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildStatusButton(String label, String newStatus, Color color,
+      String orderId, DateTime? time) {
+    return Expanded(
+      child: TextButton(
+        style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(color),
+        ),
+        onPressed: () {
+          orderController.fetchOrdersByorderId(orderId);
+          orderController.updateOrderStatusController(orderId, newStatus, time);
+        },
+        child: Text(
+          label,
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }

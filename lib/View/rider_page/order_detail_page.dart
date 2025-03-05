@@ -33,7 +33,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           widget.orderId,
           riderId,
           name!,
-          'In progress',
+          'Order Accepted',
         );
         print('อัพเดทข้อมูลสำเร็จ');
       },

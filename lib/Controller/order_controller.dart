@@ -149,7 +149,11 @@ class OrderController extends GetxController {
   }
 
   Future<void> updateOrderStatusController(
-      String orderId, String status) async {
-    await _orderService.updateOrderStatus(orderId: orderId, status: status);
+    String orderId,
+    String status,
+    DateTime? time,
+  ) async {
+    await _orderService.updateOrderStatus(
+        orderId: orderId, status: status, time: time);
   }
 }

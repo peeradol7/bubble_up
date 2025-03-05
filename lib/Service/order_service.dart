@@ -153,11 +153,13 @@ class OrderService {
   Future<void> updateOrderStatus({
     required String orderId,
     required String status,
+    DateTime? time,
   }) async {
     try {
-      await _firestore.collection(orderCollection).doc(orderId).update({
-        'status': status,
-      });
+      await _firestore
+          .collection(orderCollection)
+          .doc(orderId)
+          .update({'status': status, 'createAt': time});
     } catch (e) {
       print("Error updating order: $e");
       throw e;
