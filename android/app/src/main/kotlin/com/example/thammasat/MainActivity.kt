@@ -1,4 +1,4 @@
-package com.example.thammasat
+package com.bubbleup.app
 
 import io.flutter.embedding.android.FlutterActivity
 

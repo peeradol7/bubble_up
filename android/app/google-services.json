@@ -7,12 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:578003904265:android:85564542020dc699b4d5d8",
+        "mobilesdk_app_id": "1:578003904265:android:8ef02b3b3614ab6cb4d5d8",
         "android_client_info": {
-          "package_name": "com.example.thammasat"
+          "package_name": "com.bubbleup.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "578003904265-07nmo3pdd98or3d0p2r5irnn5mijsi29.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bubbleup.app",
+            "certificate_hash": "c356aec40008d574c9f8aa0c1310410191493b75"
+          }
+        },
+        {
+          "client_id": "578003904265-9nfvci6u1lh34blvasmmucbnjp4k4su0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAJp7t8DH_RLQeryGFkxRaipopCeLDaon8"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "578003904265-9nfvci6u1lh34blvasmmucbnjp4k4su0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "578003904265-9pfa4c158jntglchugcvhrt21jnrr8j7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.thammasat"
+              }
+            }
+          ]
         }
       }
     }
