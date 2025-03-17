@@ -16,14 +16,6 @@ class DisplayServiceWidget extends StatelessWidget {
         Get.find<ServiceListController>();
     final ServiceListWidget serviceListWidget = ServiceListWidget();
 
-    void nextPage() {
-      context.push(AppRoutes.homePage);
-    }
-
-    void printTitle(String title) {
-      print(title);
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Stack(
@@ -59,8 +51,9 @@ class DisplayServiceWidget extends StatelessWidget {
                       service.serviceName,
                       service.imagePath,
                       () {
-                        nextPage();
-                        printTitle(service.serviceName);
+                        final path = AppRoutes.displayTypeLaundryPage;
+                        final type = service.serviceName;
+                        context.push('$path/$type');
                       },
                     );
                   },

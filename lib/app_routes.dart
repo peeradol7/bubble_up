@@ -5,6 +5,7 @@ import 'package:thammasat/View/home_page/create_order_page/create_order_page.dar
 import 'package:thammasat/View/home_page/home_page.dart';
 import 'package:thammasat/View/home_page/profile_page/edit_address_page.dart';
 import 'package:thammasat/View/home_page/profile_page/setting_page.dart';
+import 'package:thammasat/View/home_page/select_service_widget/service_page/display_type_laundry_page.dart';
 import 'package:thammasat/View/landing_page/landing_page.dart';
 import 'package:thammasat/View/login_page/login_page.dart';
 import 'package:thammasat/View/rider_page/order/my_order_page.dart';
@@ -30,6 +31,7 @@ class AppRoutes {
   static const String orderDetail = '/order-detail';
   static const String myOrderPage = '/my-order';
   static const String processOrderPage = '/process-order-page';
+  static const String displayTypeLaundryPage = '/displayTypeLaundryPage';
 
   final route = GoRouter(
     initialLocation: landingPage,
@@ -80,6 +82,15 @@ class AppRoutes {
       GoRoute(
         path: myOrderPage,
         builder: (context, state) => MyOrderPage(),
+      ),
+      GoRoute(
+        path: '$displayTypeLaundryPage/:type',
+        builder: (context, state) {
+          final type = state.pathParameters['type'] ?? '';
+          return DisplayTypeLaundryPage(
+            type: type,
+          );
+        },
       ),
       GoRoute(
         path: '$orderDetail/:orderId',

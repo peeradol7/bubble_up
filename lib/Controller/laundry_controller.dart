@@ -25,12 +25,25 @@ class LaundryController extends GetxController {
   var paymentMethod = 'เงินสด'.obs;
   var status = 'pending'.obs;
   var laundryLatLng = Rxn<LatLng>();
-
+  var laundryType = <LaundrysModel>[].obs;
+  final isLoading = true.obs;
   void clearValue() {
     price.value = '';
     deliveryType.value = '';
     paymentMethod.value = '';
     totalPrice.value = 0;
+  }
+
+  Future<void> fetchLaundriesByType(String type) async {
+    try {
+      isLoading.value = true;
+      final data = await laundryService.getLaundriesByType(type);
+      laundryType.value = data;
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> fetchLaundryDataList() async {

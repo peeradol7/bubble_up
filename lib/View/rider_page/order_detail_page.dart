@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thammasat/Controller/order_controller.dart';
+import 'package:thammasat/constants/constant_status.dart';
 
 import '../../Service/shared_preferenes_service.dart';
 
@@ -33,7 +34,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           widget.orderId,
           riderId,
           name!,
-          'Order Accepted',
+          ConstantStatus.orderAccepted,
         );
         print('อัพเดทข้อมูลสำเร็จ');
       },

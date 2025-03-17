@@ -7,6 +7,7 @@ import 'package:thammasat/View/rider_page/order/my_order_page.dart';
 import 'package:thammasat/app_routes.dart';
 
 import '../../Controller/menubar_controller.dart';
+import '../../constants/app_theme.dart';
 import 'widget/rider_menu_bar_widget.dart';
 
 class OrderListPage extends StatelessWidget {
@@ -21,83 +22,278 @@ class OrderListPage extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            Positioned.fill(
-              child: Obx(
-                () {
-                  if (orderController.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.center,
+                  colors: [AppTheme.lightBlue.withOpacity(0.2), Colors.white],
+                ),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    color: AppTheme.primaryColor,
+                    child: Row(
+                      children: [
+                        Icon(Icons.list_alt, color: Colors.white),
+                        SizedBox(width: 12),
+                        Text(
+                          'รายการคำสั่งซื้อ',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Obx(
+                      () {
+                        if (orderController.isLoading.value) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: AppTheme.primaryColor,
+                            ),
+                          );
+                        }
 
-                  return PageView(
-                    controller: menuBarController.pageController,
-                    // ลบ NeverScrollableScrollPhysics เพื่อให้สไลด์ได้
-                    // หากต้องการปรับแต่งความรู้สึกในการสไลด์ สามารถใช้ physics อื่นได้
-                    // เช่น ClampingScrollPhysics() หรือ BouncingScrollPhysics()
-                    physics: const BouncingScrollPhysics(),
-                    onPageChanged: (index) {
-                      // เมื่อเปลี่ยนหน้าด้วยการสไลด์ ให้อัพเดท selectedIndex ด้วย
-                      menuBarController.selectedIndex.value = index;
-                    },
-                    children: [
-                      // หน้าที่ 1: รายการออเดอร์
-                      orderController.orderList.isEmpty
-                          ? const Center(child: Text('ไม่มีออเดอร์'))
-                          : ListView.builder(
-                              padding: const EdgeInsets.only(bottom: 80),
-                              itemCount: orderController.orderList.length,
-                              itemBuilder: (context, index) {
-                                final order = orderController.orderList[index];
-
-                                return Card(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
-                                  child: ListTile(
-                                    title: Text(order.laundryName!,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                        return PageView(
+                          controller: menuBarController.pageController,
+                          physics: const BouncingScrollPhysics(),
+                          onPageChanged: (index) {
+                            menuBarController.selectedIndex.value = index;
+                          },
+                          children: [
+                            orderController.orderList.isEmpty
+                                ? Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Text("ราคา: ${order.totalPrice} บาท"),
+                                        Icon(
+                                          Icons.receipt_long_outlined,
+                                          size: 72,
+                                          color: AppTheme.accentColor,
+                                        ),
+                                        SizedBox(height: 16),
                                         Text(
-                                            "ประเภทส่ง: ${order.deliveryType}"),
-                                        Text(
-                                            "วิธีชำระเงิน: ${order.paymentMethod}"),
+                                          'ไม่มีออเดอร์ในขณะนี้',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: AppTheme.darkBlue,
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                    trailing:
-                                        const Icon(Icons.arrow_forward_ios),
-                                    onTap: () {
-                                      final route = AppRoutes.orderDetail;
-                                      final orderId = order.orderId;
-                                      print(orderId);
-                                      context.push('$route/$orderId');
-                                      orderController
-                                          .fetchOrdersByorderId(orderId!);
+                                  )
+                                : ListView.builder(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 80,
+                                      left: 16,
+                                      right: 16,
+                                      top: 16,
+                                    ),
+                                    itemCount: orderController.orderList.length,
+                                    itemBuilder: (context, index) {
+                                      final order =
+                                          orderController.orderList[index];
+
+                                      return Container(
+                                        margin: EdgeInsets.only(bottom: 12),
+                                        decoration: AppTheme.cardDecoration,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: InkWell(
+                                              onTap: () {
+                                                final route =
+                                                    AppRoutes.orderDetail;
+                                                final orderId = order.orderId;
+                                                print(orderId);
+                                                context.push('$route/$orderId');
+                                                orderController
+                                                    .fetchOrdersByorderId(
+                                                        orderId!);
+                                              },
+                                              child: Padding(
+                                                padding: EdgeInsets.all(16),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Expanded(
+                                                          child: Text(
+                                                            order.laundryName!,
+                                                            style: AppTheme
+                                                                .headingStyle,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                            horizontal: 12,
+                                                            vertical: 6,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: AppTheme
+                                                                .accentColor
+                                                                .withOpacity(
+                                                                    0.2),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                          ),
+                                                          child: Text(
+                                                            "${order.totalPrice} บาท",
+                                                            style: AppTheme
+                                                                .priceStyle,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Divider(height: 24),
+                                                    Row(
+                                                      children: [
+                                                        _buildInfoItem(
+                                                          Icons.local_shipping,
+                                                          "ประเภทส่ง: ${order.deliveryType}",
+                                                        ),
+                                                        SizedBox(width: 12),
+                                                        _buildInfoItem(
+                                                          Icons.payment,
+                                                          "ชำระเงิน: ${order.paymentMethod}",
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 8),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        TextButton.icon(
+                                                          onPressed: () {
+                                                            final route =
+                                                                AppRoutes
+                                                                    .orderDetail;
+                                                            final orderId =
+                                                                order.orderId;
+                                                            context.push(
+                                                                '$route/$orderId');
+                                                            orderController
+                                                                .fetchOrdersByorderId(
+                                                                    orderId!);
+                                                          },
+                                                          icon: Icon(
+                                                            Icons.visibility,
+                                                            color: AppTheme
+                                                                .primaryColor,
+                                                            size: 18,
+                                                          ),
+                                                          label: Text(
+                                                            "รายละเอียด",
+                                                            style: TextStyle(
+                                                              color: AppTheme
+                                                                  .primaryColor,
+                                                            ),
+                                                          ),
+                                                          style: TextButton
+                                                              .styleFrom(
+                                                            foregroundColor:
+                                                                AppTheme
+                                                                    .primaryColor,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
                                     },
                                   ),
-                                );
-                              },
-                            ),
-                      // หน้าที่ 2: งานของฉัน
-                      MyOrderPage(),
-                      // หน้าที่ 3: โปรไฟล์
-                      ProfileWidget(),
-                    ],
-                  );
-                },
+                            // หน้าที่ 2: งานของฉัน
+                            MyOrderPage(),
+                            // หน้าที่ 3: โปรไฟล์
+                            ProfileWidget(),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: RiderMenuBarWidget(),
+              child: _buildMenuBar(),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildInfoItem(IconData icon, String text) {
+    return Expanded(
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            size: 16,
+            color: AppTheme.secondaryColor,
+          ),
+          SizedBox(width: 4),
+          Expanded(
+            child: Text(
+              text,
+              style: AppTheme.subtitleStyle,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuBar() {
+    return Container(
+      height: 70,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 5,
+            offset: Offset(0, -2),
+          ),
+        ],
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      child: RiderMenuBarWidget(),
     );
   }
 }

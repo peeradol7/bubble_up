@@ -28,7 +28,6 @@ class ShowLocationWidget extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         expandedTitleScale: 1.0,
         background: Stack(
-          // เปลี่ยนเป็น Stack เพื่อรองรับ ResultList
           children: [
             Container(
               decoration: BoxDecoration(

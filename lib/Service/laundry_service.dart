@@ -35,6 +35,21 @@ class LaundryService {
     }
   }
 
+  Future<List<LaundrysModel>> getLaundriesByType(String type) async {
+    try {
+      QuerySnapshot snapshot = await _firestore
+          .collection(laundryCollection)
+          .where('type', isEqualTo: type)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => LaundrysModel.fromFirestore(doc))
+          .toList();
+    } catch (e) {
+      throw Exception('Error fetching laundries: $e');
+    }
+  }
+
   Future<LaundrysModel?> getLaundryById(String id) async {
     try {
       DocumentSnapshot doc =

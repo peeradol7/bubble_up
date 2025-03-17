@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:thammasat/Controller/order_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../constants/constant_status.dart';
+
 class ProcessOrderPage extends StatefulWidget {
   final String orderId;
 
@@ -125,25 +127,41 @@ class _ProcessOrderPageState extends State<ProcessOrderPage> {
                   ],
                 ),
                 SizedBox(height: 16),
-                if (order.status == 'Order Accepted')
-                  _buildStatusButton('รับผ้าจากลูกค้า', 'Pickup in Progress',
-                      Colors.green, order.orderId!, null),
-                if (order.status == 'Pickup in Progress')
-                  _buildStatusButton('ส่งผ้าไปร้านซัก', 'At Laundry Shop',
-                      Colors.blue, order.orderId!, null),
-                if (order.status == 'At Laundry Shop')
+                if (order.status == ConstantStatus.orderAccepted)
+                  _buildStatusButton(
+                      'รับผ้าจากลูกค้า',
+                      ConstantStatus.pickupInProgress,
+                      Colors.green,
+                      order.orderId!,
+                      null),
+                if (order.status == ConstantStatus.pickupInProgress)
+                  _buildStatusButton(
+                      'ส่งผ้าไปร้านซัก',
+                      ConstantStatus.atLaundryShop,
+                      Colors.blue,
+                      order.orderId!,
+                      null),
+                if (order.status == ConstantStatus.atLaundryShop)
                   _buildStatusButton(
                       'ร้านซักรีดกำลังซักผ้า',
-                      'Laundry in Process',
+                      ConstantStatus.laundryInProcess,
                       Colors.orange,
                       order.orderId!,
                       null),
-                if (order.status == 'Laundry in Process')
-                  _buildStatusButton('กำลังนำผ้าไปส่ง', 'Delivery in Progress',
-                      Colors.purple, order.orderId!, null),
-                if (order.status == 'Delivery in Progress')
-                  _buildStatusButton('ส่งผ้าเรียบร้อย', 'Completed',
-                      Colors.teal, order.orderId!, DateTime.now()),
+                if (order.status == ConstantStatus.laundryInProcess)
+                  _buildStatusButton(
+                      'กำลังนำผ้าไปส่ง',
+                      ConstantStatus.deliveryInProgress,
+                      Colors.purple,
+                      order.orderId!,
+                      null),
+                if (order.status == ConstantStatus.deliveryInProgress)
+                  _buildStatusButton(
+                      'ส่งผ้าเรียบร้อย',
+                      ConstantStatus.completed,
+                      Colors.teal,
+                      order.orderId!,
+                      DateTime.now()),
               ],
             ),
           );

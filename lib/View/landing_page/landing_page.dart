@@ -44,13 +44,19 @@ class _LandingPageState extends State<LandingPage> {
               final userRole = userData['role'];
 
               if (userRole == 'customer') {
-                Future.delayed(Duration.zero, () {
-                  context.go(AppRoutes.homePage);
-                });
+                Future.delayed(
+                  Duration.zero,
+                  () {
+                    context.go(AppRoutes.homePage);
+                  },
+                );
               } else if (userRole == 'Rider') {
-                Future.delayed(Duration.zero, () {
-                  context.go(AppRoutes.orderListPage);
-                });
+                Future.delayed(
+                  Duration.zero,
+                  () {
+                    context.go(AppRoutes.orderListPage);
+                  },
+                );
               }
             });
           }

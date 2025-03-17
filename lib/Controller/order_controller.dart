@@ -122,6 +122,7 @@ class OrderController extends GetxController {
   Future<void> deleteOrder(String orderId) async {
     await _orderService.deleteOrder(orderId);
     orders.removeWhere((order) => order.orderId == orderId);
+    displayListOrders();
   }
 
   Future<void> displayListOrders() async {
@@ -155,5 +156,10 @@ class OrderController extends GetxController {
   ) async {
     await _orderService.updateOrderStatus(
         orderId: orderId, status: status, time: time);
+  }
+
+  Future<void> cancelOrderAsync(String id) async {
+    await _orderService.cancelOrder(id);
+    displayListOrders();
   }
 }

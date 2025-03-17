@@ -227,7 +227,7 @@ class _InputPasswordPageState extends State<InputPasswordPage> {
                           ),
                           RadioListTile<String>(
                             title: const Text("Customer"),
-                            value: "Customer",
+                            value: "customer",
                             groupValue: authController.role.value,
                             activeColor: const Color(0xFF01B9E4),
                             onChanged: (value) {

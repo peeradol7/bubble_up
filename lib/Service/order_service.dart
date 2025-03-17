@@ -174,4 +174,18 @@ class OrderService {
       throw e;
     }
   }
+
+  Future<void> cancelOrder(String orderId) async {
+    try {
+      await _firestore.collection(orderCollection).doc(orderId).update({
+        'status': 'Cancelled',
+      });
+
+      print("Order cancelled successfully: $orderId");
+    } catch (e, stackTrace) {
+      print("Error cancelling order: $e");
+      print("StackTrace: $stackTrace");
+      throw e;
+    }
+  }
 }
