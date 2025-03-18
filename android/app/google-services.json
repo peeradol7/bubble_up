@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "578003904265-bs9r4hb5k895b8tjk502e6gh3i15se1f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bubbleup.app",
+            "certificate_hash": "2b2ca3f919a03f03e79d0285fdc14d852da23a54"
+          }
+        },
+        {
           "client_id": "578003904265-9nfvci6u1lh34blvasmmucbnjp4k4su0.apps.googleusercontent.com",
           "client_type": 3
         }

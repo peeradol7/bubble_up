@@ -14,15 +14,20 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final AuthController authController = Get.find<AuthController>();
   String errorMessage = '';
+  bool isLoading = false;
 
   Future<void> _login() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = '';
+    });
+
     try {
       await authController.fetchUserData(
           authController.email.value, authController.password.value);
 
       if (authController.userModel.value != null) {
         final role = await authController.userModel.value?.role;
-        print("VIEW: role = $role");
 
         if (role != null) {
           if (role == 'customer') {
@@ -33,17 +38,21 @@ class _LoginPageState extends State<LoginPage> {
           }
         } else {
           setState(() {
-            errorMessage = "ข้อมูล role ไม่ถูกต้อง";
+            errorMessage = "ข้อมูลไม่ถูกต้อง";
           });
         }
       } else {
         setState(() {
-          errorMessage = "ไม่ได้รับข้อมูลผู้ใช้";
+          errorMessage = "กรุณายืนยันอีเมล";
         });
       }
     } catch (e) {
       setState(() {
         errorMessage = e.toString();
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
@@ -131,45 +140,78 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(height: 30),
-                // Login Button
+                // Login Button with Loading State
                 SizedBox(
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: () {
-                      _login();
-                    },
+                    onPressed: isLoading ? null : _login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF01B9E4),
+                      disabledBackgroundColor:
+                          Color(0xFF01B9E4).withOpacity(0.7),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       elevation: 2,
                     ),
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: isLoading
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 3,
+                                ),
+                              ),
+                              SizedBox(width: 12),
+                              Text(
+                                'กำลังเข้าสู่ระบบ...',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
-                // Error Message
                 if (errorMessage.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.only(top: 16.0),
                     child: Container(
                       padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: Colors.red[50],
                         borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.red.withOpacity(0.3)),
                       ),
-                      child: Text(
-                        errorMessage,
-                        style: TextStyle(color: Colors.red[700]),
-                        textAlign: TextAlign.center,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.red[700],
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              errorMessage,
+                              style: TextStyle(color: Colors.red[700]),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

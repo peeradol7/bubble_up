@@ -37,10 +37,10 @@ class OrderListPage extends StatelessWidget {
                     color: AppTheme.primaryColor,
                     child: Row(
                       children: [
-                        Icon(Icons.list_alt, color: Colors.white),
+                        Icon(Icons.pedal_bike, color: Colors.white),
                         SizedBox(width: 12),
                         Text(
-                          'รายการคำสั่งซื้อ',
+                          'Bubble up rider',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -243,7 +243,7 @@ class OrderListPage extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: 0,
+              bottom: 1,
               left: 0,
               right: 0,
               child: _buildMenuBar(),
@@ -278,7 +278,7 @@ class OrderListPage extends StatelessWidget {
 
   Widget _buildMenuBar() {
     return Container(
-      height: 70,
+      height: 80,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
