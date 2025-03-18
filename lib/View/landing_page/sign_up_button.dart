@@ -1,36 +1,44 @@
 import 'package:flutter/material.dart';
 
 class CustomButton {
-  ButtonStyle btnStyle() {
-    return ElevatedButton.styleFrom(
-      backgroundColor: Colors.white,
-      minimumSize: const Size(double.infinity, 50),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-    );
-  }
-
   Widget btnSignUp({
-    required VoidCallback onPressed,
+    required VoidCallback? onPressed,
     required String label,
-    required String iconPath,
-    double iconWidth = 30,
-    double iconHeight = 30,
+    String? iconPath,
+    bool isLoading = false,
   }) {
-    return ElevatedButton.icon(
+    return ElevatedButton(
       onPressed: onPressed,
-      icon: Image.asset(
-        iconPath,
-        width: iconWidth,
-        height: iconHeight,
-        fit: BoxFit.contain,
-      ),
-      label: Text(
-        label,
-        style: const TextStyle(color: Colors.black, fontSize: 15),
-      ),
-      style: btnStyle(),
+      child: isLoading
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
+                SizedBox(width: 8),
+                Text(label),
+              ],
+            )
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (iconPath != null) ...[
+                  Image.asset(
+                    iconPath,
+                    width: 24,
+                    height: 24,
+                  ),
+                  SizedBox(width: 8),
+                ],
+                Text(label),
+              ],
+            ),
     );
   }
 }

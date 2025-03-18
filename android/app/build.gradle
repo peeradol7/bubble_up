@@ -1,3 +1,9 @@
+buildscript {
+    dependencies {
+        classpath 'com.google.gms:google-services:4.3.10'
+    }
+}
+
 plugins {
     id "com.android.application"
     // START: FlutterFire Configuration
@@ -27,43 +33,44 @@ android {
         applicationId = "com.bubbleup.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdkVersion 23
+        minSdkVersion = 23 // Need to use the "=" assignment operator
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
-signingConfigs {
-    debug {
-        storeFile file("C:\\Users\\Windows 10\\.android\\debug.keystore") // ใช้ debug keystore ของ Android Studio
-        storePassword "android"
-        keyAlias "androiddebugkey"
-        keyPassword "android"
-    }
-    release {
-        storeFile file("E:\\fastwork\\key_store\\bubbleUp-release-key.jks")
-        storePassword System.getenv("BUBBLEUP_STORE_PASSWORD") ?: "029024142"
-        keyAlias "bubble-up-key-alias"
-        keyPassword System.getenv("BUBBLEUP_KEY_PASSWORD") ?: "029024142"
-    }
-}
-}
-buildTypes {
-    debug {
-        signingConfig signingConfigs.debug
-    }
-    release {
-        signingConfig signingConfigs.release
-    }
-}
     
-
+    signingConfigs {
+        debug {
+            storeFile file("C:\\Users\\Windows 10\\.android\\debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+        release {
+            storeFile file("E:\\fastwork\\key_store\\bubbleUp-release-key.jks")
+            storePassword System.getenv("BUBBLEUP_STORE_PASSWORD") ?: "029024142"
+            keyAlias "bubble-up-key-alias"
+            keyPassword System.getenv("BUBBLEUP_KEY_PASSWORD") ?: "029024142"
+        }
+    }
+    
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+}
 
 flutter {
     source = "../.."
 }
+
 dependencies {
     implementation 'com.google.android.gms:play-services-location:21.3.0'
     implementation platform('com.google.firebase:firebase-bom:32.7.1')
-    implementation 'com.google.firebase:firebase-auth' 
+    implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
 }

@@ -15,7 +15,7 @@ class SignUpDialog extends StatefulWidget {
 
 class _SignUpDialogState extends State<SignUpDialog> {
   final CustomButton btn = CustomButton();
-
+  bool isLoading = false;
   final AuthController authController = Get.find<AuthController>();
 
   Future<void> handleLogin(BuildContext context) async {
@@ -29,7 +29,6 @@ class _SignUpDialogState extends State<SignUpDialog> {
           SnackBar(content: Text('Login failed. Please try again.')),
         );
       } else {
-        print('Login successful, navigating to selectServicePage');
         if (context.mounted) {
           context.go(AppRoutes.homePage);
         }
@@ -96,8 +95,22 @@ class _SignUpDialogState extends State<SignUpDialog> {
                 ),
                 const SizedBox(height: 20),
                 btn.btnSignUp(
-                  onPressed: () => {handleLogin(context)},
-                  label: 'Continue with Google',
+                  onPressed: isLoading
+                      ? null
+                      : () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+
+                          try {
+                            await handleLogin(context);
+                          } finally {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        },
+                  label: isLoading ? 'Loading...' : 'Continue with Google',
                   iconPath: 'assets/google.png',
                 ),
                 const SizedBox(height: 10),
