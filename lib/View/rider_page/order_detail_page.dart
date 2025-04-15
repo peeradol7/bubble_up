@@ -77,27 +77,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               Text(order.address ?? 'ไม่ได้ใส่ที่อยู่'),
               const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStatePropertyAll(Colors.green)),
-                      onPressed: () {
-                        updateorder();
-                        context.pop();
-                      },
-                      child: Text(
-                        'รับออเดอร์',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
         );
@@ -108,7 +87,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
-              print("กดรับออเดอร์");
+              updateorder();
+              orderController.displayListOrders();
+              context.pop();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,

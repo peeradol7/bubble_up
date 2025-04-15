@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thammasat/Controller/auth_controller.dart';
 import 'package:thammasat/app_routes.dart';
+import 'package:thammasat/constants/constant_status.dart';
 
 import '../../../Controller/order_controller.dart';
 
@@ -48,16 +49,17 @@ class MyOrderPage extends StatelessWidget {
               }
 
               return ListView.builder(
-                itemCount: orderController.orderByRiderId.length,
+                itemCount: orderController.orderByRiderId.length + 1,
                 itemBuilder: (context, index) {
-                  final order = orderController.orderByRiderId[index];
-                  String? status;
-
-                  if (order.status == 'Completed') {
-                    status = 'เสร็จสิ้น';
-                  } else {
-                    status = 'กำลังดำเนินการ';
+                  if (index == orderController.orderByRiderId.length) {
+                    return const SizedBox(height: 100);
                   }
+
+                  final order = orderController.orderByRiderId[index];
+                  String? status = order.status == ConstantStatus.completed
+                      ? 'เสร็จสิ้น'
+                      : 'กำลังดำเนินการ';
+
                   return Card(
                     margin: const EdgeInsets.all(8.0),
                     child: ListTile(

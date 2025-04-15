@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thammasat/Controller/laundry_controller.dart';
-import 'package:thammasat/app_routes.dart';
 
+import '../../../../app_routes.dart';
 import '../../../../constants/app_theme.dart';
 
 class DisplayTypeLaundryPage extends StatefulWidget {
@@ -119,8 +119,10 @@ class _DisplayTypeLaundryPageState extends State<DisplayTypeLaundryPage> {
                             child: InkWell(
                               borderRadius: BorderRadius.circular(12),
                               onTap: () {
+                                String sanitizedLaundryId =
+                                    laundry.laundryId.trim();
                                 context.push(
-                                    '${AppRoutes.createOrderPage}/${laundry.laundryId}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ');
+                                    '${AppRoutes.createOrderPage}/$sanitizedLaundryId');
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(16),

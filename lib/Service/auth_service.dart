@@ -30,47 +30,28 @@ class AuthService {
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
-
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final userCredential = await auth.signInWithCredential(credential);
+      final String? email = googleUser.email;
 
+      if (email == null) {
+        throw Exception('Google account does not have an email.');
+      }
+
+      // Sign in with credential first
+      final userCredential = await auth.signInWithCredential(credential);
       final user = userCredential.user;
 
       if (user != null) {
+        // Check if user already exists in Firestore
         final userDoc =
             await _firestore.collection(userCollection).doc(user.uid).get();
 
-        if (userDoc.exists) {
-          final existingData = userDoc.data() as Map<String, dynamic>;
-          final updatedData = {
-            'displayName':
-                user.displayName ?? existingData['displayName'] ?? 'user',
-            'email': user.email ?? existingData['email'],
-            'authMethod': 'google',
-            'phoneNumber': existingData['phoneNumber'] ?? '',
-            'address': existingData['address'] ?? '',
-            'role': existingData['role'] ?? 'customer',
-          };
-
-          await _firestore
-              .collection(userCollection)
-              .doc(user.uid)
-              .update(updatedData);
-
-          final prefsService = await SharedPreferencesService.getInstance();
-          await prefsService.saveUserData(
-            user.uid,
-            updatedData['email'],
-            updatedData['displayName'],
-            updatedData['role'],
-            updatedData['address'],
-            updatedData['phoneNumber'],
-          );
-        } else {
+        if (!userDoc.exists) {
+          // Only create a new record if user doesn't exist
           final userData = UserCollectionModel(
             userId: user.uid,
             displayName: user.displayName ?? 'user',
@@ -86,17 +67,27 @@ class AuthService {
               .doc(user.uid)
               .set(userData.toMap());
 
+          print('Saved new user data to Firestore');
+        } else {
+          print('Existing user logged in successfully');
+        }
+
+        final userData =
+            await _firestore.collection(userCollection).doc(user.uid).get();
+
+        if (userData.exists) {
+          final userModel = UserCollectionModel.fromMap(userData.data()!);
+
+          // Save to shared preferences
           final prefsService = await SharedPreferencesService.getInstance();
           await prefsService.saveUserData(
-            userData.userId,
-            userData.email,
-            userData.displayName,
-            userData.role,
-            userData.address ?? '',
-            userData.phoneNumber ?? '',
+            userModel.userId,
+            userModel.email,
+            userModel.displayName,
+            userModel.role,
+            userModel.address ?? '',
+            userModel.phoneNumber ?? '',
           );
-
-          print('Saved new user data to Firestore');
         }
       }
 

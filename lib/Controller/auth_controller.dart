@@ -154,7 +154,7 @@ class AuthController extends GetxController {
       final userData = await authService.fetchUserDataByUserId(result.uid);
       userModel.value = userData;
     } else {
-      print('Google login failed: user is null');
+      throw Exception('Google login failed: user is null');
     }
   }
 

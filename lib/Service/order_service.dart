@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:thammasat/constants/constant_status.dart';
 
 import '../Model/order_model.dart';
 
@@ -54,7 +55,7 @@ class OrderService {
     try {
       final QuerySnapshot querySnapshot = await _firestore
           .collection(orderCollection)
-          .where('status', isEqualTo: 'pending')
+          .where('status', isEqualTo: ConstantStatus.pending)
           .get();
 
       final orders = querySnapshot.docs.map((doc) {

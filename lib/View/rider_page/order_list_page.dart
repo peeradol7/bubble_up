@@ -10,11 +10,22 @@ import '../../Controller/menubar_controller.dart';
 import '../../constants/app_theme.dart';
 import 'widget/rider_menu_bar_widget.dart';
 
-class OrderListPage extends StatelessWidget {
+class OrderListPage extends StatefulWidget {
   OrderListPage({super.key});
 
+  @override
+  State<OrderListPage> createState() => _OrderListPageState();
+}
+
+class _OrderListPageState extends State<OrderListPage> {
   final OrderController orderController = Get.put(OrderController());
+
   final MenuBarController menuBarController = Get.find<MenuBarController>();
+  @override
+  void initState() {
+    orderController.displayListOrders();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,24 +62,27 @@ class OrderListPage extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: Obx(
-                      () {
-                        if (orderController.isLoading.value) {
-                          return Center(
-                            child: CircularProgressIndicator(
-                              color: AppTheme.primaryColor,
-                            ),
-                          );
-                        }
-
-                        return PageView(
-                          controller: menuBarController.pageController,
-                          physics: const BouncingScrollPhysics(),
-                          onPageChanged: (index) {
-                            menuBarController.selectedIndex.value = index;
+                    child: PageView(
+                      controller: menuBarController.pageController,
+                      physics: const BouncingScrollPhysics(),
+                      onPageChanged: (index) {
+                        menuBarController.selectedIndex.value = index;
+                      },
+                      children: [
+                        RefreshIndicator(
+                          onRefresh: () async {
+                            await orderController.displayListOrders();
                           },
-                          children: [
-                            orderController.orderList.isEmpty
+                          child: Obx(() {
+                            if (orderController.isLoading.value) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  color: AppTheme.primaryColor,
+                                ),
+                              );
+                            }
+
+                            return orderController.orderList.isEmpty
                                 ? Center(
                                     child: Column(
                                       mainAxisAlignment:
@@ -229,14 +243,14 @@ class OrderListPage extends StatelessWidget {
                                         ),
                                       );
                                     },
-                                  ),
-                            // หน้าที่ 2: งานของฉัน
-                            MyOrderPage(),
-                            // หน้าที่ 3: โปรไฟล์
-                            ProfileWidget(),
-                          ],
-                        );
-                      },
+                                  );
+                          }),
+                        ),
+                        // หน้าที่ 2: งานของฉัน
+                        MyOrderPage(),
+                        // หน้าที่ 3: โปรไฟล์
+                        ProfileWidget(),
+                      ],
                     ),
                   ),
                 ],

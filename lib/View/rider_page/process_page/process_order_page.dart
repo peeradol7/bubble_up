@@ -32,18 +32,18 @@ class _ProcessOrderPageState extends State<ProcessOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Details'),
+        title: Text('รายละเอียดออเดอร์'),
       ),
       body: GetX<OrderController>(
         builder: (controller) {
           if (controller.isLoading.value) {
             return Center(child: CircularProgressIndicator());
           }
-          orderController.fetchOrdersByorderId(widget.orderId);
           final order = controller.orderByid.value;
           if (order == null) {
             return Center(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.error_outline, size: 100, color: Colors.red),
@@ -61,11 +61,11 @@ class _ProcessOrderPageState extends State<ProcessOrderPage> {
               ),
             );
           }
-
           return SingleChildScrollView(
             padding: EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 _buildInfoCard(
                   title: 'เงินที่ได้รับ',
@@ -107,8 +107,10 @@ class _ProcessOrderPageState extends State<ProcessOrderPage> {
                           foregroundColor: Colors.white,
                         ),
                       ),
+                    ), //
+                    SizedBox(
+                      width: 10,
                     ),
-                    SizedBox(width: 16),
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () => _openGoogleMaps(
@@ -157,11 +159,12 @@ class _ProcessOrderPageState extends State<ProcessOrderPage> {
                       null),
                 if (order.status == ConstantStatus.deliveryInProgress)
                   _buildStatusButton(
-                      'ส่งผ้าเรียบร้อย',
-                      ConstantStatus.completed,
-                      Colors.teal,
-                      order.orderId!,
-                      DateTime.now()),
+                    'ส่งผ้าเรียบร้อย',
+                    ConstantStatus.completed,
+                    Colors.teal,
+                    order.orderId!,
+                    DateTime.now(),
+                  ),
               ],
             ),
           );
@@ -172,10 +175,11 @@ class _ProcessOrderPageState extends State<ProcessOrderPage> {
 
   Widget _buildStatusButton(String label, String newStatus, Color color,
       String orderId, DateTime? time) {
-    return Expanded(
+    return SizedBox(
+      width: double.infinity,
       child: TextButton(
         style: ButtonStyle(
-          backgroundColor: WidgetStatePropertyAll(color),
+          backgroundColor: MaterialStatePropertyAll(color),
         ),
         onPressed: () {
           orderController.fetchOrdersByorderId(orderId);
@@ -189,20 +193,43 @@ class _ProcessOrderPageState extends State<ProcessOrderPage> {
     );
   }
 
-  Widget _buildInfoCard({
-    required String title,
-    required String content,
-    required IconData icon,
-  }) {
+  Widget _buildInfoCard(
+      {required String title,
+      required String content,
+      required IconData icon}) {
     return Card(
-      elevation: 4,
-      child: ListTile(
-        leading: Icon(icon, color: Colors.blue),
-        title: Text(
-          title,
-          style: TextStyle(fontWeight: FontWeight.bold),
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 24, color: Colors.blue),
+            SizedBox(width: 16),
+            // Use Flexible instead of Expanded here
+            Flexible(
+              fit: FlexFit.loose,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min, // Add this line
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    content,
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        subtitle: Text(content),
       ),
     );
   }

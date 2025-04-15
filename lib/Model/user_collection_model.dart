@@ -65,6 +65,25 @@ class UserCollectionModel {
     };
   }
 
+  factory UserCollectionModel.fromMap(Map<String, dynamic> data) {
+    try {
+      UserCollectionModel model = UserCollectionModel(
+        userId: data['userId'] ?? '',
+        displayName: data['displayName'] ?? data['name'] ?? '',
+        authMethod: data['authMethod'] ?? 'email',
+        email: data['email'] ?? '',
+        password: data.containsKey('password') ? data['password'] : null,
+        phoneNumber: data['phoneNumber'] ?? '',
+        role: data['role'] ?? '',
+        address: data['address'] ?? '',
+      );
+
+      return model;
+    } catch (e) {
+      print(StackTrace.current);
+      throw Exception("เกิดข้อผิดพลาดขณะแปลงข้อมูล: ${e.toString()}");
+    }
+  }
   UserCollectionModel copyWith({
     String? userId,
     String? email,
