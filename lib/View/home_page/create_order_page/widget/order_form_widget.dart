@@ -11,7 +11,7 @@ class OrderFormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       final data = laundryController.laundryDataById.value;
-      final deliveryPrices = laundryController.deliveryPrices.value;
+      final deliveryPrices = laundryController.deliveryPrices;
 
       if (data == null) {
         return const Center(child: Text("กำลังโหลด..."));

@@ -42,7 +42,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: appRoutes.route,
-      theme: ThemeData.fallback(),
+      theme: ThemeData(
+        primaryColor: Colors.blue,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+      ).copyWith(),
     );
   }
 }

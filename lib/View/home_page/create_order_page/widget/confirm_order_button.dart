@@ -6,6 +6,7 @@ import 'package:thammasat/Controller/auth_controller.dart';
 import 'package:thammasat/Controller/notification_controller.dart';
 import 'package:thammasat/Controller/order_controller.dart';
 import 'package:thammasat/Controller/position_controller.dart';
+import 'package:thammasat/constants/app_theme.dart';
 
 import '../../../../Controller/laundry_controller.dart';
 import '../../../../Model/order_model.dart';
@@ -27,8 +28,32 @@ class ConfirmOrderButton extends StatelessWidget {
       padding: EdgeInsets.all(16),
       child: GetX<LaundryController>(
         builder: (controller) => ElevatedButton.icon(
-          onPressed: () {
-            saveOrder();
+          onPressed: () async {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext dialogContext) {
+                return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  content: Row(
+                    children: [
+                      CircularProgressIndicator(
+                        color: AppTheme.primaryColor,
+                      ),
+                      const SizedBox(width: 20),
+                      const Text("กำลังค้นหาไรเดอร์"),
+                    ],
+                  ),
+                );
+              },
+            );
+
+            await Future.delayed(const Duration(seconds: 3));
+
+            Navigator.of(context).pop();
+
+            await saveOrder(context);
             notificationController.showOrderSuccessNotification();
             context.pop();
           },
@@ -55,7 +80,27 @@ class ConfirmOrderButton extends StatelessWidget {
     );
   }
 
-  void saveOrder() async {
+  Future<void> showLoadingDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          content: Row(
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(width: 20),
+              const Text("กำลังโหลด..."),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> saveOrder(BuildContext context) async {
     final prefsService = await SharedPreferencesService.getInstance();
     final userData = prefsService.getUserData();
 
@@ -96,7 +141,6 @@ class ConfirmOrderButton extends StatelessWidget {
           laundryController.laundryDataById.value?.longitude ?? 0,
         ),
       );
-
       await orderController.addOrder(newOrder);
     } else {
       print('ข้อมูลไม่ครบถ้วน กรุณาตรวจสอบอีกครั้ง');

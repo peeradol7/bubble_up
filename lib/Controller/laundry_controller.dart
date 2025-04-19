@@ -64,8 +64,7 @@ class LaundryController extends GetxController {
 
       laundryLatLng.value = LatLng(
           laundryDataById.value!.latitude, laundryDataById.value!.longitude);
-
-      calculatePriceForRider();
+      await calculatePriceForRider();
     } catch (e) {
       print("Error fetching laundry by ID: $e");
     }
@@ -101,42 +100,54 @@ class LaundryController extends GetxController {
   }
 
   Future<Map<String, int>> calculatePriceForRider() async {
-    final currentLocation = positionController.currentLatLng.value;
+    final currentLocation = await positionController.currentLatLng.value;
     final laundryData = laundryDataById.value;
 
     if (currentLocation == null || laundryData == null) {
-      print("LatLng ปัจจุบันหรือละติจูดของร้านซักรีดเป็น null");
-      return {};
+      deliveryPrices.value = {
+        'express': 50,
+        'normal': 30,
+      };
+      return deliveryPrices;
     }
 
     final laundryLatitude = laundryData.latitude;
     final laundryLongitude = laundryData.longitude;
 
     if (laundryLatitude == null || laundryLongitude == null) {
-      print(" LatLng ของร้านซักรีดเป็น null");
-      return {};
+      deliveryPrices.value = {
+        'express': 50,
+        'normal': 30,
+      };
+      return deliveryPrices;
     }
 
-    double distanceInMeters = await Geolocator.distanceBetween(
-      currentLocation.latitude,
-      currentLocation.longitude,
-      laundryLatitude,
-      laundryLongitude,
-    );
+    try {
+      double distanceInMeters = await Geolocator.distanceBetween(
+        currentLocation.latitude,
+        currentLocation.longitude,
+        laundryLatitude,
+        laundryLongitude,
+      );
 
-    double distanceInKilometers = distanceInMeters / 1000;
+      double distanceInKilometers = distanceInMeters / 1000;
 
-    int expressPrice = (distanceInKilometers * 15).round();
-    int normalPrice = (distanceInKilometers * 7).round();
+      int expressPrice = (distanceInKilometers * 15).round();
+      int normalPrice = (distanceInKilometers * 7).round();
 
-    deliveryPrices.value = {
-      'express': expressPrice,
-      'normal': normalPrice,
-    };
+      if (expressPrice == 0) expressPrice = 50;
+      if (normalPrice == 0) normalPrice = 30;
 
-    print("ระยะทาง: ${distanceInKilometers.toStringAsFixed(2)} กิโลเมตร");
-    print("ส่งด่วน: ${deliveryPrices['express']} บาท");
-    print("ส่งปกติ: ${deliveryPrices['normal']} บาท");
+      deliveryPrices.value = {
+        'express': expressPrice,
+        'normal': normalPrice,
+      };
+    } catch (e) {
+      deliveryPrices.value = {
+        'express': 50,
+        'normal': 30,
+      };
+    }
 
     return deliveryPrices;
   }

@@ -203,8 +203,11 @@ class StatusPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final order = orderController.orders[index];
                     final orderStatus = order.status ?? "ไม่ระบุสถานะ";
-                    final riderName =
-                        order.riderName ?? "ยังไม่มีไรเดอร์รับออเดอร์";
+                    String riderName = (order.riderName?.isNotEmpty ?? false)
+                        ? order.riderName!
+                        : 'ยังไม่มีผู้รับออเดอร์';
+
+                    print('RiderName: $riderName ---');
 
                     return Container(
                       margin: EdgeInsets.only(bottom: 16),
